@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Le Registre du Marché aux Monstres</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#0f0a06;
+    --bg-1:#1c130a;
+    --wood:#2c1c10;
+    --wood-light:#4a2f18;
+    --wood-seam:#1a1008;
+    --parchment:#f1e5c3;
+    --parchment-2:#e8d8ab;
+    --parchment-edge:#c9a86b;
+    --ink:#2b2013;
+    --ink-soft:#5c4d34;
+    --moss:#3f5e3a;
+    --moss-dark:#2e4a2a;
+    --ember:#b5651d;
+    --ember-soft:#d98f3f;
+    --oxblood:#7c2c2c;
+    --gold:#c8992f;
+    --gold-bright:#e8c66a;
+    --silver:#a7a89a;
+    --bronze:#9c603a;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    min-height:100%;
+    background:
+      radial-gradient(ellipse at 15% -10%, #3a2814 0%, transparent 45%),
+      radial-gradient(ellipse at 90% 110%, #1c130a 0%, transparent 50%),
+      repeating-linear-gradient(115deg, rgba(0,0,0,0.15) 0 2px, transparent 2px 6px),
+      var(--bg-0);
+    color:var(--ink);
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  body{ padding:40px 18px 80px; }
+
+  .wrap{ max-width:900px; margin:0 auto; }
+
+  /* ---------- Bannière / en-tête ---------- */
+  .banner{
+    position:relative;
+    background:
+      linear-gradient(180deg, var(--wood-light) 0%, var(--wood) 55%, var(--wood-seam) 100%);
+    border:1px solid #0a0603;
+    border-radius:10px;
+    padding:28px 20px 22px;
+    text-align:center;
+    box-shadow:
+      0 20px 40px rgba(0,0,0,0.55),
+      inset 0 1px 0 rgba(255,255,255,0.05),
+      inset 0 -12px 24px rgba(0,0,0,0.4);
+  }
+  .banner::before, .banner::after{
+    content:"";
+    position:absolute;
+    top:10px; bottom:10px;
+    width:6px;
+    background:linear-gradient(180deg, var(--gold) 0%, var(--bronze) 100%);
+    border-radius:3px;
+    opacity:0.85;
+  }
+  .banner::before{ left:10px; }
+  .banner::after{ right:10px; }
+
+  .crest{
+    width:64px; height:64px;
+    margin:0 auto 6px;
+    filter:drop-shadow(0 3px 4px rgba(0,0,0,0.6));
+  }
+
+  h1{
+    font-family:'Cinzel Decorative', 'Cinzel', serif;
+    font-weight:700;
+    font-size:clamp(24px, 4vw, 38px);
+    letter-spacing:0.02em;
+    color:var(--gold-bright);
+    margin:0 0 6px;
+    text-shadow:0 2px 3px rgba(0,0,0,0.6);
+  }
+
+  .subtitle{
+    color:#c9bb98;
+    font-size:13px;
+    letter-spacing:0.06em;
+    font-family:'Cinzel', serif;
+  }
+
+  .statusbar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-top:16px;
+    font-size:13px;
+    color:#d8cba5;
+  }
+
+  .dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--oxblood);
+    box-shadow:0 0 0 3px rgba(124,44,44,0.3);
+    transition:background .3s, box-shadow .3s;
+  }
+  .dot.ok{ background:var(--moss); box-shadow:0 0 0 3px rgba(63,94,58,0.35), 0 0 10px 2px rgba(80,150,70,0.4); }
+  .dot.connecting{
+    background:var(--ember);
+    box-shadow:0 0 0 3px rgba(181,101,29,0.3);
+    animation:pulse 1s infinite ease-in-out;
+  }
+  @keyframes pulse{ 50%{opacity:0.4;} }
+
+  .gear{
+    cursor:pointer;
+    background:radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold) 55%, #6b4d1a 100%);
+    border:1px solid #5a3f14;
+    color:#2a1d08;
+    width:24px; height:24px;
+    border-radius:50%;
+    font-size:12px;
+    line-height:1;
+    box-shadow:0 2px 3px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.4);
+  }
+  .gear:hover{ filter:brightness(1.1); }
+  .gear:focus-visible, .tab:focus-visible, button:focus-visible, input:focus-visible{
+    outline:2px solid var(--ember-soft);
+    outline-offset:2px;
+  }
+
+  .settings{
+    max-width:420px;
+    margin:14px auto 0;
+    background:#160f08;
+    border:1px solid #3d2a15;
+    border-radius:8px;
+    padding:16px 18px;
+    display:none;
+    gap:10px;
+    flex-direction:column;
+    text-align:left;
+  }
+  .settings.open{ display:flex; }
+  .settings label{
+    font-size:12px; color:#a89877;
+    display:flex; flex-direction:column; gap:4px;
+  }
+  .settings input{
+    background:#0b0704;
+    border:1px solid #3d2a15;
+    color:#f1e4c4;
+    padding:7px 9px;
+    border-radius:5px;
+    font-family:inherit;
+    font-size:13px;
+  }
+  .settings button{
+    margin-top:4px;
+    background:linear-gradient(180deg, var(--moss) 0%, var(--moss-dark) 100%);
+    color:#f1e4c4;
+    border:1px solid #24371f;
+    padding:9px;
+    border-radius:5px;
+    font-family:'Cinzel', serif;
+    font-size:12.5px;
+    letter-spacing:0.03em;
+    cursor:pointer;
+  }
+  .settings button:hover{ filter:brightness(1.1); }
+  .settings .hint{ font-size:11px; color:#7a6c50; }
+
+  /* ---------- Onglets (parchemins suspendus) ---------- */
+  .tabs{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin:24px 0 0;
+    position:relative;
+    z-index:2;
+  }
+
+  .tab{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    font-size:13.5px;
+    letter-spacing:0.02em;
+    background:linear-gradient(180deg, #2f2013 0%, #23180d 100%);
+    color:#c9bb98;
+    border:1px solid #3d2a15;
+    border-bottom:none;
+    padding:10px 18px 12px;
+    border-radius:9px 9px 0 0;
+    cursor:pointer;
+    transform:translateY(4px);
+    transition:transform .15s, background .15s, color .15s;
+  }
+  .tab svg{ width:15px; height:15px; opacity:0.8; }
+  .tab:hover{ color:#f1e4c4; }
+  .tab.active{
+    background:linear-gradient(180deg, var(--parchment) 0%, var(--parchment-2) 100%);
+    color:var(--ink);
+    transform:translateY(0);
+    box-shadow:0 -2px 6px rgba(0,0,0,0.25);
+  }
+  .tab.active svg{ opacity:1; }
+
+  /* ---------- Page parchemin ---------- */
+  .page{
+    position:relative;
+    background:
+      radial-gradient(ellipse at 12% 8%, rgba(255,255,255,0.25) 0%, transparent 30%),
+      radial-gradient(ellipse at 90% 92%, rgba(0,0,0,0.08) 0%, transparent 40%),
+      var(--parchment);
+    border-radius:0 10px 10px 10px;
+    box-shadow:0 20px 44px rgba(0,0,0,0.5), inset 0 0 0 1px var(--parchment-edge), inset 0 0 40px rgba(120,90,40,0.12);
+    padding:32px 28px 24px;
+    min-height:280px;
+  }
+
+  .corner{
+    position:absolute;
+    width:26px; height:26px;
+    opacity:0.55;
+  }
+  .corner.tl{ top:6px; left:6px; }
+  .corner.tr{ top:6px; right:6px; transform:scaleX(-1); }
+
+  .pin{
+    position:absolute;
+    top:-9px; left:26px;
+    width:16px;height:16px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #e2c56a, var(--gold) 60%, #7a5d1c 100%);
+    box-shadow:0 3px 4px rgba(0,0,0,0.4);
+  }
+
+  .lines{
+    background-image:repeating-linear-gradient(
+      to bottom, transparent 0, transparent 37px, rgba(42,32,19,0.12) 38px
+    );
+  }
+
+  table{ width:100%; border-collapse:collapse; font-size:14px; }
+  th{
+    text-align:left;
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    font-size:12px;
+    color:var(--ink-soft);
+    letter-spacing:0.03em;
+    padding:0 8px 10px;
+    border-bottom:1px solid var(--parchment-edge);
+  }
+  td{ padding:10px 8px; vertical-align:middle; }
+  tr:not(:last-child) td{ border-bottom:1px dashed rgba(42,32,19,0.18); }
+  td.num, th.num{ text-align:right; }
+
+  /* ---------- Blasons de classement ---------- */
+  .rank{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:28px; height:30px;
+    margin-right:12px;
+    font-family:'Cinzel', serif;
+    font-size:12px;
+    font-weight:700;
+    color:#2a2013;
+    background:#b9ad8f;
+    clip-path:polygon(50% 0%, 100% 20%, 100% 75%, 50% 100%, 0% 75%, 0% 20%);
+    box-shadow:inset 0 1px 1px rgba(255,255,255,0.4), inset 0 -2px 3px rgba(0,0,0,0.25);
+  }
+  .rank.r1{ background:linear-gradient(180deg, var(--gold-bright), var(--gold) 70%); }
+  .rank.r2{ background:linear-gradient(180deg, #d4d4c8, var(--silver) 70%); }
+  .rank.r3{ background:linear-gradient(180deg, #c07f52, var(--bronze) 70%); color:#3a2210; }
+
+  .podium{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:18px;
+    padding:10px 6px 22px;
+  }
+  .podium-spot{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:110px;
+  }
+  .p-crown{ width:22px; height:22px; margin-bottom:4px; color:var(--gold-bright); filter:drop-shadow(0 1px 2px rgba(0,0,0,0.4)); }
+  .avatar-frame{
+    border-radius:50%;
+    padding:3px;
+    background:linear-gradient(160deg, var(--gold-bright), var(--gold) 70%);
+    box-shadow:0 4px 10px rgba(0,0,0,0.35);
+  }
+  .avatar-frame img{
+    display:block;
+    border-radius:50%;
+    object-fit:cover;
+    background:#3a2c19;
+  }
+  .podium-spot.second .avatar-frame{ background:linear-gradient(160deg, #dcdccf, var(--silver) 70%); }
+  .podium-spot.third .avatar-frame{ background:linear-gradient(160deg, #cf9a6d, var(--bronze) 70%); }
+  .podium-spot.first .avatar-frame img{ width:76px; height:76px; }
+  .podium-spot.second .avatar-frame img{ width:60px; height:60px; }
+  .podium-spot.third .avatar-frame img{ width:52px; height:52px; }
+
+  .p-name{
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    font-size:13px;
+    color:var(--ink);
+    margin-top:9px;
+    text-align:center;
+    max-width:100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .p-points{ font-size:12px; color:var(--ink-soft); margin-top:2px; }
+  .p-stand{
+    width:100%;
+    margin-top:10px;
+    border-radius:6px 6px 0 0;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding-top:6px;
+    font-family:'Cinzel Decorative', serif;
+    font-size:20px;
+    color:#2a1d08;
+    box-shadow:inset 0 2px 2px rgba(255,255,255,0.3), inset 0 -3px 6px rgba(0,0,0,0.25);
+  }
+  .podium-spot.first .p-stand{ height:74px; background:linear-gradient(180deg, var(--gold-bright), var(--gold)); }
+  .podium-spot.second .p-stand{ height:52px; background:linear-gradient(180deg, #dcdccf, var(--silver)); }
+  .podium-spot.third .p-stand{ height:38px; background:linear-gradient(180deg, #cf9a6d, var(--bronze)); color:#3a2210; }
+
+  .rest-list{ margin-top:4px; }
+
+  .period-tabs{
+    display:flex;
+    gap:6px;
+    margin-bottom:18px;
+  }
+  .period-btn{
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    font-size:11.5px;
+    letter-spacing:0.03em;
+    color:var(--ink-soft);
+    background:rgba(42,32,19,0.06);
+    border:1px solid var(--parchment-edge);
+    padding:6px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background .15s, color .15s, border-color .15s;
+  }
+  .period-btn:hover{ color:var(--ink); border-color:var(--ink-soft); }
+  .period-btn.active{
+    background:linear-gradient(180deg, var(--gold-bright), var(--gold) 90%);
+    color:#2a1d08;
+    border-color:var(--bronze);
+    box-shadow:inset 0 1px 1px rgba(255,255,255,0.4);
+  }
+
+  .stars{ letter-spacing:1px; }
+  .stars.tier-1{ color:var(--bronze); }
+  .stars.tier-2{ color:var(--silver); filter:brightness(1.05); }
+  .stars.tier-3{ color:var(--gold); text-shadow:0 0 5px rgba(200,153,47,0.4); }
+
+  .accordion-item{ border-bottom:1px dashed rgba(42,32,19,0.18); }
+  .accordion-item:last-child{ border-bottom:none; }
+  .accordion-head{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 4px; cursor:pointer; font-size:14px;
+  }
+  .accordion-head .name{ font-weight:600; }
+  .accordion-head .meta{ color:var(--ink-soft); font-size:12px; font-family:'Cinzel', serif; }
+  .accordion-body{ display:none; padding:0 4px 14px 36px; }
+  .accordion-item.open .accordion-body{ display:block; }
+  .accordion-item.open .chevron{ transform:rotate(90deg); }
+  .chevron{ transition:transform .15s; display:inline-block; margin-right:8px; color:var(--ink-soft); }
+
+  .sub-row{
+    display:flex; justify-content:space-between; font-size:13px;
+    padding:4px 0; color:var(--ink-soft);
+  }
+  .sub-row span:last-child{ color:var(--ink); }
+
+  .empty{
+    text-align:center; color:var(--ink-soft);
+    padding:50px 10px; font-size:14px; line-height:1.6;
+  }
+  .empty strong{
+    display:block; font-family:'Cinzel', serif;
+    color:var(--ink); font-size:16px; margin-bottom:6px;
+  }
+
+  .footer-row{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:16px; font-size:11px; color:#8a7c5c;
+  }
+
+  .totals{ display:flex; gap:22px; font-size:12px; color:var(--ink-soft); }
+  .totals b{ color:var(--ink); }
+
+  @media (max-width:560px){
+    .page{ padding:24px 16px 20px; }
+    th, td{ padding:8px 5px; font-size:13px; }
+    .tab{ padding:9px 12px 11px; font-size:12px; }
+    .tab svg{ width:13px; height:13px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <svg class="crest" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#e8c66a"/>
+          <stop offset="1" stop-color="#a5791f"/>
+        </linearGradient>
+      </defs>
+      <path d="M32 3 L58 12 V30 C58 46 47 57 32 61 C17 57 6 46 6 30 V12 Z"
+            fill="#241608" stroke="url(#gGold)" stroke-width="2.5"/>
+      <path d="M32 10 L52 17 V30 C52 42 44 51 32 54 C20 51 12 42 12 30 V17 Z"
+            fill="none" stroke="url(#gGold)" stroke-width="1" opacity="0.6"/>
+      <path d="M22 40 L30 20 L34 20 L26 44 Z" fill="url(#gGold)"/>
+      <path d="M42 40 L34 20 L30 20 L38 44 Z" fill="url(#gGold)"/>
+      <circle cx="32" cy="30" r="3.2" fill="url(#gGold)"/>
+    </svg>
+    <h1>Le Registre du Marché aux Monstres</h1>
+    <div class="subtitle">Chasse, négoce &amp; renommée de la forêt</div>
+    <div class="statusbar">
+      <span class="dot" id="statusDot"></span>
+      <span id="statusText">Connexion...</span>
+      <button class="gear" id="gearBtn" title="Paramètres de connexion" aria-label="Paramètres de connexion">⚙</button>
+    </div>
+    <div class="settings" id="settingsPanel">
+      <label>Hôte
+        <input type="text" id="cfgHost" placeholder="127.0.0.1">
+      </label>
+      <label>Port
+        <input type="text" id="cfgPort" placeholder="8080">
+      </label>
+      <label>Mot de passe WebSocket (si activé)
+        <input type="password" id="cfgPass" placeholder="laisser vide si aucun">
+      </label>
+      <button id="cfgSave">Enregistrer et se connecter</button>
+      <div class="hint">Ces réglages sont ceux de l'onglet "WebSocket Server" dans Streamer.bot &gt; Servers/Clients.</div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="classement" role="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19h16M6 19V9l2-4h8l2 4v10M9 19v-5h6v5"/></svg>
+      Classement
+    </button>
+    <button class="tab" data-tab="stock" role="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="9" width="16" height="10" rx="1"/><path d="M4 9l1.5-4h13L20 9M9 13h6"/></svg>
+      Stock global
+    </button>
+    <button class="tab" data-tab="inventaires" role="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 4h9l3 3v13H6z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+      Inventaires
+    </button>
+  </nav>
+
+  <main class="page">
+    <div class="pin"></div>
+    <svg class="corner tl" viewBox="0 0 40 40"><path d="M2 20 C2 9 9 2 20 2" fill="none" stroke="#7a5d1c" stroke-width="2"/><circle cx="2" cy="20" r="2" fill="#7a5d1c"/></svg>
+    <svg class="corner tr" viewBox="0 0 40 40"><path d="M2 20 C2 9 9 2 20 2" fill="none" stroke="#7a5d1c" stroke-width="2"/><circle cx="2" cy="20" r="2" fill="#7a5d1c"/></svg>
+
+    <section id="tab-classement" class="lines">
+      <div class="period-tabs" id="periodTabs">
+        <button class="period-btn" data-period="semaine">Semaine</button>
+        <button class="period-btn" data-period="mois">Mois</button>
+        <button class="period-btn active" data-period="tout">Tout</button>
+      </div>
+      <div id="classementBody"></div>
+    </section>
+    <section id="tab-stock" class="lines" style="display:none"></section>
+    <section id="tab-inventaires" class="lines" style="display:none"></section>
+
+    <div class="footer-row">
+      <span id="lastUpdate">—</span>
+      <span id="rawHint"></span>
+    </div>
+  </main>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- Config ----------
+  var STORAGE_KEY = "mhs_dashboard_config";
+  function loadConfig(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(raw) return JSON.parse(raw);
+    }catch(e){}
+    return { host:"127.0.0.1", port:"8080", password:"" };
+  }
+  function saveConfig(cfg){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
+  }
+  var config = loadConfig();
+
+  document.getElementById("cfgHost").value = config.host || "127.0.0.1";
+  document.getElementById("cfgPort").value = config.port || "8080";
+  document.getElementById("cfgPass").value = config.password || "";
+
+  var gearBtn = document.getElementById("gearBtn");
+  var settingsPanel = document.getElementById("settingsPanel");
+  gearBtn.addEventListener("click", function(){
+    settingsPanel.classList.toggle("open");
+  });
+  document.getElementById("cfgSave").addEventListener("click", function(){
+    config = {
+      host: document.getElementById("cfgHost").value.trim() || "127.0.0.1",
+      port: document.getElementById("cfgPort").value.trim() || "8080",
+      password: document.getElementById("cfgPass").value
+    };
+    saveConfig(config);
+    settingsPanel.classList.remove("open");
+    reconnect();
+  });
+
+  // ---------- Status UI ----------
+  var statusDot = document.getElementById("statusDot");
+  var statusText = document.getElementById("statusText");
+  function setStatus(state, text){
+    statusDot.className = "dot " + (state || "");
+    statusText.textContent = text;
+  }
+
+  // ---------- Tabs ----------
+  var tabs = document.querySelectorAll(".tab");
+  var panels = {
+    classement: document.getElementById("tab-classement"),
+    stock: document.getElementById("tab-stock"),
+    inventaires: document.getElementById("tab-inventaires")
+  };
+  tabs.forEach(function(t){
+    t.addEventListener("click", function(){
+      tabs.forEach(function(x){ x.classList.remove("active"); });
+      t.classList.add("active");
+      Object.keys(panels).forEach(function(k){ panels[k].style.display = "none"; });
+      panels[t.dataset.tab].style.display = "block";
+    });
+  });
+
+  // ---------- Sous-onglets de période (classement) ----------
+  var periodButtons = document.querySelectorAll(".period-btn");
+  var currentPeriod = "tout";
+  var lastBalances = {};
+  var lastHistory = [];
+  periodButtons.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      periodButtons.forEach(function(b){ b.classList.remove("active"); });
+      btn.classList.add("active");
+      currentPeriod = btn.dataset.period;
+      renderClassement(lastBalances, lastHistory);
+    });
+  });
+
+  // ---------- WebSocket RPC ----------
+  var ws = null;
+  var pending = {};
+  var reqCounter = 0;
+  var authenticated = false;
+  var pollTimer = null;
+  var reconnectTimer = null;
+  var cachedConfig = null; // MHS_Config, fetché une fois par connexion
+
+  function nextId(){
+    reqCounter += 1;
+    return "dash-" + reqCounter + "-" + Date.now();
+  }
+
+  function send(request){
+    return new Promise(function(resolve, reject){
+      if(!ws || ws.readyState !== WebSocket.OPEN){
+        reject(new Error("not connected"));
+        return;
+      }
+      var id = nextId();
+      request.id = id;
+      pending[id] = { resolve: resolve, reject: reject };
+      ws.send(JSON.stringify(request));
+      setTimeout(function(){
+        if(pending[id]){
+          delete pending[id];
+          reject(new Error("timeout"));
+        }
+      }, 6000);
+    });
+  }
+
+  async function sha256Base64(str){
+    var enc = new TextEncoder().encode(str);
+    var hash = await crypto.subtle.digest("SHA-256", enc);
+    var bytes = new Uint8Array(hash);
+    var bin = "";
+    for(var i=0;i<bytes.length;i++){ bin += String.fromCharCode(bytes[i]); }
+    return btoa(bin);
+  }
+
+  function wsUrl(){
+    var host = config.host || "127.0.0.1";
+    var port = config.port || "8080";
+    return "ws://" + host + ":" + port + "/";
+  }
+
+  function connect(){
+    setStatus("connecting", "Connexion...");
+    authenticated = false;
+    cachedConfig = null;
+    try{
+      ws = new WebSocket(wsUrl());
+    }catch(e){
+      setStatus("", "Adresse invalide");
+      scheduleReconnect();
+      return;
+    }
+
+    ws.onopen = function(){
+      // on attend le message Hello avant d'agir
+    };
+
+    ws.onmessage = function(evt){
+      var data;
+      try{ data = JSON.parse(evt.data); }
+      catch(e){ return; }
+
+      if(data.request === "Hello"){
+        handleHello(data);
+        return;
+      }
+
+      if(data.id && pending[data.id]){
+        var p = pending[data.id];
+        delete pending[data.id];
+        p.resolve(data);
+      }
+    };
+
+    ws.onclose = function(){
+      setStatus("", "Déconnecté");
+      authenticated = false;
+      clearTimeout(pollTimer);
+      scheduleReconnect();
+    };
+
+    ws.onerror = function(){
+      // onclose suivra
+    };
+  }
+
+  function scheduleReconnect(){
+    clearTimeout(reconnectTimer);
+    reconnectTimer = setTimeout(connect, 4000);
+  }
+
+  function reconnect(){
+    if(ws){ try{ ws.close(); }catch(e){} }
+    clearTimeout(reconnectTimer);
+    connect();
+  }
+
+  async function handleHello(data){
+    if(data.authentication && data.authentication.salt && data.authentication.challenge){
+      if(!config.password){
+        setStatus("", "Mot de passe requis");
+        return;
+      }
+      try{
+        var secret = await sha256Base64(config.password + data.authentication.salt);
+        var authString = await sha256Base64(secret + data.authentication.challenge);
+        var resp = await send({ request:"Authenticate", authentication: authString });
+        if(resp.status === "ok"){
+          onAuthenticated();
+        }else{
+          setStatus("", "Mot de passe refusé");
+        }
+      }catch(e){
+        setStatus("", "Erreur d'authentification");
+      }
+    }else{
+      onAuthenticated();
+    }
+  }
+
+  function onAuthenticated(){
+    authenticated = true;
+    setStatus("ok", "Connecté en direct");
+    fetchAndRender();
+    clearTimeout(pollTimer);
+    schedulePoll();
+  }
+
+  function schedulePoll(){
+    pollTimer = setTimeout(function(){
+      fetchAndRender().finally(schedulePoll);
+    }, 3000);
+  }
+
+  // ---------- Récupération des données ----------
+  function extractValue(resp, name, fallback){
+    if(!resp || resp.status === "error") return fallback;
+
+    // Format observé sur cette instance de Streamer.bot :
+    // { "variables": { "<name>": { "name":..., "value":"...", "lastWrite":"..." } }, "status":"ok" }
+    if(resp.variables && resp.variables[name]){
+      var entry = resp.variables[name];
+      if(typeof entry === "string") return entry;
+      if(entry && typeof entry.value === "string") return entry.value;
+      if(entry && typeof entry.Value === "string") return entry.Value;
+    }
+
+    // Anciens formats possibles, gardés en secours
+    var v = resp.variable;
+    if(v === undefined || v === null) v = resp.value;
+    if(v === undefined || v === null) return fallback;
+    if(typeof v === "string") return v;
+    if(typeof v === "object"){
+      if(typeof v.value === "string") return v.value;
+      if(typeof v.Value === "string") return v.Value;
+    }
+    return fallback;
+  }
+
+  function safeParseJSON(str, fallback){
+    if(!str) return fallback;
+    try{ return JSON.parse(str); }catch(e){ return fallback; }
+  }
+
+  async function getGlobal(name){
+    try{
+      var resp = await send({ request:"GetGlobal", variable:name, persisted:true });
+      return extractValue(resp, name, null);
+    }catch(e){
+      return null;
+    }
+  }
+
+  async function fetchAndRender(){
+    if(!authenticated) return;
+    try{
+      var balancesRaw = await getGlobal("MHS_Balances");
+      var stockRaw = await getGlobal("MHS_StockAll");
+      var historyRaw = await getGlobal("MHS_PointsHistory");
+      if(!cachedConfig){
+        var configRaw = await getGlobal("MHS_Config");
+        cachedConfig = safeParseJSON(configRaw, null);
+      }
+
+      var balances = safeParseJSON(balancesRaw, {});
+      var stock = safeParseJSON(stockRaw, []);
+      var history = safeParseJSON(historyRaw, []);
+
+      lastBalances = balances;
+      lastHistory = Array.isArray(history) ? history : [];
+
+      renderClassement(lastBalances, lastHistory);
+      renderStock(stock, cachedConfig);
+      renderInventaires(stock);
+
+      document.getElementById("lastUpdate").textContent =
+        "Dernière mise à jour : " + new Date().toLocaleTimeString("fr-FR");
+    }catch(e){
+      // connexion probablement tombée, onclose gèrera l'affichage
+    }
+  }
+
+  // ---------- Rendu ----------
+  function priceFor(config, monstre, etoile){
+    if(!config || !config.prix) return null;
+    for(var i=0;i<config.prix.length;i++){
+      var p = config.prix[i];
+      if(p.m === monstre && Number(p.e) === Number(etoile)) return Number(p.p);
+    }
+    return null;
+  }
+
+  function starTier(etoile){
+    if(etoile >= 5) return "tier-3";
+    if(etoile >= 3) return "tier-2";
+    return "tier-1";
+  }
+
+  function entriesFromBalances(balances){
+    return Object.keys(balances || {}).map(function(user){
+      return { user:user, jetons: Number(balances[user]) || 0 };
+    });
+  }
+
+  function entriesFromHistory(history, sinceMs){
+    var byUser = {}; // clé insensible à la casse -> { display, total }
+    (history || []).forEach(function(h){
+      if(!h || !h.user) return;
+      var ts = h.horodatage ? Date.parse(h.horodatage) : NaN;
+      if(!isNaN(sinceMs) && (isNaN(ts) || ts < sinceMs)) return;
+      var key = String(h.user).toLowerCase();
+      if(!byUser[key]) byUser[key] = { user:h.user, jetons:0 };
+      byUser[key].jetons += Number(h.points) || 0;
+    });
+    return Object.values(byUser);
+  }
+
+  var AVATAR_FALLBACK = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23241608'/><path d='M32 14c-8 0-14 7-14 15 0 6 3 10 7 13l-2 6h18l-2-6c4-3 7-7 7-13 0-8-6-15-14-15z' fill='%23c8992f'/></svg>";
+
+  function avatarUrl(username){
+    return "https://decapi.me/twitch/avatar/" + encodeURIComponent(username);
+  }
+
+  // decapi.me renvoie l'URL de l'image en TEXTE BRUT (pas l'image elle-même,
+  // pas de redirection HTTP). On ne peut donc pas la mettre directement dans
+  // un <img src="...">, il faut d'abord récupérer ce texte, puis l'utiliser
+  // comme src réel. On met en cache le résultat pour éviter de re-fetcher
+  // à chaque rendu.
+  var avatarCache = {};
+
+  function loadAvatars(container){
+    var imgs = container.querySelectorAll("img[data-avatar-user]");
+    imgs.forEach(function(img){
+      var user = img.getAttribute("data-avatar-user");
+      if(!user) return;
+      var key = user.toLowerCase();
+
+      if(avatarCache[key]){
+        if(avatarCache[key] !== "error") img.src = avatarCache[key];
+        return;
+      }
+
+      fetch(avatarUrl(user))
+        .then(function(res){
+          if(!res.ok) throw new Error("bad response");
+          return res.text();
+        })
+        .then(function(url){
+          url = (url || "").trim();
+          if(!url || url.toLowerCase().indexOf("http") !== 0){
+            throw new Error("réponse invalide");
+          }
+          avatarCache[key] = url;
+          img.src = url;
+        })
+        .catch(function(){
+          avatarCache[key] = "error";
+          // le fallback déjà affiché (via onerror ou src initial) reste en place
+        });
+    });
+  }
+
+  function crownIcon(){
+    return '<svg class="p-crown" viewBox="0 0 24 24" fill="currentColor"><path d="M3 8l4 3 5-6 5 6 4-3-2 11H5L3 8z"/></svg>';
+  }
+
+  function podiumSpot(entry, place){
+    var sizeLabel = place === "first" ? 1 : place === "second" ? 2 : 3;
+    var userAttr = entry ? ' data-avatar-user="' + escapeHtml(entry.user) + '"' : '';
+    var name = entry ? escapeHtml(entry.user) : "—";
+    var pts = entry ? entry.jetons.toLocaleString("fr-FR") + " J" : "";
+    return (
+      '<div class="podium-spot ' + place + '">' +
+        (place === "first" ? crownIcon() : '') +
+        '<div class="avatar-frame"><img' + userAttr + ' src="' + AVATAR_FALLBACK + '" alt="" onerror="this.onerror=null;this.src=\'' + AVATAR_FALLBACK + '\';"></div>' +
+        '<div class="p-name">' + name + '</div>' +
+        '<div class="p-points">' + pts + '</div>' +
+        '<div class="p-stand">' + sizeLabel + '</div>' +
+      '</div>'
+    );
+  }
+
+  function buildPodium(top){
+    var order;
+    if(top.length <= 1) order = ["first"];
+    else if(top.length === 2) order = ["second", "first"];
+    else order = ["second", "first", "third"];
+
+    var byPlace = { first: top[0], second: top[1], third: top[2] };
+    var html = order.map(function(place){ return podiumSpot(byPlace[place], place); }).join("");
+    return '<div class="podium">' + html + '</div>';
+  }
+
+  function renderClassement(balances, history){
+    var el = document.getElementById("classementBody");
+    var entries;
+
+    if(currentPeriod === "semaine"){
+      entries = entriesFromHistory(history, Date.now() - 7 * 24 * 60 * 60 * 1000);
+    }else if(currentPeriod === "mois"){
+      entries = entriesFromHistory(history, Date.now() - 30 * 24 * 60 * 60 * 1000);
+    }else{
+      entries = entriesFromBalances(balances);
+    }
+
+    entries.sort(function(a,b){ return b.jetons - a.jetons; });
+
+    if(entries.length === 0){
+      var msg = currentPeriod === "tout"
+        ? "Aucun chasseur n'a encore vendu de monstre. Le premier lingot inscrira le premier nom ici."
+        : "Aucune vente enregistrée sur cette période.";
+      el.innerHTML = '<div class="empty"><strong>Le registre est vierge.</strong>' + msg + '</div>';
+      return;
+    }
+
+    var top = entries.slice(0, 3);
+    var rest = entries.slice(3);
+
+    var html = buildPodium(top);
+
+    if(rest.length > 0){
+      var rows = rest.map(function(e, i){
+        return '<tr><td><span class="rank">' + (i+4) + '</span>' + escapeHtml(e.user) + '</td>' +
+               '<td class="num">' + e.jetons.toLocaleString("fr-FR") + ' <span style="color:var(--ink-soft)">J</span></td></tr>';
+      }).join("");
+      html += '<div class="rest-list"><table><thead><tr><th>Chasseur</th><th class="num">Jetons de la Forêt</th></tr></thead>' +
+              '<tbody>' + rows + '</tbody></table></div>';
+    }
+
+    el.innerHTML = html;
+    loadAvatars(el);
+  }
+
+  function renderStock(stock, config){
+    var el = panels.stock;
+    stock = Array.isArray(stock) ? stock : [];
+
+    var groups = {};
+    stock.forEach(function(item){
+      var monstre = item.monstre || "Inconnu";
+      var etoile = Number(item.etoile) || 1;
+      var key = monstre + "__" + etoile;
+      if(!groups[key]) groups[key] = { monstre:monstre, etoile:etoile, qte:0 };
+      groups[key].qte += 1;
+    });
+
+    var list = Object.values(groups).sort(function(a,b){
+      if(a.monstre === b.monstre) return a.etoile - b.etoile;
+      return a.monstre.localeCompare(b.monstre);
+    });
+
+    if(list.length === 0){
+      el.innerHTML = '<div class="empty"><strong>Les étals sont vides.</strong>Personne n\'a de monstre en réserve pour le moment.</div>';
+      return;
+    }
+
+    var totalQte = 0, totalVal = 0, hasVal = false;
+    var rows = list.map(function(g){
+      var prix = priceFor(config, g.monstre, g.etoile);
+      var val = prix !== null ? prix * g.qte : null;
+      totalQte += g.qte;
+      if(val !== null){ hasVal = true; totalVal += val; }
+      return '<tr><td>' + escapeHtml(g.monstre) + '</td>' +
+             '<td class="stars ' + starTier(g.etoile) + '">' + "★".repeat(g.etoile) + '</td>' +
+             '<td class="num">' + g.qte + '</td>' +
+             '<td class="num">' + (val !== null ? Math.round(val).toLocaleString("fr-FR") + " J" : "—") + '</td></tr>';
+    }).join("");
+
+    el.innerHTML =
+      '<table><thead><tr><th>Monstre</th><th>Rareté</th><th class="num">En stock</th><th class="num">Valeur est.</th></tr></thead>' +
+      '<tbody>' + rows + '</tbody></table>' +
+      '<div class="totals" style="margin-top:16px">' +
+        '<span>Monstres en stock : <b>' + totalQte + '</b></span>' +
+        (hasVal ? '<span>Valeur totale estimée : <b>' + Math.round(totalVal).toLocaleString("fr-FR") + ' J</b></span>' : '') +
+      '</div>';
+  }
+
+  var openInventaires = {}; // clé insensible à la casse -> true si l'accordéon est ouvert
+
+  function renderInventaires(stock){
+    var el = panels.inventaires;
+    stock = Array.isArray(stock) ? stock : [];
+
+    var byUser = {};
+    stock.forEach(function(item){
+      var user = item.user || "inconnu";
+      var key = user.toLowerCase();
+      if(!byUser[key]) byUser[key] = { display:user, items:{}, total:0 };
+      var monstre = item.monstre || "Inconnu";
+      var etoile = Number(item.etoile) || 1;
+      var ik = monstre + "__" + etoile;
+      if(!byUser[key].items[ik]) byUser[key].items[ik] = { monstre:monstre, etoile:etoile, qte:0 };
+      byUser[key].items[ik].qte += 1;
+      byUser[key].total += 1;
+    });
+
+    var users = Object.values(byUser).sort(function(a,b){ return b.total - a.total; });
+
+    if(users.length === 0){
+      el.innerHTML = '<div class="empty"><strong>Aucun sac de chasse rempli.</strong>Dès qu\'un chasseur ramènera un monstre, son inventaire apparaîtra ici.</div>';
+      return;
+    }
+
+    var html = users.map(function(u, idx){
+      var items = Object.values(u.items).sort(function(a,b){
+        if(a.monstre === b.monstre) return a.etoile - b.etoile;
+        return a.monstre.localeCompare(b.monstre);
+      });
+      var body = items.map(function(it){
+        return '<div class="sub-row"><span>' + escapeHtml(it.monstre) + ' <span class="stars ' + starTier(it.etoile) + '">' + "★".repeat(it.etoile) + '</span></span><span>x' + it.qte + '</span></div>';
+      }).join("");
+
+      var isOpen = !!openInventaires[u.display.toLowerCase()];
+
+      return '<div class="accordion-item' + (isOpen ? ' open' : '') + '" data-idx="' + idx + '" data-user="' + escapeHtml(u.display) + '">' +
+        '<div class="accordion-head">' +
+          '<span><span class="chevron">▸</span><span class="name">' + escapeHtml(u.display) + '</span></span>' +
+          '<span class="meta">' + u.total + ' monstre' + (u.total>1?'s':'') + '</span>' +
+        '</div>' +
+        '<div class="accordion-body">' + body + '</div>' +
+      '</div>';
+    }).join("");
+
+    el.innerHTML = html;
+
+    el.querySelectorAll(".accordion-item").forEach(function(item){
+      var head = item.querySelector(".accordion-head");
+      head.addEventListener("click", function(){
+        var key = (item.getAttribute("data-user") || "").toLowerCase();
+        var willOpen = !item.classList.contains("open");
+        item.classList.toggle("open", willOpen);
+        if(willOpen){ openInventaires[key] = true; }
+        else{ delete openInventaires[key]; }
+      });
+    });
+  }
+
+  function escapeHtml(str){
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  document.addEventListener("visibilitychange", function(){
+    if(document.hidden){
+      clearTimeout(pollTimer);
+    }else if(authenticated){
+      fetchAndRender();
+      schedulePoll();
+    }
+  });
+
+  connect();
+})();
+</script>
+</body>
+</html>
