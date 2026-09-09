@@ -1,0 +1,269 @@
+{"balances":{
+  "mowglitchblaat": 5235,
+  "Raidraw45500": 862,
+  "lockazhion": 2087,
+  "GreedMW": 200
+},"stock":[
+  {
+    "id": "959487e6",
+    "user": "DawCoeur_",
+    "monstre": "Nu Udra",
+    "etoile": 8,
+    "horodatage": "2026-09-06T11:58:18.6904984Z"
+  },
+  {
+    "id": "9e2ba878",
+    "user": "ayen57",
+    "monstre": "Arkveld",
+    "etoile": 8,
+    "horodatage": "2026-09-06T15:01:34.8734283Z"
+  },
+  {
+    "id": "2201fd09",
+    "user": "ChefSpirite",
+    "monstre": "Lagiacrus",
+    "etoile": 9,
+    "horodatage": "2026-09-07T13:08:01.573917Z"
+  },
+  {
+    "id": "06848ec5",
+    "user": "ChefSpirite",
+    "monstre": "Arkveld",
+    "etoile": 8,
+    "horodatage": "2026-09-07T13:49:15.7186024Z"
+  },
+  {
+    "id": "6dfaf28a",
+    "user": "DawCoeur_",
+    "monstre": "Rathalos",
+    "etoile": 9,
+    "horodatage": "2026-09-07T19:01:46.6022461Z"
+  },
+  {
+    "id": "69c9a32d",
+    "user": "DawCoeur_",
+    "monstre": "Seregios",
+    "etoile": 8,
+    "horodatage": "2026-09-07T19:43:48.7848104Z"
+  },
+  {
+    "id": "9f750aee",
+    "user": "DawCoeur_",
+    "monstre": "Mizutsune",
+    "etoile": 9,
+    "horodatage": "2026-09-07T19:44:07.4267396Z"
+  },
+  {
+    "id": "ba31d1a2",
+    "user": "DawCoeur_",
+    "monstre": "Gore Magala",
+    "etoile": 7,
+    "horodatage": "2026-09-07T20:10:38.0723403Z"
+  },
+  {
+    "id": "68bb5e6e",
+    "user": "DawCoeur_",
+    "monstre": "Gore Magala",
+    "etoile": 7,
+    "horodatage": "2026-09-07T20:10:49.1308221Z"
+  },
+  {
+    "id": "618afe8d",
+    "user": "DawCoeur_",
+    "monstre": "Gore Magala",
+    "etoile": 7,
+    "horodatage": "2026-09-07T20:10:54.6227273Z"
+  },
+  {
+    "id": "33d38232",
+    "user": "DawCoeur_",
+    "monstre": "Arkveld",
+    "etoile": 10,
+    "horodatage": "2026-09-07T21:13:07.4443553Z"
+  },
+  {
+    "id": "6606bf8c",
+    "user": "DawCoeur_",
+    "monstre": "Uth Duna",
+    "etoile": 10,
+    "horodatage": "2026-09-07T21:13:22.9147221Z"
+  },
+  {
+    "id": "dbf4d843",
+    "user": "DawCoeur_",
+    "monstre": "Nu Udra",
+    "etoile": 10,
+    "horodatage": "2026-09-07T21:13:32.2613555Z"
+  },
+  {
+    "id": "0ed89cb6",
+    "user": "DawCoeur_",
+    "monstre": "Rey Dau",
+    "etoile": 10,
+    "horodatage": "2026-09-07T21:13:41.4299219Z"
+  },
+  {
+    "id": "e48225f3",
+    "user": "lockazhion",
+    "monstre": "Arkveld",
+    "etoile": 8,
+    "horodatage": "2026-09-08T09:45:56.0434514Z"
+  },
+  {
+    "id": "7a79c395",
+    "user": "lockazhion",
+    "monstre": "Arkveld",
+    "etoile": 7,
+    "horodatage": "2026-09-08T10:02:41.3226248Z"
+  },
+  {
+    "id": "8e2536c3",
+    "user": "lockazhion",
+    "monstre": "Mizutsune",
+    "etoile": 8,
+    "horodatage": "2026-09-08T10:03:00.0567385Z"
+  },
+  {
+    "id": "e2b85329",
+    "user": "lockazhion",
+    "monstre": "Arkveld",
+    "etoile": 7,
+    "horodatage": "2026-09-08T10:27:55.4904071Z"
+  },
+  {
+    "id": "c405373e",
+    "user": "lockazhion",
+    "monstre": "Lagiacrus",
+    "etoile": 9,
+    "horodatage": "2026-09-08T10:28:16.4480233Z"
+  },
+  {
+    "id": "83fe208d",
+    "user": "lockazhion",
+    "monstre": "Seregios",
+    "etoile": 8,
+    "horodatage": "2026-09-08T11:40:32.0789618Z"
+  },
+  {
+    "id": "1e6f3705",
+    "user": "ChefSpirite",
+    "monstre": "Rey Dau",
+    "etoile": 9,
+    "horodatage": "2026-09-08T13:23:58.0384545Z"
+  },
+  {
+    "id": "d9c6afa7",
+    "user": "azy_lesang",
+    "monstre": "Arkveld",
+    "etoile": 8,
+    "horodatage": "2026-09-08T18:31:19.168449Z"
+  },
+  {
+    "id": "c94f18b1",
+    "user": "letiiti",
+    "monstre": "Arkveld",
+    "etoile": 8,
+    "horodatage": "2026-09-08T18:31:40.5575873Z"
+  },
+  {
+    "id": "66ab5487",
+    "user": "lockazhion",
+    "monstre": "Arkveld",
+    "etoile": 9,
+    "horodatage": "2026-09-08T22:17:06.1463328Z"
+  },
+  {
+    "id": "897514f6",
+    "user": "lockazhion",
+    "monstre": "Jin Dahaad",
+    "etoile": 9,
+    "horodatage": "2026-09-08T22:50:02.4771025Z"
+  }
+],"config":{
+  "prix": [
+    {"m":"Seregios","e":7,"p":110},
+    {"m":"Gravios","e":7,"p":110},
+    {"m":"Arkveld","e":7,"p":110},
+    {"m":"Mizutsune","e":7,"p":110},
+    {"m":"Lagiacrus","e":7,"p":110},
+    {"m":"Gore Magala","e":7,"p":110},
+    {"m":"Nu Udra","e":7,"p":110},
+    {"m":"Uth Duna","e":7,"p":110},
+    {"m":"Jin Dahaad","e":7,"p":110},
+    {"m":"Rey Dau","e":7,"p":110},
+    {"m":"Quematrice","e":7,"p":40},
+    {"m":"Chatacabra","e":7,"p":40},
+    {"m":"Balahara","e":7,"p":40},
+    {"m":"Hirabami","e":7,"p":40},
+    {"m":"Rathalos","e":7,"p":70},
+    {"m":"Doshaguma","e":7,"p":70},
+    {"m":"Ajarakan","e":7,"p":70},
+    {"m":"Blangonga","e":7,"p":70},
+    {"m":"Yian Kut-Ku","e":7,"p":70},
+    {"m":"Nerscylla","e":7,"p":70},
+    {"m":"Nerscylla Clone","e":7,"p":70},
+    {"m":"Lala Barina","e":7,"p":70},
+    {"m":"Congalala","e":7,"p":70},
+    {"m":"Rompopolo","e":7,"p":70},
+    {"m":"Xu Wu","e":7,"p":70},
+    {"m":"Gypceros","e":7,"p":70},
+    {"m":"Rathian","e":7,"p":70},
+    {"m":"Guardian Arkveld","e":7,"p":70},
+    {"m":"Guardian Rathalos","e":7,"p":70},
+    {"m":"Guardian Fulgur Anjanath","e":7,"p":70},
+    {"m":"Guardian Doshaguma","e":7,"p":70},
+    {"m":"Guardian Ebony Odogaron","e":7,"p":70},
+    {"m":"Guardian Rathian","e":7,"p":70},
+    {"m":"Guardian Seikret","e":7,"p":70},
+
+    {"m":"Arkveld","e":8,"p":200},
+    {"m":"Lagiacrus","e":8,"p":200},
+    {"m":"Mizutsune","e":8,"p":200},
+    {"m":"Rathalos","e":8,"p":200},
+    {"m":"Rey Dau","e":8,"p":200},
+    {"m":"Uth Duna","e":8,"p":200},
+    {"m":"Nu Udra","e":8,"p":200},
+    {"m":"Gore Magala","e":8,"p":200},
+    {"m":"Jin Dahaad","e":8,"p":200},
+    {"m":"Zoh Shia","e":8,"p":200},
+    {"m":"Omega Planetes","e":8,"p":200},
+    {"m":"Seregios","e":8,"p":180},
+    {"m":"Gravios","e":8,"p":140},
+    {"m":"Doshaguma","e":8,"p":140},
+    {"m":"Ajarakan","e":8,"p":140},
+    {"m":"Blangonga","e":8,"p":140},
+    {"m":"Yian Kut-Ku","e":8,"p":140},
+    {"m":"Guardian Fulgur Anjanath","e":8,"p":140},
+    {"m":"Guardian Ebony Odogaron","e":8,"p":140},
+
+    {"m":"Gore Magala","e":9,"p":400},
+    {"m":"Omega Planetes","e":9,"p":400},
+    {"m":"Zoh Shia","e":9,"p":310},
+    {"m":"Arkveld","e":9,"p":300},
+    {"m":"Nu Udra","e":9,"p":270},
+    {"m":"Rey Dau","e":9,"p":270},
+    {"m":"Uth Duna","e":9,"p":270},
+    {"m":"Jin Dahaad","e":9,"p":270},
+    {"m":"Seregios","e":9,"p":250},
+    {"m":"Lagiacrus","e":9,"p":220},
+    {"m":"Mizutsune","e":9,"p":220},
+    {"m":"Rathalos","e":9,"p":220},
+    {"m":"Ajarakan","e":9,"p":220},
+    {"m":"Blangonga","e":9,"p":220},
+    {"m":"Yian Kut-Ku","e":9,"p":220},
+    {"m":"Doshaguma","e":9,"p":220},
+    {"m":"Guardian Fulgur Anjanath","e":9,"p":220},
+    {"m":"Guardian Ebony Odogaron","e":9,"p":220},
+    {"m":"Gogmazios","e":9,"p":220},
+
+    {"m":"Zoh Shia","e":10,"p":620},
+    {"m":"Gogmazios","e":10,"p":620},
+    {"m":"Rey Dau","e":10,"p":560},
+    {"m":"Nu Udra","e":10,"p":585},
+    {"m":"Arkveld","e":10,"p":550},
+    {"m":"Uth Duna","e":10,"p":550},
+    {"m":"Jin Dahaad","e":10,"p":580},
+    {"m":"Rompopolo","e":10,"p":580}
+
+  ]
+},"majLe":"2026-09-09T01:14:38.3795773Z"}
