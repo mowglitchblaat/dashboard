@@ -120,63 +120,24 @@
   }
   @keyframes pulse{ 50%{opacity:0.4;} }
 
-  .gear{
+  .refresh-btn{
     cursor:pointer;
     background:radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold) 55%, #6b4d1a 100%);
     border:1px solid #5a3f14;
     color:#2a1d08;
     width:24px; height:24px;
     border-radius:50%;
-    font-size:12px;
+    font-size:13px;
     line-height:1;
     box-shadow:0 2px 3px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.4);
+    transition:transform .4s;
   }
-  .gear:hover{ filter:brightness(1.1); }
-  .gear:focus-visible, .tab:focus-visible, button:focus-visible, input:focus-visible{
+  .refresh-btn:hover{ filter:brightness(1.1); }
+  .refresh-btn.spin{ transform:rotate(360deg); }
+  .refresh-btn:focus-visible, .tab:focus-visible, button:focus-visible, input:focus-visible{
     outline:2px solid var(--ember-soft);
     outline-offset:2px;
   }
-
-  .settings{
-    max-width:420px;
-    margin:14px auto 0;
-    background:#160f08;
-    border:1px solid #3d2a15;
-    border-radius:8px;
-    padding:16px 18px;
-    display:none;
-    gap:10px;
-    flex-direction:column;
-    text-align:left;
-  }
-  .settings.open{ display:flex; }
-  .settings label{
-    font-size:12px; color:#a89877;
-    display:flex; flex-direction:column; gap:4px;
-  }
-  .settings input{
-    background:#0b0704;
-    border:1px solid #3d2a15;
-    color:#f1e4c4;
-    padding:7px 9px;
-    border-radius:5px;
-    font-family:inherit;
-    font-size:13px;
-  }
-  .settings button{
-    margin-top:4px;
-    background:linear-gradient(180deg, var(--moss) 0%, var(--moss-dark) 100%);
-    color:#f1e4c4;
-    border:1px solid #24371f;
-    padding:9px;
-    border-radius:5px;
-    font-family:'Cinzel', serif;
-    font-size:12.5px;
-    letter-spacing:0.03em;
-    cursor:pointer;
-  }
-  .settings button:hover{ filter:brightness(1.1); }
-  .settings .hint{ font-size:11px; color:#7a6c50; }
 
   /* ---------- Onglets (parchemins suspendus) ---------- */
   .tabs{
@@ -448,20 +409,7 @@
     <div class="statusbar">
       <span class="dot" id="statusDot"></span>
       <span id="statusText">Connexion...</span>
-      <button class="gear" id="gearBtn" title="Paramètres de connexion" aria-label="Paramètres de connexion">⚙</button>
-    </div>
-    <div class="settings" id="settingsPanel">
-      <label>Hôte
-        <input type="text" id="cfgHost" placeholder="127.0.0.1">
-      </label>
-      <label>Port
-        <input type="text" id="cfgPort" placeholder="8080">
-      </label>
-      <label>Mot de passe WebSocket (si activé)
-        <input type="password" id="cfgPass" placeholder="laisser vide si aucun">
-      </label>
-      <button id="cfgSave">Enregistrer et se connecter</button>
-      <div class="hint">Ces réglages sont ceux de l'onglet "WebSocket Server" dans Streamer.bot &gt; Servers/Clients.</div>
+      <button class="refresh-btn" id="refreshBtn" title="Rafraîchir maintenant" aria-label="Rafraîchir maintenant">⟳</button>
     </div>
   </header>
 
@@ -508,39 +456,12 @@
 (function(){
   "use strict";
 
-  // ---------- Config ----------
-  var STORAGE_KEY = "mhs_dashboard_config";
-  function loadConfig(){
-    try{
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if(raw) return JSON.parse(raw);
-    }catch(e){}
-    return { host:"127.0.0.1", port:"8080", password:"" };
-  }
-  function saveConfig(cfg){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
-  }
-  var config = loadConfig();
-
-  document.getElementById("cfgHost").value = config.host || "127.0.0.1";
-  document.getElementById("cfgPort").value = config.port || "8080";
-  document.getElementById("cfgPass").value = config.password || "";
-
-  var gearBtn = document.getElementById("gearBtn");
-  var settingsPanel = document.getElementById("settingsPanel");
-  gearBtn.addEventListener("click", function(){
-    settingsPanel.classList.toggle("open");
-  });
-  document.getElementById("cfgSave").addEventListener("click", function(){
-    config = {
-      host: document.getElementById("cfgHost").value.trim() || "127.0.0.1",
-      port: document.getElementById("cfgPort").value.trim() || "8080",
-      password: document.getElementById("cfgPass").value
-    };
-    saveConfig(config);
-    settingsPanel.classList.remove("open");
-    reconnect();
-  });
+  // ---------- Source des données ----------
+  // Cette version lit le fichier data.json généré et poussé par Streamer.bot
+  // sur ce même dépôt GitHub Pages, au lieu d'ouvrir une connexion WebSocket
+  // (qui ne peut fonctionner que depuis la machine où tourne Streamer.bot).
+  var DATA_URL = "data.json";
+  var POLL_MS = 15000;
 
   // ---------- Status UI ----------
   var statusDot = document.getElementById("statusDot");
@@ -549,6 +470,14 @@
     statusDot.className = "dot " + (state || "");
     statusText.textContent = text;
   }
+
+  var refreshBtn = document.getElementById("refreshBtn");
+  refreshBtn.addEventListener("click", function(){
+    refreshBtn.classList.add("spin");
+    fetchAndRender().finally(function(){
+      setTimeout(function(){ refreshBtn.classList.remove("spin"); }, 400);
+    });
+  });
 
   // ---------- Tabs ----------
   var tabs = document.querySelectorAll(".tab");
@@ -570,7 +499,7 @@
   var periodButtons = document.querySelectorAll(".period-btn");
   var currentPeriod = "tout";
   var lastBalances = {};
-  var lastHistory = [];
+  var lastHistory = []; // data.json n'exporte pas encore d'historique : reste vide
   periodButtons.forEach(function(btn){
     btn.addEventListener("click", function(){
       periodButtons.forEach(function(b){ b.classList.remove("active"); });
@@ -580,212 +509,40 @@
     });
   });
 
-  // ---------- WebSocket RPC ----------
-  var ws = null;
-  var pending = {};
-  var reqCounter = 0;
-  var authenticated = false;
   var pollTimer = null;
-  var reconnectTimer = null;
-  var cachedConfig = null; // MHS_Config, fetché une fois par connexion
-
-  function nextId(){
-    reqCounter += 1;
-    return "dash-" + reqCounter + "-" + Date.now();
-  }
-
-  function send(request){
-    return new Promise(function(resolve, reject){
-      if(!ws || ws.readyState !== WebSocket.OPEN){
-        reject(new Error("not connected"));
-        return;
-      }
-      var id = nextId();
-      request.id = id;
-      pending[id] = { resolve: resolve, reject: reject };
-      ws.send(JSON.stringify(request));
-      setTimeout(function(){
-        if(pending[id]){
-          delete pending[id];
-          reject(new Error("timeout"));
-        }
-      }, 6000);
-    });
-  }
-
-  async function sha256Base64(str){
-    var enc = new TextEncoder().encode(str);
-    var hash = await crypto.subtle.digest("SHA-256", enc);
-    var bytes = new Uint8Array(hash);
-    var bin = "";
-    for(var i=0;i<bytes.length;i++){ bin += String.fromCharCode(bytes[i]); }
-    return btoa(bin);
-  }
-
-  function wsUrl(){
-    var host = config.host || "127.0.0.1";
-    var port = config.port || "8080";
-    return "ws://" + host + ":" + port + "/";
-  }
-
-  function connect(){
-    setStatus("connecting", "Connexion...");
-    authenticated = false;
-    cachedConfig = null;
-    try{
-      ws = new WebSocket(wsUrl());
-    }catch(e){
-      setStatus("", "Adresse invalide");
-      scheduleReconnect();
-      return;
-    }
-
-    ws.onopen = function(){
-      // on attend le message Hello avant d'agir
-    };
-
-    ws.onmessage = function(evt){
-      var data;
-      try{ data = JSON.parse(evt.data); }
-      catch(e){ return; }
-
-      if(data.request === "Hello"){
-        handleHello(data);
-        return;
-      }
-
-      if(data.id && pending[data.id]){
-        var p = pending[data.id];
-        delete pending[data.id];
-        p.resolve(data);
-      }
-    };
-
-    ws.onclose = function(){
-      setStatus("", "Déconnecté");
-      authenticated = false;
-      clearTimeout(pollTimer);
-      scheduleReconnect();
-    };
-
-    ws.onerror = function(){
-      // onclose suivra
-    };
-  }
-
-  function scheduleReconnect(){
-    clearTimeout(reconnectTimer);
-    reconnectTimer = setTimeout(connect, 4000);
-  }
-
-  function reconnect(){
-    if(ws){ try{ ws.close(); }catch(e){} }
-    clearTimeout(reconnectTimer);
-    connect();
-  }
-
-  async function handleHello(data){
-    if(data.authentication && data.authentication.salt && data.authentication.challenge){
-      if(!config.password){
-        setStatus("", "Mot de passe requis");
-        return;
-      }
-      try{
-        var secret = await sha256Base64(config.password + data.authentication.salt);
-        var authString = await sha256Base64(secret + data.authentication.challenge);
-        var resp = await send({ request:"Authenticate", authentication: authString });
-        if(resp.status === "ok"){
-          onAuthenticated();
-        }else{
-          setStatus("", "Mot de passe refusé");
-        }
-      }catch(e){
-        setStatus("", "Erreur d'authentification");
-      }
-    }else{
-      onAuthenticated();
-    }
-  }
-
-  function onAuthenticated(){
-    authenticated = true;
-    setStatus("ok", "Connecté en direct");
-    fetchAndRender();
-    clearTimeout(pollTimer);
-    schedulePoll();
-  }
-
   function schedulePoll(){
     pollTimer = setTimeout(function(){
       fetchAndRender().finally(schedulePoll);
-    }, 3000);
+    }, POLL_MS);
   }
 
   // ---------- Récupération des données ----------
-  function extractValue(resp, name, fallback){
-    if(!resp || resp.status === "error") return fallback;
-
-    // Format observé sur cette instance de Streamer.bot :
-    // { "variables": { "<name>": { "name":..., "value":"...", "lastWrite":"..." } }, "status":"ok" }
-    if(resp.variables && resp.variables[name]){
-      var entry = resp.variables[name];
-      if(typeof entry === "string") return entry;
-      if(entry && typeof entry.value === "string") return entry.value;
-      if(entry && typeof entry.Value === "string") return entry.Value;
-    }
-
-    // Anciens formats possibles, gardés en secours
-    var v = resp.variable;
-    if(v === undefined || v === null) v = resp.value;
-    if(v === undefined || v === null) return fallback;
-    if(typeof v === "string") return v;
-    if(typeof v === "object"){
-      if(typeof v.value === "string") return v.value;
-      if(typeof v.Value === "string") return v.Value;
-    }
-    return fallback;
-  }
-
-  function safeParseJSON(str, fallback){
-    if(!str) return fallback;
-    try{ return JSON.parse(str); }catch(e){ return fallback; }
-  }
-
-  async function getGlobal(name){
-    try{
-      var resp = await send({ request:"GetGlobal", variable:name, persisted:true });
-      return extractValue(resp, name, null);
-    }catch(e){
-      return null;
-    }
-  }
-
   async function fetchAndRender(){
-    if(!authenticated) return;
     try{
-      var balancesRaw = await getGlobal("MHS_Balances");
-      var stockRaw = await getGlobal("MHS_StockAll");
-      var historyRaw = await getGlobal("MHS_PointsHistory");
-      if(!cachedConfig){
-        var configRaw = await getGlobal("MHS_Config");
-        cachedConfig = safeParseJSON(configRaw, null);
-      }
+      setStatus("connecting", "Actualisation...");
+      var res = await fetch(DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      var data = await res.json();
 
-      var balances = safeParseJSON(balancesRaw, {});
-      var stock = safeParseJSON(stockRaw, []);
-      var history = safeParseJSON(historyRaw, []);
+      var balances = data.balances || {};
+      var stock = Array.isArray(data.stock) ? data.stock : [];
+      var config = data.config || null;
+      var history = Array.isArray(data.history) ? data.history : [];
 
       lastBalances = balances;
-      lastHistory = Array.isArray(history) ? history : [];
+      lastHistory = history;
 
       renderClassement(lastBalances, lastHistory);
-      renderStock(stock, cachedConfig);
+      renderStock(stock, config);
       renderInventaires(stock);
 
+      setStatus("ok", "Connecté");
+
+      var maj = data.majLe ? new Date(data.majLe) : new Date();
       document.getElementById("lastUpdate").textContent =
-        "Dernière mise à jour : " + new Date().toLocaleTimeString("fr-FR");
+        "Dernière mise à jour du registre : " + maj.toLocaleString("fr-FR");
     }catch(e){
-      // connexion probablement tombée, onclose gèrera l'affichage
+      setStatus("", "Registre injoignable");
     }
   }
 
@@ -917,7 +674,7 @@
     if(entries.length === 0){
       var msg = currentPeriod === "tout"
         ? "Aucun chasseur n'a encore vendu de monstre. Le premier lingot inscrira le premier nom ici."
-        : "Aucune vente enregistrée sur cette période.";
+        : "Aucune vente enregistrée sur cette période (l'historique détaillé n'est pas encore exporté vers ce registre en ligne).";
       el.innerHTML = '<div class="empty"><strong>Le registre est vierge.</strong>' + msg + '</div>';
       return;
     }
@@ -1054,13 +811,14 @@
   document.addEventListener("visibilitychange", function(){
     if(document.hidden){
       clearTimeout(pollTimer);
-    }else if(authenticated){
+    }else{
       fetchAndRender();
       schedulePoll();
     }
   });
 
-  connect();
+  fetchAndRender();
+  schedulePoll();
 })();
 </script>
 </body>
