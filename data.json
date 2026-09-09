@@ -1,6 +1,6 @@
 {"balances":{
   "mowglitchblaat": 155,
-  "Raidraw45500": 3280,
+  "Raidraw45500": 3907,
   "lockazhion": 2087,
   "GreedMW": 200
 },"stock":[
@@ -194,34 +194,6 @@
     "horodatage": "2026-09-09T19:33:20.3604549Z"
   },
   {
-    "id": "0ab8d708",
-    "user": "Raidraw45500",
-    "monstre": "Arkveld",
-    "etoile": 9,
-    "horodatage": "2026-09-09T19:33:36.9840181Z"
-  },
-  {
-    "id": "245d322a",
-    "user": "Raidraw45500",
-    "monstre": "Nu Udra",
-    "etoile": 9,
-    "horodatage": "2026-09-09T19:33:49.2148824Z"
-  },
-  {
-    "id": "c9aeb153",
-    "user": "Raidraw45500",
-    "monstre": "Nu Udra",
-    "etoile": 9,
-    "horodatage": "2026-09-09T19:58:11.6453043Z"
-  },
-  {
-    "id": "4d3a31c6",
-    "user": "Raidraw45500",
-    "monstre": "Arkveld",
-    "etoile": 9,
-    "horodatage": "2026-09-09T19:58:24.0009851Z"
-  },
-  {
     "id": "7881bd63",
     "user": "SG_Mugiwara13",
     "monstre": "Arkveld",
@@ -322,4 +294,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-09T20:00:32.0706469Z"}
+},"majLe":"2026-09-09T20:54:43.8419286Z"}
