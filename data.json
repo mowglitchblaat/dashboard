@@ -1,5 +1,5 @@
 {"balances":{
-  "mowglitchblaat": 5235,
+  "mowglitchblaat": 0,
   "Raidraw45500": 862,
   "lockazhion": 2087,
   "GreedMW": 200
@@ -178,6 +178,48 @@
     "monstre": "Jin Dahaad",
     "etoile": 9,
     "horodatage": "2026-09-08T22:50:02.4771025Z"
+  },
+  {
+    "id": "75d47dec",
+    "user": "Raidraw45500",
+    "monstre": "Nu Udra",
+    "etoile": 9,
+    "horodatage": "2026-09-09T11:33:48.6820459Z"
+  },
+  {
+    "id": "be730214",
+    "user": "Raidraw45500",
+    "monstre": "Nu Udra",
+    "etoile": 9,
+    "horodatage": "2026-09-09T11:34:12.7182877Z"
+  },
+  {
+    "id": "ed42538b",
+    "user": "Raidraw45500",
+    "monstre": "Nu Udra",
+    "etoile": 9,
+    "horodatage": "2026-09-09T11:34:18.7181369Z"
+  },
+  {
+    "id": "f7731b27",
+    "user": "Raidraw45500",
+    "monstre": "Nu Udra",
+    "etoile": 8,
+    "horodatage": "2026-09-09T11:48:28.0388027Z"
+  },
+  {
+    "id": "2c801449",
+    "user": "Raidraw45500",
+    "monstre": "Nu Udra",
+    "etoile": 9,
+    "horodatage": "2026-09-09T12:02:56.0870747Z"
+  },
+  {
+    "id": "39daa2e7",
+    "user": "Raidraw45500",
+    "monstre": "Nu Udra",
+    "etoile": 9,
+    "horodatage": "2026-09-09T12:12:03.941395Z"
   }
 ],"config":{
   "prix": [
@@ -266,4 +308,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-09T01:14:38.3795773Z"}
+},"majLe":"2026-09-09T12:13:37.3153606Z"}
