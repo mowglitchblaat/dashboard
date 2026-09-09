@@ -178,6 +178,13 @@
     "monstre": "Jin Dahaad",
     "etoile": 9,
     "horodatage": "2026-09-08T22:50:02.4771025Z"
+  },
+  {
+    "id": "93b0fa77",
+    "user": "mowglitchblaat",
+    "monstre": "Arkveld",
+    "etoile": 8,
+    "horodatage": "2026-09-09T18:22:00.5493364Z"
   }
 ],"config":{
   "prix": [
@@ -266,4 +273,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-09T17:46:19.4006901Z"}
+},"majLe":"2026-09-09T18:23:44.4084522Z"}
