@@ -2,15 +2,9 @@
   "mowglitchblaat": 0,
   "Raidraw45500": 3907,
   "lockazhion": 2087,
-  "GreedMW": 200
+  "GreedMW": 200,
+  "DawCoeur_": 4991
 },"stock":[
-  {
-    "id": "959487e6",
-    "user": "DawCoeur_",
-    "monstre": "Nu Udra",
-    "etoile": 8,
-    "horodatage": "2026-09-06T11:58:18.6904984Z"
-  },
   {
     "id": "9e2ba878",
     "user": "ayen57",
@@ -31,76 +25,6 @@
     "monstre": "Arkveld",
     "etoile": 8,
     "horodatage": "2026-09-07T13:49:15.7186024Z"
-  },
-  {
-    "id": "6dfaf28a",
-    "user": "DawCoeur_",
-    "monstre": "Rathalos",
-    "etoile": 9,
-    "horodatage": "2026-09-07T19:01:46.6022461Z"
-  },
-  {
-    "id": "69c9a32d",
-    "user": "DawCoeur_",
-    "monstre": "Seregios",
-    "etoile": 8,
-    "horodatage": "2026-09-07T19:43:48.7848104Z"
-  },
-  {
-    "id": "9f750aee",
-    "user": "DawCoeur_",
-    "monstre": "Mizutsune",
-    "etoile": 9,
-    "horodatage": "2026-09-07T19:44:07.4267396Z"
-  },
-  {
-    "id": "ba31d1a2",
-    "user": "DawCoeur_",
-    "monstre": "Gore Magala",
-    "etoile": 7,
-    "horodatage": "2026-09-07T20:10:38.0723403Z"
-  },
-  {
-    "id": "68bb5e6e",
-    "user": "DawCoeur_",
-    "monstre": "Gore Magala",
-    "etoile": 7,
-    "horodatage": "2026-09-07T20:10:49.1308221Z"
-  },
-  {
-    "id": "618afe8d",
-    "user": "DawCoeur_",
-    "monstre": "Gore Magala",
-    "etoile": 7,
-    "horodatage": "2026-09-07T20:10:54.6227273Z"
-  },
-  {
-    "id": "33d38232",
-    "user": "DawCoeur_",
-    "monstre": "Arkveld",
-    "etoile": 10,
-    "horodatage": "2026-09-07T21:13:07.4443553Z"
-  },
-  {
-    "id": "6606bf8c",
-    "user": "DawCoeur_",
-    "monstre": "Uth Duna",
-    "etoile": 10,
-    "horodatage": "2026-09-07T21:13:22.9147221Z"
-  },
-  {
-    "id": "dbf4d843",
-    "user": "DawCoeur_",
-    "monstre": "Nu Udra",
-    "etoile": 10,
-    "horodatage": "2026-09-07T21:13:32.2613555Z"
-  },
-  {
-    "id": "0ed89cb6",
-    "user": "DawCoeur_",
-    "monstre": "Rey Dau",
-    "etoile": 10,
-    "horodatage": "2026-09-07T21:13:41.4299219Z"
   },
   {
     "id": "e48225f3",
@@ -315,4 +239,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-10T13:25:19.4682443Z"}
+},"majLe":"2026-09-10T13:30:20.3049138Z"}
