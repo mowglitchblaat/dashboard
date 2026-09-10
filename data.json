@@ -1,10 +1,10 @@
 {"balances":{
   "mowglitchblaat": 0,
-  "Raidraw45500": 3907,
+  "Raidraw45500": 4613,
   "lockazhion": 2087,
   "GreedMW": 200,
   "DawCoeur_": 4991,
-  "Zarakaih": 190
+  "Zarakaih": 596
 },"stock":[
   {
     "id": "9e2ba878",
@@ -154,25 +154,18 @@
     "horodatage": "2026-09-10T12:00:55.5822776Z"
   },
   {
-    "id": "1ec0e17c",
-    "user": "Raidraw45500",
-    "monstre": "Seregios",
-    "etoile": 8,
-    "horodatage": "2026-09-10T13:44:12.6025435Z"
-  },
-  {
-    "id": "71c14864",
-    "user": "Raidraw45500",
-    "monstre": "Rathalos",
-    "etoile": 8,
-    "horodatage": "2026-09-10T13:45:07.0308806Z"
-  },
-  {
     "id": "050831a5",
     "user": "letiiti",
     "monstre": "Seregios",
     "etoile": 8,
     "horodatage": "2026-09-10T13:45:13.2684207Z"
+  },
+  {
+    "id": "0f101ee1",
+    "user": "letiiti",
+    "monstre": "Rompopolo",
+    "etoile": 10,
+    "horodatage": "2026-09-10T14:01:30.118863Z"
   }
 ],"config":{
   "prix": [
@@ -261,4 +254,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-10T14:00:23.5550546Z"}
+},"majLe":"2026-09-10T14:05:23.8481156Z"}
