@@ -180,6 +180,13 @@
     "monstre": "Mizutsune",
     "etoile": 8,
     "horodatage": "2026-09-11T10:21:40.8904475Z"
+  },
+  {
+    "id": "0b09dc7e",
+    "user": "lockazhion",
+    "monstre": "Rathalos",
+    "etoile": 9,
+    "horodatage": "2026-09-11T10:33:52.0994558Z"
   }
 ],"config":{
   "prix": [
@@ -268,4 +275,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-11T10:33:02.3095026Z"}
+},"majLe":"2026-09-11T10:38:03.2867202Z"}
