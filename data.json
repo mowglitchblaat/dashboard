@@ -166,6 +166,20 @@
     "monstre": "Rompopolo",
     "etoile": 10,
     "horodatage": "2026-09-10T14:01:30.118863Z"
+  },
+  {
+    "id": "40e07da3",
+    "user": "lockazhion",
+    "monstre": "Arkveld",
+    "etoile": 8,
+    "horodatage": "2026-09-11T10:20:52.6734264Z"
+  },
+  {
+    "id": "6025b994",
+    "user": "lockazhion",
+    "monstre": "Mizutsune",
+    "etoile": 8,
+    "horodatage": "2026-09-11T10:21:40.8904475Z"
   }
 ],"config":{
   "prix": [
@@ -254,4 +268,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-11T10:17:59.9043582Z"}
+},"majLe":"2026-09-11T10:23:00.6782171Z"}
