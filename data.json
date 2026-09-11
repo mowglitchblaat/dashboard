@@ -110,6 +110,13 @@
     "monstre": "Mizutsune",
     "etoile": 8,
     "horodatage": "2026-09-11T11:29:09.2729164Z"
+  },
+  {
+    "id": "5f1be919",
+    "user": "mowglitchblaat",
+    "monstre": "Gore Magala",
+    "etoile": 7,
+    "horodatage": "2026-09-11T19:37:24.3743089Z"
   }
 ],"config":{
   "prix": [
@@ -198,4 +205,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-11T19:34:01.0393458Z"}
+},"majLe":"2026-09-11T19:39:01.3798800Z"}
