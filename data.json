@@ -1,7 +1,7 @@
 {"balances":{
   "mowglitchblaat": 0,
   "Raidraw45500": 4613,
-  "lockazhion": 2087,
+  "lockazhion": 6014,
   "GreedMW": 200,
   "DawCoeur_": 4991,
   "Zarakaih": 596
@@ -28,48 +28,6 @@
     "horodatage": "2026-09-07T13:49:15.7186024Z"
   },
   {
-    "id": "e48225f3",
-    "user": "lockazhion",
-    "monstre": "Arkveld",
-    "etoile": 8,
-    "horodatage": "2026-09-08T09:45:56.0434514Z"
-  },
-  {
-    "id": "7a79c395",
-    "user": "lockazhion",
-    "monstre": "Arkveld",
-    "etoile": 7,
-    "horodatage": "2026-09-08T10:02:41.3226248Z"
-  },
-  {
-    "id": "8e2536c3",
-    "user": "lockazhion",
-    "monstre": "Mizutsune",
-    "etoile": 8,
-    "horodatage": "2026-09-08T10:03:00.0567385Z"
-  },
-  {
-    "id": "e2b85329",
-    "user": "lockazhion",
-    "monstre": "Arkveld",
-    "etoile": 7,
-    "horodatage": "2026-09-08T10:27:55.4904071Z"
-  },
-  {
-    "id": "c405373e",
-    "user": "lockazhion",
-    "monstre": "Lagiacrus",
-    "etoile": 9,
-    "horodatage": "2026-09-08T10:28:16.4480233Z"
-  },
-  {
-    "id": "83fe208d",
-    "user": "lockazhion",
-    "monstre": "Seregios",
-    "etoile": 8,
-    "horodatage": "2026-09-08T11:40:32.0789618Z"
-  },
-  {
     "id": "1e6f3705",
     "user": "ChefSpirite",
     "monstre": "Rey Dau",
@@ -89,20 +47,6 @@
     "monstre": "Arkveld",
     "etoile": 8,
     "horodatage": "2026-09-08T18:31:40.5575873Z"
-  },
-  {
-    "id": "66ab5487",
-    "user": "lockazhion",
-    "monstre": "Arkveld",
-    "etoile": 9,
-    "horodatage": "2026-09-08T22:17:06.1463328Z"
-  },
-  {
-    "id": "897514f6",
-    "user": "lockazhion",
-    "monstre": "Jin Dahaad",
-    "etoile": 9,
-    "horodatage": "2026-09-08T22:50:02.4771025Z"
   },
   {
     "id": "09b029fe",
@@ -133,27 +77,6 @@
     "horodatage": "2026-09-09T19:58:49.0663137Z"
   },
   {
-    "id": "564254ac",
-    "user": "lockazhion",
-    "monstre": "Nu Udra",
-    "etoile": 9,
-    "horodatage": "2026-09-10T12:00:24.9107339Z"
-  },
-  {
-    "id": "d97f9579",
-    "user": "lockazhion",
-    "monstre": "Nu Udra",
-    "etoile": 9,
-    "horodatage": "2026-09-10T12:00:40.7703995Z"
-  },
-  {
-    "id": "7a3126b6",
-    "user": "lockazhion",
-    "monstre": "Nu Udra",
-    "etoile": 9,
-    "horodatage": "2026-09-10T12:00:55.5822776Z"
-  },
-  {
     "id": "050831a5",
     "user": "letiiti",
     "monstre": "Seregios",
@@ -168,27 +91,6 @@
     "horodatage": "2026-09-10T14:01:30.118863Z"
   },
   {
-    "id": "40e07da3",
-    "user": "lockazhion",
-    "monstre": "Arkveld",
-    "etoile": 8,
-    "horodatage": "2026-09-11T10:20:52.6734264Z"
-  },
-  {
-    "id": "6025b994",
-    "user": "lockazhion",
-    "monstre": "Mizutsune",
-    "etoile": 8,
-    "horodatage": "2026-09-11T10:21:40.8904475Z"
-  },
-  {
-    "id": "0b09dc7e",
-    "user": "lockazhion",
-    "monstre": "Rathalos",
-    "etoile": 9,
-    "horodatage": "2026-09-11T10:33:52.0994558Z"
-  },
-  {
     "id": "3b0eed70",
     "user": "DawCoeur_",
     "monstre": "Seregios",
@@ -201,6 +103,13 @@
     "monstre": "Rey Dau",
     "etoile": 9,
     "horodatage": "2026-09-11T11:24:55.8180637Z"
+  },
+  {
+    "id": "5863c9e4",
+    "user": "DawCoeur_",
+    "monstre": "Mizutsune",
+    "etoile": 8,
+    "horodatage": "2026-09-11T11:29:09.2729164Z"
   }
 ],"config":{
   "prix": [
@@ -289,4 +198,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-11T11:28:09.2044901Z"}
+},"majLe":"2026-09-11T11:33:09.6390714Z"}
