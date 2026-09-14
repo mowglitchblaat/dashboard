@@ -173,6 +173,13 @@
     "monstre": "Seregios",
     "etoile": 9,
     "horodatage": "2026-09-14T14:21:25.3819094Z"
+  },
+  {
+    "id": "4cc2c85a",
+    "user": "DawCoeur_",
+    "monstre": "Lagiacrus",
+    "etoile": 9,
+    "horodatage": "2026-09-14T14:21:35.5836067Z"
   }
 ],"config":{
   "prix": [
@@ -261,4 +268,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-14T19:40:56.9810832Z"}
+},"majLe":"2026-09-14T19:45:57.1695238Z"}
