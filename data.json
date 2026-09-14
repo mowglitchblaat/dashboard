@@ -131,6 +131,20 @@
     "monstre": "Mizutsune",
     "etoile": 9,
     "horodatage": "2026-09-11T20:23:42.86636Z"
+  },
+  {
+    "id": "3cbb661f",
+    "user": "mowglitchblaat",
+    "monstre": "Mizutsune",
+    "etoile": 9,
+    "horodatage": "2026-09-11T20:23:22.7430832Z"
+  },
+  {
+    "id": "ada1e5c5",
+    "user": "mowglitchblaat",
+    "monstre": "Gore Magala",
+    "etoile": 9,
+    "horodatage": "2026-09-14T10:15:42.3946733Z"
   }
 ],"config":{
   "prix": [
@@ -219,4 +233,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-14T10:19:42.9569804Z"}
+},"majLe":"2026-09-14T10:24:43.4548182Z"}
