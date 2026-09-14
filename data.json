@@ -145,6 +145,13 @@
     "monstre": "Gore Magala",
     "etoile": 9,
     "horodatage": "2026-09-14T10:15:42.3946733Z"
+  },
+  {
+    "id": "63b231d8",
+    "user": "mowglitchblaat",
+    "monstre": "Seregios",
+    "etoile": 9,
+    "horodatage": "2026-09-14T10:18:37.0363421Z"
   }
 ],"config":{
   "prix": [
@@ -233,4 +240,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-14T10:24:43.4548182Z"}
+},"majLe":"2026-09-14T10:29:44.0033184Z"}
