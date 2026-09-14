@@ -3,7 +3,7 @@
   "Raidraw45500": 5287,
   "lockazhion": 6014,
   "GreedMW": 200,
-  "DawCoeur_": 4991,
+  "DawCoeur_": 11690,
   "Zarakaih": 856
 },"stock":[
   {
@@ -91,27 +91,6 @@
     "horodatage": "2026-09-10T14:01:30.118863Z"
   },
   {
-    "id": "3b0eed70",
-    "user": "DawCoeur_",
-    "monstre": "Seregios",
-    "etoile": 9,
-    "horodatage": "2026-09-11T11:24:46.4678775Z"
-  },
-  {
-    "id": "a9309fc8",
-    "user": "DawCoeur_",
-    "monstre": "Rey Dau",
-    "etoile": 9,
-    "horodatage": "2026-09-11T11:24:55.8180637Z"
-  },
-  {
-    "id": "5863c9e4",
-    "user": "DawCoeur_",
-    "monstre": "Mizutsune",
-    "etoile": 8,
-    "horodatage": "2026-09-11T11:29:09.2729164Z"
-  },
-  {
     "id": "5f1be919",
     "user": "mowglitchblaat",
     "monstre": "Gore Magala",
@@ -124,13 +103,6 @@
     "monstre": "Mizutsune",
     "etoile": 8,
     "horodatage": "2026-09-11T19:37:53.2712173Z"
-  },
-  {
-    "id": "84546999",
-    "user": "DawCoeur_",
-    "monstre": "Mizutsune",
-    "etoile": 9,
-    "horodatage": "2026-09-11T20:23:42.86636Z"
   },
   {
     "id": "3cbb661f",
@@ -154,32 +126,25 @@
     "horodatage": "2026-09-14T10:18:37.0363421Z"
   },
   {
-    "id": "b10d096f",
-    "user": "DawCoeur_",
-    "monstre": "Mizutsune",
+    "id": "daebb4d9",
+    "user": "SG_Mugiwara13",
+    "monstre": "Arkveld",
     "etoile": 9,
-    "horodatage": "2026-09-11T21:09:06.3562315Z"
+    "horodatage": "2026-09-09T19:58:54.0048011Z"
   },
   {
-    "id": "11bdc524",
-    "user": "DawCoeur_",
-    "monstre": "Rathalos",
+    "id": "11147420",
+    "user": "SG_Mugiwara13",
+    "monstre": "Gore Magala",
     "etoile": 9,
-    "horodatage": "2026-09-11T21:09:12.5808852Z"
+    "horodatage": "2026-09-14T19:46:07.1916192Z"
   },
   {
-    "id": "62091358",
-    "user": "DawCoeur_",
-    "monstre": "Seregios",
-    "etoile": 9,
-    "horodatage": "2026-09-14T14:21:25.3819094Z"
-  },
-  {
-    "id": "4cc2c85a",
-    "user": "DawCoeur_",
-    "monstre": "Lagiacrus",
-    "etoile": 9,
-    "horodatage": "2026-09-14T14:21:35.5836067Z"
+    "id": "6c963548",
+    "user": "SG_Mugiwara13",
+    "monstre": "Arkveld",
+    "etoile": 8,
+    "horodatage": "2026-09-14T19:47:27.9407224Z"
   }
 ],"config":{
   "prix": [
@@ -268,4 +233,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-14T19:45:57.1695238Z"}
+},"majLe":"2026-09-14T19:50:57.9084032Z"}
