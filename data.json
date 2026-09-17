@@ -1,6 +1,6 @@
 {"balances":{
-  "mowglitchblaat": 0,
-  "Raidraw45500": 5287,
+  "mowglitchblaat": 2231,
+  "Raidraw45500": 6481,
   "lockazhion": 6014,
   "GreedMW": 200,
   "DawCoeur_": 11690,
@@ -91,41 +91,6 @@
     "horodatage": "2026-09-10T14:01:30.118863Z"
   },
   {
-    "id": "5f1be919",
-    "user": "mowglitchblaat",
-    "monstre": "Gore Magala",
-    "etoile": 7,
-    "horodatage": "2026-09-11T19:37:24.3743089Z"
-  },
-  {
-    "id": "96ef7c2c",
-    "user": "mowglitchblaat",
-    "monstre": "Mizutsune",
-    "etoile": 8,
-    "horodatage": "2026-09-11T19:37:53.2712173Z"
-  },
-  {
-    "id": "3cbb661f",
-    "user": "mowglitchblaat",
-    "monstre": "Mizutsune",
-    "etoile": 9,
-    "horodatage": "2026-09-11T20:23:22.7430832Z"
-  },
-  {
-    "id": "ada1e5c5",
-    "user": "mowglitchblaat",
-    "monstre": "Gore Magala",
-    "etoile": 9,
-    "horodatage": "2026-09-14T10:15:42.3946733Z"
-  },
-  {
-    "id": "63b231d8",
-    "user": "mowglitchblaat",
-    "monstre": "Seregios",
-    "etoile": 9,
-    "horodatage": "2026-09-14T10:18:37.0363421Z"
-  },
-  {
     "id": "daebb4d9",
     "user": "SG_Mugiwara13",
     "monstre": "Arkveld",
@@ -175,25 +140,32 @@
     "horodatage": "2026-09-14T20:29:53.0239167Z"
   },
   {
-    "id": "6c2260df",
-    "user": "mowglitchblaat",
-    "monstre": "Seregios",
+    "id": "339509b2",
+    "user": "DawCoeur_",
+    "monstre": "Arkveld",
     "etoile": 9,
-    "horodatage": "2026-09-14T10:21:34.6018174Z"
+    "horodatage": "2026-09-14T19:46:37.5733176Z"
   },
   {
-    "id": "289782c5",
-    "user": "Raidraw45500",
-    "monstre": "Arkveld",
-    "etoile": 10,
-    "horodatage": "2026-09-17T13:16:04.9010429Z"
+    "id": "6374dc4f",
+    "user": "DawCoeur_",
+    "monstre": "Rey Dau",
+    "etoile": 9,
+    "horodatage": "2026-09-14T19:46:44.8169246Z"
   },
   {
-    "id": "1c05856e",
-    "user": "Raidraw45500",
+    "id": "1ed4a875",
+    "user": "DawCoeur_",
     "monstre": "Arkveld",
-    "etoile": 10,
-    "horodatage": "2026-09-17T13:16:23.7827739Z"
+    "etoile": 8,
+    "horodatage": "2026-09-14T19:47:22.4217201Z"
+  },
+  {
+    "id": "f64e11cf",
+    "user": "DawCoeur_",
+    "monstre": "Rey Dau",
+    "etoile": 8,
+    "horodatage": "2026-09-14T19:47:29.387066Z"
   }
 ],"config":{
   "prix": [
@@ -282,4 +254,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-17T13:17:12.2180626Z"}
+},"majLe":"2026-09-17T13:22:12.2397076Z"}
