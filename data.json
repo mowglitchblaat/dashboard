@@ -4,7 +4,8 @@
   "lockazhion": 6014,
   "GreedMW": 200,
   "DawCoeur_": 11690,
-  "Zarakaih": 856
+  "Zarakaih": 856,
+  "SG_Mugiwara13": 11361
 },"stock":[
   {
     "id": "9e2ba878",
@@ -49,34 +50,6 @@
     "horodatage": "2026-09-08T18:31:40.5575873Z"
   },
   {
-    "id": "09b029fe",
-    "user": "SG_Mugiwara13",
-    "monstre": "Lagiacrus",
-    "etoile": 7,
-    "horodatage": "2026-09-09T19:33:09.9230645Z"
-  },
-  {
-    "id": "dfa3bb60",
-    "user": "SG_Mugiwara13",
-    "monstre": "Nu Udra",
-    "etoile": 9,
-    "horodatage": "2026-09-09T19:33:20.3604549Z"
-  },
-  {
-    "id": "7881bd63",
-    "user": "SG_Mugiwara13",
-    "monstre": "Arkveld",
-    "etoile": 9,
-    "horodatage": "2026-09-09T19:33:27.0559565Z"
-  },
-  {
-    "id": "97f501d4",
-    "user": "SG_Mugiwara13",
-    "monstre": "Nu Udra",
-    "etoile": 9,
-    "horodatage": "2026-09-09T19:58:49.0663137Z"
-  },
-  {
     "id": "050831a5",
     "user": "letiiti",
     "monstre": "Seregios",
@@ -91,27 +64,6 @@
     "horodatage": "2026-09-10T14:01:30.118863Z"
   },
   {
-    "id": "daebb4d9",
-    "user": "SG_Mugiwara13",
-    "monstre": "Arkveld",
-    "etoile": 9,
-    "horodatage": "2026-09-09T19:58:54.0048011Z"
-  },
-  {
-    "id": "11147420",
-    "user": "SG_Mugiwara13",
-    "monstre": "Gore Magala",
-    "etoile": 9,
-    "horodatage": "2026-09-14T19:46:07.1916192Z"
-  },
-  {
-    "id": "6c963548",
-    "user": "SG_Mugiwara13",
-    "monstre": "Arkveld",
-    "etoile": 8,
-    "horodatage": "2026-09-14T19:47:27.9407224Z"
-  },
-  {
     "id": "57f572da",
     "user": "ChefSpirite",
     "monstre": "Omega Planetes",
@@ -119,25 +71,11 @@
     "horodatage": "2026-09-14T20:04:43.5987288Z"
   },
   {
-    "id": "092175df",
-    "user": "SG_Mugiwara13",
-    "monstre": "Omega Planetes",
-    "etoile": 9,
-    "horodatage": "2026-09-14T20:04:50.7448047Z"
-  },
-  {
     "id": "785fadee",
     "user": "ChefSpirite",
     "monstre": "Gore Magala",
     "etoile": 9,
     "horodatage": "2026-09-14T20:29:21.2230018Z"
-  },
-  {
-    "id": "58e96ac2",
-    "user": "SG_Mugiwara13",
-    "monstre": "Gore Magala",
-    "etoile": 9,
-    "horodatage": "2026-09-14T20:29:53.0239167Z"
   },
   {
     "id": "339509b2",
@@ -168,53 +106,11 @@
     "horodatage": "2026-09-14T19:47:29.387066Z"
   },
   {
-    "id": "c9862849",
-    "user": "SG_Mugiwara13",
-    "monstre": "Arkveld",
-    "etoile": 10,
-    "horodatage": "2026-09-18T14:11:17.1350225Z"
-  },
-  {
-    "id": "2abe0f4f",
-    "user": "SG_Mugiwara13",
-    "monstre": "Arkveld",
-    "etoile": 9,
-    "horodatage": "2026-09-18T14:12:05.6109598Z"
-  },
-  {
-    "id": "e1aa7f0a",
-    "user": "SG_Mugiwara13",
-    "monstre": "Rey Dau",
-    "etoile": 9,
-    "horodatage": "2026-09-18T14:12:11.5479248Z"
-  },
-  {
-    "id": "38704aa4",
-    "user": "SG_Mugiwara13",
-    "monstre": "Arkveld",
-    "etoile": 10,
-    "horodatage": "2026-09-18T14:12:18.3756076Z"
-  },
-  {
-    "id": "1b3ee337",
-    "user": "SG_Mugiwara13",
-    "monstre": "Arkveld",
-    "etoile": 10,
-    "horodatage": "2026-09-18T14:33:45.547018Z"
-  },
-  {
     "id": "3f1c33e4",
     "user": "ChrisReturn",
     "monstre": "Arkveld",
     "etoile": 10,
     "horodatage": "2026-09-18T14:34:33.5799944Z"
-  },
-  {
-    "id": "b558e90c",
-    "user": "SG_Mugiwara13",
-    "monstre": "Seregios",
-    "etoile": 8,
-    "horodatage": "2026-09-18T14:45:25.7025562Z"
   },
   {
     "id": "d4aca472",
@@ -229,13 +125,6 @@
     "monstre": "Seregios",
     "etoile": 8,
     "horodatage": "2026-09-18T14:46:01.0387558Z"
-  },
-  {
-    "id": "5fa23761",
-    "user": "SG_Mugiwara13",
-    "monstre": "Seregios",
-    "etoile": 8,
-    "horodatage": "2026-09-18T15:04:56.9742843Z"
   }
 ],"config":{
   "prix": [
@@ -324,4 +213,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-18T15:17:17.0527687Z"}
+},"majLe":"2026-09-18T15:22:17.1434643Z"}
