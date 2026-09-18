@@ -1,6 +1,6 @@
 {"balances":{
   "mowglitchblaat": 2231,
-  "Raidraw45500": 6481,
+  "Raidraw45500": 8304,
   "lockazhion": 6014,
   "GreedMW": 200,
   "DawCoeur_": 11690,
@@ -168,39 +168,32 @@
     "horodatage": "2026-09-14T19:47:29.387066Z"
   },
   {
-    "id": "2109a2bd",
-    "user": "Raidraw45500",
+    "id": "c9862849",
+    "user": "SG_Mugiwara13",
     "monstre": "Arkveld",
     "etoile": 10,
-    "horodatage": "2026-09-18T14:11:22.2150124Z"
+    "horodatage": "2026-09-18T14:11:17.1350225Z"
   },
   {
-    "id": "9143dc96",
-    "user": "Raidraw45500",
+    "id": "2abe0f4f",
+    "user": "SG_Mugiwara13",
     "monstre": "Arkveld",
-    "etoile": 10,
-    "horodatage": "2026-09-18T14:11:25.3067058Z"
+    "etoile": 9,
+    "horodatage": "2026-09-18T14:12:05.6109598Z"
   },
   {
-    "id": "46c2b940",
-    "user": "Raidraw45500",
-    "monstre": "Arkveld",
-    "etoile": 10,
-    "horodatage": "2026-09-18T14:11:30.2084691Z"
-  },
-  {
-    "id": "b5c4d26f",
-    "user": "Raidraw45500",
+    "id": "e1aa7f0a",
+    "user": "SG_Mugiwara13",
     "monstre": "Rey Dau",
     "etoile": 9,
-    "horodatage": "2026-09-18T14:11:47.9185247Z"
+    "horodatage": "2026-09-18T14:12:11.5479248Z"
   },
   {
-    "id": "a3e8ff64",
-    "user": "Raidraw45500",
-    "monstre": "Seregios",
-    "etoile": 9,
-    "horodatage": "2026-09-18T14:11:54.5274895Z"
+    "id": "38704aa4",
+    "user": "SG_Mugiwara13",
+    "monstre": "Arkveld",
+    "etoile": 10,
+    "horodatage": "2026-09-18T14:12:18.3756076Z"
   }
 ],"config":{
   "prix": [
@@ -289,4 +282,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-18T14:12:08.4247370Z"}
+},"majLe":"2026-09-18T14:17:08.4507455Z"}
