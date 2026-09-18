@@ -222,6 +222,20 @@
     "monstre": "Seregios",
     "etoile": 8,
     "horodatage": "2026-09-18T14:45:45.412535Z"
+  },
+  {
+    "id": "9561a24d",
+    "user": "Zarakaih",
+    "monstre": "Seregios",
+    "etoile": 8,
+    "horodatage": "2026-09-18T14:46:01.0387558Z"
+  },
+  {
+    "id": "5fa23761",
+    "user": "SG_Mugiwara13",
+    "monstre": "Seregios",
+    "etoile": 8,
+    "horodatage": "2026-09-18T15:04:56.9742843Z"
   }
 ],"config":{
   "prix": [
@@ -310,4 +324,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-18T15:02:15.2019036Z"}
+},"majLe":"2026-09-18T15:07:15.9139107Z"}
