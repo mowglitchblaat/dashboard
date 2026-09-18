@@ -208,6 +208,20 @@
     "monstre": "Arkveld",
     "etoile": 10,
     "horodatage": "2026-09-18T14:34:33.5799944Z"
+  },
+  {
+    "id": "b558e90c",
+    "user": "SG_Mugiwara13",
+    "monstre": "Seregios",
+    "etoile": 8,
+    "horodatage": "2026-09-18T14:45:25.7025562Z"
+  },
+  {
+    "id": "d4aca472",
+    "user": "ChrisReturn",
+    "monstre": "Seregios",
+    "etoile": 8,
+    "horodatage": "2026-09-18T14:45:45.412535Z"
   }
 ],"config":{
   "prix": [
@@ -296,4 +310,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-18T14:42:11.9744394Z"}
+},"majLe":"2026-09-18T14:47:12.9380175Z"}
