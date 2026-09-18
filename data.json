@@ -4,7 +4,7 @@
   "lockazhion": 6014,
   "GreedMW": 200,
   "DawCoeur_": 11690,
-  "Zarakaih": 856,
+  "Zarakaih": 0,
   "SG_Mugiwara13": 11361
 },"stock":[
   {
@@ -118,13 +118,6 @@
     "monstre": "Seregios",
     "etoile": 8,
     "horodatage": "2026-09-18T14:45:45.412535Z"
-  },
-  {
-    "id": "9561a24d",
-    "user": "Zarakaih",
-    "monstre": "Seregios",
-    "etoile": 8,
-    "horodatage": "2026-09-18T14:46:01.0387558Z"
   }
 ],"config":{
   "prix": [
@@ -213,4 +206,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-18T15:22:17.1434643Z"}
+},"majLe":"2026-09-18T15:27:17.9260854Z"}
