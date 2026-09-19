@@ -1,6 +1,6 @@
 {"balances":{
   "mowglitchblaat": 2231,
-  "Raidraw45500": 8304,
+  "Raidraw45500": 8668,
   "lockazhion": 6014,
   "GreedMW": 200,
   "DawCoeur_": 11690,
@@ -118,6 +118,13 @@
     "monstre": "Seregios",
     "etoile": 8,
     "horodatage": "2026-09-18T14:45:45.412535Z"
+  },
+  {
+    "id": "225b2cce",
+    "user": "Raidraw45500",
+    "monstre": "Rey Dau",
+    "etoile": 9,
+    "horodatage": "2026-09-19T15:00:01.2599801Z"
   }
 ],"config":{
   "prix": [
@@ -206,4 +213,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-19T14:57:59.4577418Z"}
+},"majLe":"2026-09-19T15:02:59.5364111Z"}
