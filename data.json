@@ -125,6 +125,27 @@
     "monstre": "Rey Dau",
     "etoile": 9,
     "horodatage": "2026-09-19T15:00:01.2599801Z"
+  },
+  {
+    "id": "969c9316",
+    "user": "Zarakaih",
+    "monstre": "Seregios",
+    "etoile": 8,
+    "horodatage": "2026-09-18T15:03:11.7645736Z"
+  },
+  {
+    "id": "c9b02df2",
+    "user": "Zarakaih",
+    "monstre": "Seregios",
+    "etoile": 8,
+    "horodatage": "2026-09-18T15:18:32.1518447Z"
+  },
+  {
+    "id": "a600840c",
+    "user": "Zarakaih",
+    "monstre": "Jin Dahaad",
+    "etoile": 9,
+    "horodatage": "2026-09-21T08:17:07.7897624Z"
   }
 ],"config":{
   "prix": [
@@ -213,4 +234,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-21T08:15:13.4654381Z"}
+},"majLe":"2026-09-21T08:20:14.2155591Z"}
