@@ -1,6 +1,6 @@
 {"balances":{
   "mowglitchblaat": 2231,
-  "Raidraw45500": 8668,
+  "Raidraw45500": 14598,
   "lockazhion": 6014,
   "GreedMW": 200,
   "DawCoeur_": 11690,
@@ -120,39 +120,11 @@
     "horodatage": "2026-09-18T14:45:45.412535Z"
   },
   {
-    "id": "225b2cce",
-    "user": "Raidraw45500",
-    "monstre": "Rey Dau",
-    "etoile": 9,
-    "horodatage": "2026-09-19T15:00:01.2599801Z"
-  },
-  {
-    "id": "df1c8a62",
-    "user": "Raidraw45500",
-    "monstre": "Jin Dahaad",
-    "etoile": 9,
-    "horodatage": "2026-09-21T09:53:37.7696887Z"
-  },
-  {
-    "id": "b7f5a852",
-    "user": "Raidraw45500",
-    "monstre": "Seregios",
-    "etoile": 9,
-    "horodatage": "2026-09-21T09:53:53.5365028Z"
-  },
-  {
-    "id": "6eda61e0",
-    "user": "Raidraw45500",
-    "monstre": "Arkveld",
-    "etoile": 9,
-    "horodatage": "2026-09-21T09:54:03.2887426Z"
-  },
-  {
-    "id": "faf761f7",
-    "user": "Raidraw45500",
+    "id": "222ddf5b",
+    "user": "DawCoeur_",
     "monstre": "Arkveld",
     "etoile": 10,
-    "horodatage": "2026-09-21T09:54:15.8241768Z"
+    "horodatage": "2026-09-22T19:30:47.799019Z"
   }
 ],"config":{
   "prix": [
@@ -241,4 +213,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-09-22T20:00:31.2419364Z"}
+},"majLe":"2026-09-22T20:05:32.0109471Z"}
