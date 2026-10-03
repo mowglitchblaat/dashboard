@@ -195,6 +195,34 @@
     "monstre": "Gogmazios",
     "etoile": 9,
     "horodatage": "2026-10-03T19:27:42.3953124Z"
+  },
+  {
+    "id": "a674b033",
+    "user": "SG_Mugiwara13",
+    "monstre": "Rey Dau",
+    "etoile": 10,
+    "horodatage": "2026-10-03T20:15:13.0356544Z"
+  },
+  {
+    "id": "f14df943",
+    "user": "SG_Mugiwara13",
+    "monstre": "Uth Duna",
+    "etoile": 10,
+    "horodatage": "2026-10-03T20:15:20.785015Z"
+  },
+  {
+    "id": "a7fb15d4",
+    "user": "SG_Mugiwara13",
+    "monstre": "Nu Udra",
+    "etoile": 10,
+    "horodatage": "2026-10-03T20:15:26.8145735Z"
+  },
+  {
+    "id": "819d99a1",
+    "user": "SG_Mugiwara13",
+    "monstre": "Arkveld",
+    "etoile": 10,
+    "horodatage": "2026-10-03T20:15:32.569792Z"
   }
 ],"config":{
   "prix": [
@@ -283,4 +311,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-03T20:11:00.0011760Z"}
+},"majLe":"2026-10-03T20:16:00.4125468Z"}
