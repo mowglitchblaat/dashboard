@@ -188,6 +188,13 @@
     "monstre": "Arkveld",
     "etoile": 9,
     "horodatage": "2026-10-02T20:55:11.4904717Z"
+  },
+  {
+    "id": "c1de4519",
+    "user": "SG_Mugiwara13",
+    "monstre": "Gogmazios",
+    "etoile": 9,
+    "horodatage": "2026-10-03T19:27:42.3953124Z"
   }
 ],"config":{
   "prix": [
@@ -276,4 +283,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-03T19:25:56.2250536Z"}
+},"majLe":"2026-10-03T19:30:56.6648155Z"}
