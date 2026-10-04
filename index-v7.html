@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jeu de cartes</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#14141a;color:#eee}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:#1d1d27}
+h1{margin:0;font-size:20px}nav{display:flex;gap:6px;padding:10px 20px;flex-wrap:wrap}
+main{padding:10px 20px 40px;max-width:1100px;margin:auto}
+button,select,input,textarea{font:inherit;padding:7px 10px;border-radius:6px;border:1px solid #444;background:#262633;color:#eee}
+button{cursor:pointer;background:#7c3aed;border-color:#7c3aed}button.sec{background:#262633;border-color:#444}button.on{background:#7c3aed}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.card{border:3px solid #444;border-radius:10px;padding:6px;background:#1d1d27;display:flex;flex-direction:column;gap:4px}
+.card img{width:100%;border-radius:6px}small{color:#aaa}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:26px 22px;padding:10px}
+.cw{display:flex;flex-direction:column;gap:12px}
+.cimg{width:100%;display:block;filter:drop-shadow(0 0 3px var(--g)) drop-shadow(0 0 12px var(--g))}
+.inf{font-size:11px;color:#6b6b78;text-align:center;line-height:1.4;border-top:1px dashed #2c2c38;padding-top:6px}
+.dbar{position:sticky;top:0;z-index:5;background:#1d1d27;padding:10px 14px;border-radius:10px;margin:8px 0 14px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid #2c2c38}
+button:disabled{opacity:.4;cursor:not-allowed}
+.cimg.in{filter:drop-shadow(0 0 3px var(--g)) drop-shadow(0 0 12px var(--g)) drop-shadow(0 0 24px var(--g))}
+.cw button{font-size:13px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+form.f{display:grid;gap:8px;max-width:520px;background:#1d1d27;padding:14px;border-radius:10px;margin-bottom:20px}
+table{border-collapse:collapse;width:100%}td,th{padding:6px;border-bottom:1px solid #333;text-align:left}
+.ok{color:#4ade80}.ko{color:#f87171}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin:8px 0 22px}
+.stat{background:#1d1d27;border:1px solid #2c2c38;border-radius:10px;padding:12px}
+.stat b{display:block;font-size:26px;margin:2px 0}.stat span{color:#aaa;font-size:13px;display:block}
+.stat.card2{display:flex;gap:12px;align-items:center;grid-column:span 2}
+.stat.card2 img{width:80px;border-radius:4px;filter:drop-shadow(0 0 3px var(--g)) drop-shadow(0 0 10px var(--g))}
+</style></head><body>
+<header><h1>🃏 Jeu de cartes</h1><div id="me"></div></header>
+<nav id="nav"></nav><main id="main"></main>
+<script>
+const sb=supabase.createClient('https://bjsvqikjnvaomyoifiml.supabase.co','sb_publishable_-3cPqDCyE-zhb3z5r6dPhg_DJFKGAI6');
+const $=s=>document.querySelector(s),main=$('#main');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const img=p=>p?sb.storage.from('cartes').getPublicUrl(p).data.publicUrl:'';
+async function q(p){const r=await p;if(r.error){alert(r.error.message);throw r.error}return r.data}
+let user,joueur,isAdmin,tab='collection',sub='cartes',B={};
+const opts=(a,l='nom')=>a.map(x=>`<option value="${x.id}">${esc(x[l])}</option>`).join('');
+const TABS={collection:'Ma collection',boutique:'Boutique',deck:'Mon deck',profil:'Profils'};
+
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){
+    $('#nav').innerHTML='';$('#me').innerHTML='<button id="login">Se connecter avec Twitch</button>';
+    main.innerHTML='<p>Connecte-toi avec ton compte Twitch pour voir ta collection.</p>';
+    $('#login').onclick=()=>sb.auth.signInWithOAuth({provider:'twitch',options:{redirectTo:location.origin+location.pathname}});
+    return;
+  }
+  user=session.user;
+  joueur=await q(sb.from('joueurs').select('*').eq('id',user.id).single());
+  isAdmin=await q(sb.rpc('is_admin'));
+  header();show(tab);
+}
+function header(){
+  $('#me').innerHTML=`${isAdmin?'<small style="opacity:.5;margin-right:8px">site v7</small>':''}${esc(joueur.pseudo)} · 💰 ${joueur.monnaie} <button class="sec" id="out">Déconnexion</button>`;
+  $('#out').onclick=async()=>{await sb.auth.signOut();location.reload()};
+}
+async function refreshJoueur(){joueur=await q(sb.from('joueurs').select('*').eq('id',user.id).single());header()}
+function show(t){
+  tab=t;const T={...TABS};if(isAdmin)T.admin='⚙️ Admin';
+  $('#nav').innerHTML=Object.entries(T).map(([k,v])=>`<button class="${k==t?'on':'sec'}" data-t="${k}">${v}</button>`).join('');
+  $('#nav').querySelectorAll('button').forEach(b=>b.onclick=()=>show(b.dataset.t));
+  ({collection:vCollection,boutique:vBoutique,deck:vDeck,profil:vProfil,admin:vAdmin})[t]();
+}
+
+/* ---------- Collection ---------- */
+let deck=null,typeOf={},flt='tout',fcol='tout',collData=[];
+const cn=x=>x.variantes_carte.cartes.collections?.nom||'Communes';
+const TYPES={combattant:'Combattants',magie:'Magies',piege:'Pièges'};
+async function loadColl(){
+  collData=await q(sb.from('collection_joueur').select('quantite,variantes_carte(nom,image_path,cartes(id,nom,type,collections(nom),raretes(nom,couleur)))').eq('joueur_id',user.id));
+  typeOf={};collData.forEach(x=>{const c=x.variantes_carte.cartes;typeOf[c.id]=c.type});
+  if(!deck){const dk=await q(sb.from('deck').select('carte_id').eq('joueur_id',user.id));deck=new Set(dk.map(x=>x.carte_id))}
+}
+function updBar(){
+  const n=t=>[...deck].filter(i=>typeOf[i]==t).length,ok=deck.size>=9&&deck.size<=10&&n('combattant')>=3&&n('magie')>=3&&n('piege')>=3;
+  $('#dbar').innerHTML=`<span><b>${deck.size}/10</b> — combattants ${n('combattant')}/3 · magies ${n('magie')}/3 · pièges ${n('piege')}/3</span><button id="sv" ${ok?'':'disabled'} title="9 ou 10 cartes, au moins 3 de chaque type">Enregistrer le deck</button>`;
+  $('#sv').onclick=async()=>{
+    const {error}=await sb.rpc('enregistrer_deck',{p_cartes:[...deck]});
+    alert(error?({DECK_TAILLE_INVALIDE:'Il faut 9 ou 10 cartes.',DECK_COMPOSITION_INVALIDE:'Il faut au moins 3 cartes de chaque type.'}[error.message]||error.message):'Deck enregistré !');};
+}
+function cardHTML(x){
+  const v=x.variantes_carte,c=v.cartes,on=deck.has(c.id);
+  return `<div class="cw">${v.image_path?`<img class="cimg${on?' in':''}" style="--g:${esc(c.raretes.couleur)}" src="${img(v.image_path)}">`:''}<div class="inf">${esc(c.nom)} · ${esc(c.type)} · ${esc(c.raretes.nom)}<br>${esc(v.nom)} ×${x.quantite}</div><button class="${on?'sec':''}" data-c="${c.id}">${on?'✓ Retirer du deck':'Ajouter au deck'}</button></div>`;
+}
+function bindToggle(redraw){
+  main.querySelectorAll('button[data-c]').forEach(b=>b.onclick=()=>{const id=+b.dataset.c;
+    if(deck.has(id))deck.delete(id);
+    else if(deck.size>=10){alert('Deck complet : 10 cartes maximum.');return}
+    else deck.add(id);
+    redraw();});
+}
+async function vCollection(){
+  await loadColl();
+  if(!collData.length){main.innerHTML='<p>Tu n\'as encore aucune carte. Achète un booster dans la boutique, puis ouvre-le en live avec !booster.</p>';return}
+  main.innerHTML='<div id="dbar" class="dbar"></div><div class="row" id="flt"></div><div class="row" id="fcol"></div><div class="cgrid" id="gr"></div>';
+  drawColl();
+}
+function drawColl(){
+  $('#flt').innerHTML=[['tout','Tout'],...Object.entries(TYPES)].map(([k,v])=>`<button class="${k==flt?'on':'sec'}" data-f="${k}">${v}</button>`).join('');
+  $('#flt').querySelectorAll('button').forEach(b=>b.onclick=()=>{flt=b.dataset.f;drawColl()});
+  const names=[...new Set(collData.map(cn))].sort();
+  $('#fcol').innerHTML=[['tout','Toutes les collections'],...names.map(n=>[n,n])].map(([k,v])=>`<button class="${k==fcol?'on':'sec'}" data-k="${esc(k)}">${esc(v)}</button>`).join('');
+  $('#fcol').querySelectorAll('button').forEach(b=>b.onclick=()=>{fcol=b.dataset.k;drawColl()});
+  $('#gr').innerHTML=collData.filter(x=>(flt=='tout'||x.variantes_carte.cartes.type==flt)&&(fcol=='tout'||cn(x)==fcol)).map(cardHTML).join('');
+  bindToggle(drawColl);updBar();
+}
+
+/* ---------- Boutique ---------- */
+async function vBoutique(){
+  const [t,s]=await Promise.all([q(sb.from('types_boosters').select('*').eq('actif',true)),
+    q(sb.from('stock_boosters').select('quantite,types_boosters(nom)').eq('joueur_id',user.id).gt('quantite',0))]);
+  main.innerHTML=`<h3>Tes boosters non ouverts</h3><p>${s.length?s.map(x=>`${esc(x.types_boosters.nom)} ×${x.quantite}`).join(' · ')+'<br><small>Ouvre-les pendant le live avec !booster</small>':'Aucun'}</p>
+  <h3>Acheter</h3><div class="grid">${t.map(b=>`<div class="card">${b.image_path?`<img src="${img(b.image_path)}">`:''}<b>${esc(b.nom)}</b><small>${b.nb_cartes} cartes</small><button data-id="${b.id}">Acheter · 💰 ${b.prix}</button></div>`).join('')}</div>`;
+  main.querySelectorAll('button[data-id]').forEach(b=>b.onclick=async()=>{
+    const {error}=await sb.rpc('acheter_booster',{p_type_id:+b.dataset.id});
+    if(error)alert(error.message.includes('MONNAIE')?'Pas assez de monnaie.':error.message);
+    await refreshJoueur();vBoutique();});
+}
+
+/* ---------- Deck ---------- */
+async function vDeck(){
+  await loadColl();
+  main.innerHTML='<div id="dbar" class="dbar"></div><div class="cgrid" id="gr"></div>';
+  drawDeck();
+}
+function drawDeck(){
+  const seen=new Set(),ord={combattant:0,magie:1,piege:2};
+  const L=collData.filter(x=>{const i=x.variantes_carte.cartes.id;if(!deck.has(i)||seen.has(i))return false;seen.add(i);return true})
+    .sort((a,b)=>ord[a.variantes_carte.cartes.type]-ord[b.variantes_carte.cartes.type]);
+  $('#gr').innerHTML=L.length?L.map(cardHTML).join(''):'<p>Ton deck est vide. Ajoute des cartes depuis « Ma collection ».</p>';
+  bindToggle(drawDeck);updBar();
+}
+
+/* ---------- Profils (visibles par tous les joueurs connectés) ---------- */
+async function vProfil(id=user.id){
+  const mine=id==user.id;
+  const [rl,rp]=await Promise.all([sb.rpc('liste_profils'),sb.rpc('profil_public',{p_joueur:id})]);
+  if(rl.error||rp.error){main.innerHTML='<p class="ko">Profils indisponibles pour le moment (l\'admin doit d\'abord lancer 05-profil.sql puis 06-profils-publics.sql dans Supabase).</p>';return}
+  if(!rp.data){main.innerHTML='<p>Profil introuvable.</p>';return}
+  const D=rp.data,S=D.stats||{},n=k=>S[k]??0,tot=n('victoires')+n('defaites')+n('nuls');
+  const pct=tot?Math.round(100*n('victoires')/tot)+' %':'—';
+  const st=(l,v,s)=>`<div class="stat"><span>${l}</span><b>${v}</b>${s?`<span>${s}</span>`:''}</div>`;
+  const cardTile=(l,x,u)=>{
+    if(!x)return st(l,'—');
+    return `<div class="stat card2" style="--g:${esc(x.couleur||'#888')}">${x.image_path?`<img src="${img(x.image_path)}">`:''}<div><span>${l}</span><b style="font-size:18px">${esc(x.nom)}</b><span>${x.valeur} ${u}</span></div></div>`};
+  let coll='';
+  if(mine){
+    await loadColl();
+    const rt=await sb.from('cartes').select('id',{count:'exact',head:true}).eq('actif',true);
+    const mc=new Map();collData.forEach(x=>{const c=x.variantes_carte.cartes;mc.set(c.id,c)});
+    const copies=collData.reduce((a,x)=>a+x.quantite,0),byR={};
+    mc.forEach(c=>{const r=c.raretes.nom;byR[r]=(byR[r]||0)+1});
+    coll=`<h3>Collection</h3><div class="stats">
+   ${st('Cartes différentes',mc.size+(rt.count!=null?' / '+rt.count:''))}${st('Cartes au total',copies,'doublons compris')}
+   ${st('Boosters ouverts',n('boosters_ouverts'))}
+   ${Object.entries(byR).map(([k,v])=>st(esc(k),v,'cartes différentes')).join('')}</div>`;
+  }
+  const rank=rl.data.slice(0,50).map((x,i)=>`<tr><td>${i+1}</td><td><button class="${x.joueur_id==id?'on':'sec'}" data-p="${x.joueur_id}">${esc(x.pseudo)}${x.joueur_id==user.id?' (moi)':''}</button></td><td>${x.victoires}</td><td>${x.defaites}</td><td>${x.nuls}</td></tr>`).join('');
+  main.innerHTML=`<div class="row"><h3 style="margin:0">${mine?'Mon profil':'Profil de '+esc(D.pseudo)}</h3>${mine?'':`<button class="sec" data-p="${user.id}">← Mon profil</button>`}</div>
+  <h3>Combats</h3><div class="stats">
+   ${st('Victoires',n('victoires'))}${st('Défaites',n('defaites'))}${st('Nuls',n('nuls'))}
+   ${st('% de victoires',pct,tot+' combat'+(tot>1?'s':''))}
+   ${st('Meilleure série de victoires',n('meilleure_serie'))}${st('Série en cours',n('serie_actuelle'))}</div>
+  <h3>Records</h3><div class="stats">
+   ${st('Plus gros coup infligé',n('plus_gros_coup'),'dégâts en une attaque')}
+   ${st('Victoire la plus rapide',S.victoire_rapide_tours?S.victoire_rapide_tours+' tours':'—')}
+   ${st('Combat le plus long',S.combat_long_tours?S.combat_long_tours+' tours':'—')}
+   ${st('Dégâts totaux infligés',n('degats_totaux'))}</div>
+  <h3>Cartes</h3><div class="stats">${cardTile('Carte la plus jouée',D.plus_jouee,'combats')}${cardTile('Carte la plus victorieuse',D.plus_gagnante,'victoires')}</div>
+  ${coll}
+  ${tot?'':`<p><small>${mine?'Aucun combat joué pour l\'instant : tes statistiques de combat apparaîtront après ton premier combat.':'Ce joueur n\'a pas encore combattu.'}</small></p>`}
+  <h3>Classement</h3><p><small>Clique sur un pseudo pour voir son profil.</small></p>
+  <table><tr><th>#</th><th>Joueur</th><th>V</th><th>D</th><th>N</th></tr>${rank}</table>`;
+  main.querySelectorAll('button[data-p]').forEach(b=>b.onclick=()=>{vProfil(b.dataset.p);window.scrollTo(0,0)});
+}
+
+/* ---------- Admin ---------- */
+async function vAdmin(){
+  const S={cartes:'Cartes',collections:'Collections',boosters:'Boosters',effets:'Effets',raretes:'Raretés',cadeaux:'Cadeaux',joueurs:'Joueurs'};
+  main.innerHTML=`<div class="row">${Object.entries(S).map(([k,v])=>`<button class="${k==sub?'on':'sec'}" data-s="${k}">${v}</button>`).join('')}</div><div id="sub"></div>`;
+  main.querySelectorAll('button[data-s]').forEach(b=>b.onclick=()=>{sub=b.dataset.s;vAdmin()});
+  ({cartes:aCartes,collections:aCollections,boosters:aBoosters,effets:aEffets,raretes:aRaretes,cadeaux:aCadeaux,joueurs:aJoueurs})[sub]();
+}
+async function upload(file){
+  const path=crypto.randomUUID()+'.'+(file.name.split('.').pop()||'png');
+  await q(sb.storage.from('cartes').upload(path,file,{contentType:file.type}));return path;
+}
+
+/* ---------- Catalogue d'effets (pour ajouter un effet : une ligne ici) ---------- */
+// Paramètres réutilisables : [libellé, 'n' (nombre) ou liste de choix]
+const P={val:['Valeur','n'],u:['Unité',['pts','pct']],tours:['Nb de tours','n'],chance:['Chance (%)','n'],frappes:['Nb de frappes','n'],
+ coups:['Nb de coups','n'],cible:['Cible',['soi','adversaire']],carte:['Carte',['magie','piege']],seuil:['Seuil','n'],seuilpv:['Seuil (% PV)','n'],
+ cond:['Condition',['pv_max','degats_infliges']],pct:['% PV rendus en plus','n'],val2:['2e valeur','n'],pctatq:["% de l'ATQ infligée volé en PV",'n'],pctpv:['% des PV max de la cible perdus par tour','n'],degtour:['Points de dégâts par tour','n']};
+// Chaque effet : [libellé, ...paramètres]
+const PAS={evite_mort:['Évite la mort une fois'],soin_tour:['Se soigne de X chaque tour','val','u'],renvoi:['Renvoie X dégâts reçus','val','u'],
+ atq_tours:["Augmente l'ATQ tous les X tours",'tours','val','u'],pv_tours:['Augmente les PV tous les X tours','tours','val','u'],
+ multi_frappe:['À X % de chances, frappe X fois par tour','chance','frappes'],reduc_degats:['À X % de chances, réduit les dégâts reçus de X','chance','val','u'],
+ bonus_frappe:["Si frappé X fois par tour, bonus à la prochaine attaque",'coups','val','u'],
+ etourdir:["À X % de chances, étourdit la cible (n'attaque pas au prochain tour)",'chance'],
+ vol_pct_atq:["À X % de chances, vole X % de l'ATQ infligée (soin)",'chance','pctatq'],
+ brulure:["À X % de chances, applique une brûlure (% de PV par tour)",'chance','pctpv','tours'],
+ poison:["À X % de chances, applique un poison (points par tour)",'chance','degtour','tours']};
+const ULT={degats:["Dégâts directs à l'adversaire",'val'],voler:['Vole une magie/un piège','carte'],detruire:['Détruit une magie/un piège','carte'],
+ equiper:['Équipe une autre magie/piège du deck','carte'],soin:['Se soigne','val','u'],vol_vie:['Vole de la vie','val'],echange_atq:["Échange l'attaque avec l'adversaire"],
+ annule_attaque:['Annule la prochaine attaque'],double_degats:['Double ses dégâts pendant X tours','tours'],echange_atq_def:["Échange l'ATQ et la défense de l'adversaire"]};
+const MAG={atq_mod:["Modifie l'ATQ (négatif = baisse)",'cible','val','u'],pv_mod:['Modifie les PV max (négatif = baisse)','cible','val','u'],
+ soin:['Soigne son combattant','val','u'],degats:["Dégâts directs à l'adversaire",'val'],annule_attaque:["Annule la prochaine attaque de l'adversaire"],
+ renvoi:['Renvoie une part des dégâts pendant X tours','val','tours'],insensible_piege:['Insensible aux pièges pendant X tours','tours'],
+ annule_magies:['Annule les autres magies pendant X tours','tours'],mort_evitee:['Évite la mort si condition (reste à 1 PV, une fois)','cond','seuil','pct'],
+ degats_tours:['Inflige X dégâts après X tours','val','tours']};
+const CON={adv_attaque:["L'adversaire a attaqué X fois",'coups'],adv_ultime:["L'adversaire utilise son ultime"],proprio_pv_sous:['Le propriétaire passe sous X % de PV','seuilpv'],
+ adv_pv_bas:["L'adversaire passe sous X % de PV",'seuilpv'],adv_soigne:["L'adversaire se soigne"],proprio_soigne:['Le propriétaire se soigne'],proprio_meurt:['Le propriétaire meurt']};
+let editId=null;
+function mk(el,cat){
+  el.innerHTML=`<select><option value="">— Aucun —</option>${Object.entries(cat).map(([k,v])=>`<option value="${k}">${v[0]}</option>`).join('')}</select><div class="row"></div>`;
+  const s=el.querySelector('select'),d=el.querySelector('.row');
+  s.onchange=()=>{d.innerHTML=s.value?cat[s.value].slice(1).map(k=>{const [l,t]=P[k];
+    return `<label><small>${l}</small><br>${t=='n'?`<input data-k="${k}" type="number" step="any" style="width:110px">`:`<select data-k="${k}">${t.map(o=>`<option>${o}</option>`).join('')}</select>`}</label>`}).join(''):''};
+  return {get(){if(!s.value)return null;const o={type:s.value};
+    d.querySelectorAll('[data-k]').forEach(i=>o[i.dataset.k]=i.tagName=='INPUT'?(i.value===''?null:+i.value):i.value);return o},
+  set(o){if(!o||!o.type)return;s.value=o.type;if(s.value!==o.type){s.value='';return}s.onchange();
+    d.querySelectorAll('[data-k]').forEach(i=>{if(o[i.dataset.k]!=null)i.value=o[i.dataset.k]})}};
+}
+
+async function aCartes(){
+  editId=null;
+  const [col,rar,cartes]=await Promise.all([q(sb.from('collections').select('*')),q(sb.from('raretes').select('*').order('ordre')),
+    q(sb.from('cartes').select('id,nom,type,actif,raretes(nom),collections(nom),variantes_carte(id)').order('id',{ascending:false}))]);
+  const ep=await sb.from('effets_perso').select('*'),cu=ep.data||[];
+  const mc=(b,k)=>({...b,...Object.fromEntries(cu.filter(x=>x.categorie==k).map(x=>[x.cle,[x.libelle,...x.params]]))});
+  const CAT={pas:mc(PAS,'passif'),ult:mc(ULT,'ultime'),mag:mc(MAG,'magie'),con:mc(CON,'condition')};
+  $('#sub').innerHTML=`<h3 id="ftitle">Nouvelle carte</h3>
+  <form class="f" id="fc"><input name="nom" placeholder="Nom" required>
+   <select name="type"><option value="combattant">Combattant</option><option value="magie">Magie</option><option value="piege">Piège</option></select>
+   <select name="col"><option value="">Commune (aucune collection)</option>${opts(col)}</select>
+   <select name="rar">${opts(rar)}</select>
+   <div class="row" id="r-stats"><input name="atq" type="number" placeholder="ATQ" style="width:90px"><input name="pv" type="number" placeholder="PV" style="width:90px"></div>
+   <input name="desc" placeholder="Description (optionnel)">
+   <label>Image complète de la carte<br><input name="file" type="file" accept="image/*" required></label>
+   <div id="s-comb"><b>Ultime</b><div id="b-ult"></div>
+    <div class="row"><label><small>Après N tours</small><br><input name="utours" type="number" min="0" style="width:90px"></label>
+    <label><input type="checkbox" name="ucarte"> ou quand une magie/piège s'active</label></div>
+    <div class="row"><label><small>Utilisations max (0 = illimité)</small><br><input name="uuses" type="number" min="0" value="1" style="width:90px"></label>
+    <label><small>Délai entre 2 utilisations (tours)</small><br><input name="ucd" type="number" min="0" value="0" style="width:90px"></label></div>
+    <b>Passif</b><div id="b-pas"></div></div>
+   <div id="s-mag" style="display:none"><b>Effet de la magie</b><div id="b-mag"></div></div>
+   <div id="s-pie" style="display:none"><b>Condition du piège</b><div id="b-con"></div><b>Effet du piège</b><div id="b-pef"></div>
+    <label><small>Déclenchements max</small><br><input name="decl" type="number" min="1" value="1" style="width:90px"></label></div>
+   <label><input type="checkbox" name="actif"> Publier (visible des joueurs et dans les boosters)</label>
+   <div class="row"><button id="fbtn">Créer la carte</button><button type="button" class="sec" id="fcancel" style="display:none">Annuler la modification</button></div></form>
+  <h3>Ajouter une version alternative</h3>
+  <form class="f" id="fv"><select name="carte">${opts(cartes)}</select><input name="nom" placeholder="Nom (ex : Alt 1)" required>
+   <input name="poids" type="number" value="10" title="Taux d'apparition (Standard = 100)"><input name="file" type="file" accept="image/*" required><button>Ajouter la version</button></form>
+  <h3>Cartes (${cartes.length})</h3><div class="row"><select id="fcolad"><option value="">Toutes les collections</option>${col.map(c=>`<option>${esc(c.nom)}</option>`).join('')}<option>Commune</option></select></div><table><tr><th>Nom</th><th>Type</th><th>Rareté</th><th>Collection</th><th>Versions</th><th>Publiée</th><th></th></tr>
+  ${cartes.map(c=>`<tr data-col="${esc(c.collections?.nom||'Commune')}"><td>${esc(c.nom)}</td><td>${c.type}</td><td>${esc(c.raretes.nom)}</td><td>${esc(c.collections?.nom||'Commune')}</td><td>${c.variantes_carte.length}</td>
+  <td><button class="sec" data-a="${c.id}" data-v="${c.actif}">${c.actif?'<span class="ok">Oui</span>':'<span class="ko">Non</span>'}</button></td>
+  <td><button class="sec" data-edit="${c.id}" title="Modifier cette carte">✏️</button> <button class="sec" data-del="${c.id}" data-nom="${esc(c.nom)}" title="Supprimer cette carte">🗑️</button></td></tr>`).join('')}</table>`;
+  const fc=$('#fc');
+  B={ult:mk($('#b-ult'),CAT.ult),pas:mk($('#b-pas'),CAT.pas),mag:mk($('#b-mag'),CAT.mag),con:mk($('#b-con'),CAT.con),pef:mk($('#b-pef'),{...CAT.ult,...CAT.mag})};
+  const toggle=()=>{const t=fc.type.value;
+    $('#r-stats').style.display=$('#s-comb').style.display=t=='combattant'?'':'none';
+    $('#s-mag').style.display=t=='magie'?'':'none';$('#s-pie').style.display=t=='piege'?'':'none'};
+  fc.type.onchange=toggle;toggle();
+  $('#fcolad').onchange=e=>{const v=e.target.value;$('#sub').querySelectorAll('tr[data-col]').forEach(tr=>tr.style.display=!v||tr.dataset.col==v?'':'none')};
+  fc.onsubmit=async e=>{e.preventDefault();const f=e.target,v=n=>f[n].value,t=v('type');
+    try{let ult=null,pas=null,eff=null;
+     if(t=='combattant'){ult=B.ult.get();if(ult){if(+f.utours.value)ult.apres_tours=+f.utours.value;if(f.ucarte.checked)ult.sur_carte=true;ult.utilisations=+f.uuses.value||0;ult.delai_tours=+f.ucd.value||0}pas=B.pas.get()}
+     else if(t=='magie')eff=B.mag.get();
+     else{const c=B.con.get(),x=B.pef.get();if(c||x)eff={condition:c,effet:x,declenchements:+f.decl.value||1}}
+     const cb=t=='combattant';
+     const row={nom:v('nom'),type:t,collection_id:v('col')||null,rarete_id:+v('rar'),atq:cb&&v('atq')!==''?+v('atq'):null,pv:cb&&v('pv')!==''?+v('pv'):null,
+      description:v('desc')||null,actif:f.actif.checked,ultime:ult,passif:pas,effet:eff};
+     if(editId){delete row.type;await q(sb.from('cartes').update(row).eq('id',editId));
+      if(f.file.files[0]){const path=await upload(f.file.files[0]);
+       const vs=await q(sb.from('variantes_carte').select('id').eq('carte_id',editId).eq('nom','Standard').limit(1));
+       if(vs.length)await q(sb.from('variantes_carte').update({image_path:path}).eq('id',vs[0].id));
+       else await q(sb.from('variantes_carte').insert({carte_id:editId,nom:'Standard',image_path:path,poids:100}));}
+      editId=null;aCartes();return}
+     const c=await q(sb.from('cartes').insert(row).select('id').single());
+     const path=await upload(f.file.files[0]);
+     await q(sb.from('variantes_carte').insert({carte_id:c.id,nom:'Standard',image_path:path,poids:100}));
+     aCartes();}catch(x){}};
+  $('#fv').onsubmit=async e=>{e.preventDefault();const f=e.target;
+    try{const path=await upload(f.file.files[0]);
+     await q(sb.from('variantes_carte').insert({carte_id:+f.carte.value,nom:f.nom.value,image_path:path,poids:+f.poids.value}));aCartes();}catch(x){}};
+  $('#sub').querySelectorAll('button[data-edit]').forEach(b=>b.onclick=async()=>{
+    const c=await q(sb.from('cartes').select('*').eq('id',b.dataset.edit).single()),f=fc;
+    editId=c.id;f.nom.value=c.nom;f.type.value=c.type;f.type.disabled=true;toggle();
+    f.col.value=c.collection_id||'';f.rar.value=c.rarete_id;f.atq.value=c.atq??'';f.pv.value=c.pv??'';f.desc.value=c.description||'';f.actif.checked=c.actif;
+    f.file.required=false;
+    const u=c.ultime||{};B.ult.set(c.ultime);f.utours.value=u.apres_tours||'';f.ucarte.checked=!!u.sur_carte;f.uuses.value=u.utilisations??1;f.ucd.value=u.delai_tours??0;
+    B.pas.set(c.passif);if(c.type=='magie')B.mag.set(c.effet);
+    if(c.type=='piege'&&c.effet){B.con.set(c.effet.condition);B.pef.set(c.effet.effet);f.decl.value=c.effet.declenchements||1}
+    $('#ftitle').textContent='Modifier : '+c.nom;$('#fbtn').textContent='Enregistrer les modifications';$('#fcancel').style.display='';
+    fc.scrollIntoView({behavior:'smooth'});});
+  $('#fcancel').onclick=()=>aCartes();
+  $('#sub').querySelectorAll('button[data-a]').forEach(b=>b.onclick=async()=>{
+    await q(sb.from('cartes').update({actif:b.dataset.v!=='true'}).eq('id',b.dataset.a));aCartes();});
+  $('#sub').querySelectorAll('button[data-del]').forEach(b=>b.onclick=async()=>{
+    if(!confirm('Supprimer définitivement « '+b.dataset.nom+' » ?\nElle disparaîtra aussi des collections et des decks des joueurs.'))return;
+    const chemins=await q(sb.rpc('supprimer_carte',{p_carte_id:+b.dataset.del}));
+    if(chemins&&chemins.length){try{await sb.storage.from('cartes').remove(chemins)}catch(x){}}
+    aCartes();});
+}
+
+async function aCollections(){
+  const [c,cc]=await Promise.all([q(sb.from('collections').select('*').order('id')),q(sb.from('cartes').select('collection_id'))]);
+  const nb=id=>cc.filter(y=>y.collection_id==id).length;
+  $('#sub').innerHTML=`<table><tr><th>Nom</th><th>Cartes</th><th></th></tr>
+  ${c.map(x=>`<tr data-id="${x.id}"><td><input value="${esc(x.nom)}"></td><td>${nb(x.id)}</td><td><button>Enregistrer</button> <button class="sec">🗑️</button></td></tr>`).join('')}
+  <tr data-id="new"><td><input placeholder="Nouvelle collection"></td><td></td><td><button>Ajouter</button></td></tr></table>`;
+  $('#sub').querySelectorAll('tr[data-id]').forEach(tr=>{const b=tr.querySelectorAll('button');
+    b[0].onclick=async()=>{const nom=tr.querySelector('input').value.trim();if(!nom)return;
+      await q(tr.dataset.id=='new'?sb.from('collections').insert({nom}):sb.from('collections').update({nom}).eq('id',tr.dataset.id));aCollections();};
+    if(b[1])b[1].onclick=async()=>{if(!confirm('Supprimer cette collection ?'))return;
+      await q(sb.from('collections').delete().eq('id',tr.dataset.id));aCollections();};});
+}
+
+async function aBoosters(){
+  const [b,col,rar,bc,bm]=await Promise.all([q(sb.from('types_boosters').select('*').order('id')),q(sb.from('collections').select('*').order('nom')),
+    q(sb.from('raretes').select('*').order('ordre')),q(sb.from('boosters_collections').select('*')),q(sb.from('boosters_modifs').select('*'))]);
+  const form=x=>{
+    const cs=new Set(bc.filter(y=>x&&y.type_id==x.id).map(y=>y.collection_id)),ms={};
+    bm.filter(y=>x&&y.type_id==x.id).forEach(y=>ms[y.rarete_id]=y.modif);
+    return `<form class="f" data-id="${x?x.id:'new'}"><b>${x?esc(x.nom):'Nouveau booster'}</b>
+    <input name="nom" value="${esc(x?x.nom:'')}" placeholder="Nom du booster" required>
+    <div class="row"><label><small>Prix</small><br><input name="prix" type="number" min="0" value="${x?x.prix:100}" style="width:90px"></label>
+     <label><small>Nb de cartes</small><br><input name="nb" type="number" min="1" value="${x?x.nb_cartes:5}" style="width:90px"></label>
+     <label><input type="checkbox" name="actif" ${!x||x.actif?'checked':''}> En vente</label></div>
+    ${x&&x.image_path?`<img src="${img(x.image_path)}" style="max-width:140px;border-radius:6px">`:''}<label><small>Image du booster (optionnel)</small><br><input name="file" type="file" accept="image/*"></label>
+    <small>Collections présentes (les cartes communes sont toujours incluses)</small>
+    <div class="row">${col.map(c=>`<label><input type="checkbox" name="c${c.id}" ${cs.has(c.id)?'checked':''}> ${esc(c.nom)}</label>`).join('')||'<small>Aucune collection</small>'}</div>
+    <small>Modificateur de drop : s'ajoute au poids de la rareté pour ce booster (négatif possible)</small>
+    <div class="row">${rar.map(r=>`<label><small>${esc(r.nom)} (poids ${r.poids})</small><br><input name="m${r.id}" type="number" value="${ms[r.id]||0}" style="width:90px"></label>`).join('')}</div>
+    <div class="row"><button>${x?'Enregistrer':'Créer le booster'}</button>${x?`<button type="button" class="sec" data-del="${x.id}" data-nom="${esc(x.nom)}">🗑️ Supprimer</button>`:''}</div></form>`};
+  $('#sub').innerHTML=form(null)+'<h3>Boosters existants ('+b.length+')</h3>'+b.map(form).join('');
+  $('#sub').querySelectorAll('form').forEach(f=>f.onsubmit=async e=>{e.preventDefault();
+    try{const row={nom:f.nom.value,prix:+f.prix.value,nb_cartes:+f.nb.value,actif:f.actif.checked};if(f.file.files[0])row.image_path=await upload(f.file.files[0]);let id=f.dataset.id;
+     if(id=='new')id=(await q(sb.from('types_boosters').insert(row).select('id').single())).id;
+     else await q(sb.from('types_boosters').update(row).eq('id',id));
+     id=+id;
+     await q(sb.from('boosters_collections').delete().eq('type_id',id));
+     const cs=col.filter(c=>f['c'+c.id].checked).map(c=>({type_id:id,collection_id:c.id}));
+     if(cs.length)await q(sb.from('boosters_collections').insert(cs));
+     await q(sb.from('boosters_modifs').upsert(rar.map(r=>({type_id:id,rarete_id:r.id,modif:+f['m'+r.id].value||0}))));
+     aBoosters();}catch(x){}});
+  $('#sub').querySelectorAll('button[data-del]').forEach(x=>x.onclick=async()=>{
+    if(!confirm('Supprimer « '+x.dataset.nom+' » ?\nLes boosters non ouverts de ce type chez les joueurs seront perdus.\n(Pour seulement le retirer de la boutique, décoche « En vente ».)'))return;
+    await q(sb.from('types_boosters').delete().eq('id',x.dataset.del));aBoosters();});
+}
+
+async function aEffets(){
+  const r=await sb.from('effets_perso').select('*').order('id');
+  if(r.error){$('#sub').innerHTML='<p class="ko">Table introuvable : lance d\'abord 04-effets.sql dans Supabase.</p>';return}
+  const L=r.data,CATS={passif:'Passif',ultime:'Ultime',magie:'Magie',condition:'Condition de piège'};
+  $('#sub').innerHTML=`<form class="f" id="fe"><b>Nouvel effet</b><select name="cat">${Object.entries(CATS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select>
+   <input name="lib" placeholder="Texte affiché (ex : Gagne X PV quand il attaque)" required>
+   <small>Valeurs à saisir pour cet effet</small>
+   <div class="row">${Object.entries(P).map(([k,v])=>`<label><input type="checkbox" name="p_${k}"> ${v[0]}</label>`).join('')}</div>
+   <button>Ajouter l'effet</button></form>
+   <h3>Effets ajoutés (${L.length})</h3><table><tr><th>Type</th><th>Texte</th><th>Valeurs</th><th></th></tr>
+   ${L.map(x=>`<tr><td>${CATS[x.categorie]}</td><td>${esc(x.libelle)}</td><td>${x.params.map(k=>esc(P[k]?P[k][0]:k)).join(', ')||'—'}</td><td><button class="sec" data-id="${x.id}">🗑️</button></td></tr>`).join('')}</table>`;
+  $('#fe').onsubmit=async e=>{e.preventDefault();const f=e.target;
+    const params=Object.keys(P).filter(k=>f['p_'+k].checked);
+    const cle='perso_'+f.lib.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
+    try{await q(sb.from('effets_perso').insert({categorie:f.cat.value,cle,libelle:f.lib.value.trim(),params}));aEffets();}catch(x){}};
+  $('#sub').querySelectorAll('button[data-id]').forEach(b=>b.onclick=async()=>{
+    if(!confirm('Retirer cet effet de la liste ? (Les cartes déjà créées avec cet effet le gardent.)'))return;
+    await q(sb.from('effets_perso').delete().eq('id',b.dataset.id));aEffets();});
+}
+
+async function aRaretes(){
+  const r=await q(sb.from('raretes').select('*').order('ordre'));
+  $('#sub').innerHTML=`<p><small>Poids : plus il est grand, plus la rareté sort souvent (ex : 70 / 25 / 5).</small></p>
+  <table><tr><th>Nom</th><th>Couleur</th><th>Poids</th><th>Ordre</th><th></th></tr>
+  ${r.map(x=>`<tr data-id="${x.id}"><td><input value="${esc(x.nom)}"></td><td><input type="color" value="${esc(x.couleur)}"></td><td><input type="number" value="${x.poids}" style="width:80px"></td><td><input type="number" value="${x.ordre}" style="width:70px"></td><td><button>Enregistrer</button></td></tr>`).join('')}
+  <tr data-id="new"><td><input placeholder="Nouvelle rareté"></td><td><input type="color" value="#a855f7"></td><td><input type="number" value="10" style="width:80px"></td><td><input type="number" value="${r.length+1}" style="width:70px"></td><td><button>Ajouter</button></td></tr></table>`;
+  $('#sub').querySelectorAll('tr[data-id]').forEach(tr=>tr.querySelector('button').onclick=async()=>{
+    const i=tr.querySelectorAll('input'),row={nom:i[0].value,couleur:i[1].value,poids:+i[2].value,ordre:+i[3].value};
+    if(!row.nom)return;
+    await q(tr.dataset.id=='new'?sb.from('raretes').insert(row):sb.from('raretes').update(row).eq('id',tr.dataset.id));aRaretes();});
+}
+
+async function aCadeaux(){
+  const [t,j]=await Promise.all([q(sb.from('types_boosters').select('id,nom')),q(sb.from('joueurs').select('id,pseudo').order('pseudo'))]);
+  $('#sub').innerHTML=`<form class="f" id="fg"><select name="j"><option value="">🎁 Tous les joueurs</option>${opts(j,'pseudo')}</select>
+   <select name="t">${opts(t)}</select><input name="n" type="number" min="1" value="1"><button>Offrir</button></form>`;
+  $('#fg').onsubmit=async e=>{e.preventDefault();const f=e.target;
+    const {error}=await sb.rpc('offrir_boosters',{p_joueur:f.j.value||null,p_type_id:+f.t.value,p_quantite:+f.n.value});
+    alert(error?error.message:'Boosters offerts !');};
+}
+
+/* ---------- Admin : gérer les cartes et boosters des membres ---------- */
+async function aJoueurs(){
+  const j=await q(sb.from('joueurs').select('id,pseudo,monnaie').order('pseudo'));
+  $('#sub').innerHTML=`<p><small>Gère les cartes et les boosters des membres, par exemple pour nettoyer après les tests. Les suppressions sont définitives. (Il faut avoir lancé 05-admin-joueurs.sql dans Supabase.)</small></p>
+   <div class="f"><select id="jsel"><option value="">— Choisir un joueur —</option>${opts(j,'pseudo')}</select></div>
+   <div id="jbox"></div>
+   <h3>Remise à zéro</h3>
+   <div class="f"><label><input type="checkbox" id="rzb" checked> vider aussi les boosters non ouverts</label>
+    <label>monnaie remise à <input id="rzm" type="number" min="0" style="width:90px" placeholder="inchangée"></label></div>
+   <div class="f"><button class="sec" id="rzj">Vider le joueur choisi</button><button id="rza" style="background:#b91c1c">Vider TOUS les joueurs</button></div>`;
+  const opt=()=>({p_boosters:$('#rzb').checked,p_monnaie:$('#rzm').value===''?null:+$('#rzm').value});
+  const fini=async m=>{collData=[];deck=null;await refreshJoueur();alert(m);aJoueurs()};
+  async function load(){
+    const id=$('#jsel').value;if(!id){$('#jbox').innerHTML='';return}
+    const d=await q(sb.rpc('admin_collection',{p_joueur:id})),p=j.find(x=>x.id==id),tot=d.reduce((s,x)=>s+x.quantite,0);
+    $('#jbox').innerHTML=`<p><b>${esc(p.pseudo)}</b> · 💰 ${p.monnaie} · ${tot} carte(s)</p>`+(d.length?`<table><tr><th>Carte</th><th>Type</th><th>Version</th><th>Qté</th><th></th></tr>${d.map(x=>`<tr><td>${esc(x.carte)}</td><td>${esc(x.type)}</td><td>${esc(x.variante)}</td><td>${x.quantite}</td><td><button class="sec" data-r="${x.variante_id}" data-n="1">−1</button> <button class="sec" data-r="${x.variante_id}">Tout retirer</button></td></tr>`).join('')}</table>`:'<p><small>Aucune carte dans la collection.</small></p>');
+    $('#jbox').querySelectorAll('button[data-r]').forEach(b=>b.onclick=async()=>{
+      if(!b.dataset.n&&!confirm('Retirer toutes les copies de cette carte à ce joueur ?'))return;
+      await q(sb.rpc('admin_retirer_carte',{p_joueur:id,p_variante:b.dataset.r,p_quantite:b.dataset.n?+b.dataset.n:null}));
+      collData=[];deck=null;load()});
+  }
+  $('#jsel').onchange=load;
+  $('#rzj').onclick=async()=>{const id=$('#jsel').value;if(!id)return alert('Choisis d\'abord un joueur.');
+    const p=j.find(x=>x.id==id);if(!confirm('Vider la collection et le deck de '+p.pseudo+($('#rzb').checked?' ainsi que ses boosters non ouverts':'')+' ?\nC\'est définitif.'))return;
+    await q(sb.rpc('admin_vider_joueur',{p_joueur:id,...opt()}));fini('Joueur remis à zéro.')};
+  $('#rza').onclick=async()=>{if(prompt('Cela vide les cartes de TOUS les joueurs, toi compris. Tape VIDER pour confirmer :')!=='VIDER')return;
+    await q(sb.rpc('admin_vider_joueur',{p_joueur:null,...opt()}));fini('Tous les joueurs ont été remis à zéro.')};
+}
+
+sb.auth.onAuthStateChange((ev)=>{if(ev==='SIGNED_IN'&&!user)init()});
+init();
+</script></body></html>
