@@ -1,869 +1,481 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Le Registre du Marché aux Bêtes</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jeu de cartes</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-  :root{
-    --void:#060402;
-    --void-2:#150d07;
-    --panel:#241a0f;
-    --panel-edge:#c9a13a;
-    --ink:#f1e4c4;
-    --ink-soft:#b9a37a;
-    --moss:#3d5a3a;
-    --moss-dark:#2b4128;
-    --ember:#c9782b;
-    --ember-soft:#e8a355;
-    --oxblood:#9c2b2b;
-    --gold:#c9a13a;
-    --gold-hi:#f5d98a;
-    --gold-low:#5c4415;
-    --steel:#3f6a78;
-    --steel-hi:#8fb9c4;
-    --silver:#b9c4c9;
-    --bronze:#a8703f;
-    --violet:#5b3568;
-    --violet-hi:#8a5c9c;
-    --slate:#33424e;
-    --slate-hi:#6f8b9c;
-    --umber:#5a3a1e;
-    --umber-hi:#a06a3a;
-  }
-
-  *{box-sizing:border-box;}
-
-  html,body{
-    margin:0;
-    min-height:100%;
-    background:
-      radial-gradient(ellipse 60% 45% at 12% -5%, rgba(201,120,43,0.24) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 45% at 88% 0%, rgba(63,106,120,0.22) 0%, transparent 60%),
-      radial-gradient(ellipse at 50% 50%, transparent 0%, rgba(0,0,0,0.5) 75%, rgba(0,0,0,0.8) 100%),
-      radial-gradient(ellipse at 50% 100%, #180f08 0%, transparent 55%),
-      var(--void);
-    color:var(--ink);
-    font-family:'IBM Plex Mono', monospace;
-  }
-
-  html::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    opacity:0.5;
-    mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/></svg>");
-  }
-
-  body{
-    padding:44px 20px 80px;
-  }
-
-  .wrap{
-    max-width:900px;
-    margin:0 auto;
-  }
-
-  header{
-    text-align:center;
-    margin-bottom:30px;
-    position:relative;
-    padding:34px 24px 26px;
-    border:2px solid var(--gold-low);
-    border-radius:4px;
-    background:
-      radial-gradient(ellipse 90% 140% at 50% -20%, rgba(201,161,58,0.14) 0%, transparent 55%),
-      linear-gradient(180deg, var(--void-2) 0%, var(--void) 100%);
-    box-shadow:
-      inset 0 0 0 1px rgba(184,145,46,0.2),
-      inset 0 0 0 6px rgba(0,0,0,0.35),
-      inset 0 1px 0 rgba(240,211,131,0.08),
-      0 20px 45px rgba(0,0,0,0.6);
-  }
-  header::before, header::after{
-    content:"";
-    position:absolute;
-    top:8px; bottom:8px;
-    width:16px;
-    border-top:2px solid var(--gold);
-    border-bottom:2px solid var(--gold);
-    opacity:0.65;
-  }
-  header::before{ left:8px; border-left:2px solid var(--gold); }
-  header::after{ right:8px; border-right:2px solid var(--gold); }
-
-  .corner-stud{
-    position:absolute;
-    width:10px; height:10px;
-    background:radial-gradient(circle at 35% 30%, var(--gold-hi), var(--gold) 60%, var(--gold-low) 100%);
-    clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-    box-shadow:0 0 6px rgba(212,168,74,0.5);
-  }
-  .corner-stud.tl{ top:6px; left:6px; }
-  .corner-stud.tr{ top:6px; right:6px; }
-  .corner-stud.bl{ bottom:6px; left:6px; }
-  .corner-stud.br{ bottom:6px; right:6px; }
-
-  .emblem{
-    width:38px; height:38px;
-    margin:0 auto 12px;
-    display:block;
-    filter:drop-shadow(0 0 8px rgba(212,168,74,0.35));
-  }
-
-  h1{
-    font-family:'Cinzel', serif;
-    font-weight:700;
-    font-size:clamp(28px, 4.6vw, 44px);
-    letter-spacing:0.04em;
-    margin:0 0 12px;
-    line-height:1.15;
-    background:linear-gradient(180deg, var(--gold-hi) 0%, var(--gold) 45%, #8a6b22 80%, var(--gold) 100%);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-    text-shadow:
-      0 1px 0 rgba(0,0,0,0.6),
-      0 2px 0 rgba(0,0,0,0.5),
-      0 4px 10px rgba(0,0,0,0.7);
-    filter:drop-shadow(0 0 16px rgba(184,145,46,0.22));
-  }
-
-  .subtitle{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:14px;
-    color:#a89877;
-    font-family:'Cinzel', serif;
-    font-size:12.5px;
-    letter-spacing:0.22em;
-    text-transform:uppercase;
-  }
-  .subtitle::before, .subtitle::after{
-    content:"";
-    height:1px;
-    width:46px;
-    background:linear-gradient(90deg, transparent, var(--gold-low));
-  }
-  .subtitle::after{ background:linear-gradient(90deg, var(--gold-low), transparent); }
-  .subtitle .rune{
-    width:9px; height:9px;
-    flex:none;
-    background:linear-gradient(135deg, var(--gold-hi), var(--gold-low));
-    clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-  }
-
-  .statusbar{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    margin-top:20px;
-    padding:6px 16px;
-    font-size:12.5px;
-    color:#c9bb98;
-    background:rgba(0,0,0,0.3);
-    border:1px solid var(--gold-low);
-    border-radius:999px;
-  }
-
-  .dot{
-    width:9px;height:9px;border-radius:50%;
-    background:var(--oxblood);
-    box-shadow:0 0 0 3px rgba(122,46,46,0.25);
-    transition:background .3s, box-shadow .3s;
-  }
-  .dot.ok{
-    background:var(--moss);
-    box-shadow:0 0 0 3px rgba(67,97,63,0.3);
-  }
-  .dot.connecting{
-    background:var(--ember);
-    box-shadow:0 0 0 3px rgba(181,101,29,0.3);
-    animation:pulse 1s infinite ease-in-out;
-  }
-  @keyframes pulse{ 50%{opacity:0.4;} }
-
-  .refresh-btn{
-    cursor:pointer;
-    background:none;border:none;
-    color:#c9bb98;
-    font-size:15px;
-    padding:2px 6px;
-    border-radius:4px;
-    transition:transform .4s, color .15s;
-  }
-  .refresh-btn:hover{ color:#f1e4c4; }
-  .refresh-btn.spin{ transform:rotate(360deg); }
-  .refresh-btn:focus-visible, .tab:focus-visible, button:focus-visible{
-    outline:2px solid var(--ember-soft);
-    outline-offset:2px;
-  }
-
-  .tabs{
-    display:flex;
-    justify-content:center;
-    gap:4px;
-    margin:24px 0 0;
-    position:relative;
-    z-index:2;
-    padding:6px;
-    border:2px solid var(--gold-low);
-    border-bottom:none;
-    border-radius:8px 8px 0 0;
-    background:
-      linear-gradient(180deg, #1a1108 0%, #0d0904 100%);
-    box-shadow:inset 0 1px 0 rgba(240,211,131,0.06), 0 -4px 14px rgba(0,0,0,0.35);
-  }
-
-  .tab{
-    flex:1;
-    position:relative;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    font-family:'Cinzel', serif;
-    font-weight:700;
-    font-size:11.5px;
-    letter-spacing:0.05em;
-    text-transform:uppercase;
-    color:#e9dcb9;
-    border:1px solid rgba(0,0,0,0.5);
-    border-radius:5px;
-    padding:16px 8px 13px;
-    cursor:pointer;
-    transition:transform .15s, box-shadow .15s, filter .15s;
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.18),
-      inset 0 -10px 16px rgba(0,0,0,0.28),
-      0 3px 0 rgba(0,0,0,0.45);
-    filter:saturate(0.85) brightness(0.92);
-  }
-  .tab[data-tab="classement"]{ background:linear-gradient(180deg, #a8582f 0%, #7c3a1f 55%, #5c2a17 100%); }
-  .tab[data-tab="stock"]{ background:linear-gradient(180deg, #4f6b3a 0%, #3a5228 55%, #2b3e1e 100%); }
-  .tab[data-tab="inventaires"]{ background:linear-gradient(180deg, #3f6a78 0%, #2d525e 55%, #223e47 100%); }
-  .tab .tab-icon{ width:22px; height:22px; opacity:0.92; filter:drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
-  .tab:hover{ filter:saturate(1) brightness(1.05); transform:translateY(-2px); }
-  .tab.active{
-    color:var(--gold-hi);
-    filter:saturate(1.1) brightness(1.12);
-    transform:translateY(-2px);
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.28),
-      inset 0 -10px 16px rgba(0,0,0,0.22),
-      0 0 0 1.5px var(--gold),
-      0 4px 12px rgba(212,168,74,0.25);
-  }
-
-  .page{
-    position:relative;
-    background:
-      radial-gradient(ellipse 90% 60% at 50% -10%, rgba(212,168,74,0.14) 0%, transparent 60%),
-      linear-gradient(180deg, #2c2013 0%, var(--panel) 45%, #1b1309 100%);
-    border-radius:0 0 6px 6px;
-    box-shadow:
-      inset 0 0 0 1px rgba(212,168,74,0.25),
-      inset 0 2px 0 rgba(240,211,131,0.12),
-      0 22px 50px rgba(0,0,0,0.65);
-    padding:36px 30px 26px;
-    min-height:280px;
-    border:2px solid var(--gold-low);
-    border-top:none;
-  }
-
-  .page::before, .page::after{
-    content:"";
-    position:absolute;
-    bottom:10px;
-    width:14px; height:14px;
-    border-bottom:2px solid var(--gold);
-    opacity:0.55;
-  }
-  .page::before{ left:10px; border-left:2px solid var(--gold); }
-  .page::after{ right:10px; border-right:2px solid var(--gold); }
-
-  .pin{
-    position:absolute;
-    top:14px; right:20px;
-    width:14px;height:14px;
-    background:radial-gradient(circle at 35% 30%, #e2c56a, var(--gold) 60%, #7a5d1c 100%);
-    clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-    box-shadow:0 2px 4px rgba(0,0,0,0.35);
-  }
-
-  .lines{
-    background-image:repeating-linear-gradient(
-      to bottom,
-      transparent 0,
-      transparent 37px,
-      rgba(212,168,74,0.07) 38px
-    );
-  }
-
-  table{
-    width:100%;
-    border-collapse:collapse;
-    font-size:14px;
-  }
-  th{
-    text-align:left;
-    font-family:'Cinzel', serif;
-    font-weight:500;
-    font-size:12px;
-    color:var(--ink-soft);
-    letter-spacing:0.03em;
-    padding:0 8px 10px;
-    border-bottom:1px solid var(--panel-edge);
-  }
-  td{
-    padding:9px 8px;
-    vertical-align:middle;
-  }
-  tr:not(:last-child) td{
-    border-bottom:1px dashed rgba(212,168,74,0.18);
-  }
-  td.num, th.num{ text-align:right; }
-
-  .rank{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:26px;height:26px;
-    border-radius:50%;
-    border:1px solid var(--ink-soft);
-    font-size:12px;
-    font-weight:600;
-    margin-right:10px;
-  }
-  .rank.r1{ background:var(--gold); border-color:var(--gold); color:#2a2013; }
-  .rank.r2{ background:var(--silver); border-color:var(--silver); color:#2a2013; }
-  .rank.r3{ background:var(--bronze); border-color:var(--bronze); color:#f1e4c4; }
-
-  /* ---------- Étoiles de rareté ---------- */
-  .stars{
-    display:inline-block;
-    color:var(--ember-soft);
-    letter-spacing:2px;
-    font-size:13px;
-    text-shadow:0 0 6px rgba(201,120,43,0.35);
-    white-space:nowrap;
-  }
-
-  /* ---------- Podium ---------- */
-  .podium{
-    display:flex;
-    align-items:flex-end;
-    justify-content:center;
-    gap:14px;
-    margin:6px 0 28px;
-    padding:0 4px;
-  }
-  .place{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    width:120px;
-  }
-  .place-name{
-    font-family:'Cinzel', serif;
-    font-weight:700;
-    font-size:13.5px;
-    color:var(--ink);
-    margin-top:10px;
-    text-align:center;
-    max-width:110px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-  .place-score{
-    font-size:12px;
-    color:var(--ink-soft);
-    margin-top:2px;
-  }
-  .avatar-frame{
-    position:relative;
-    width:64px;height:64px;
-    border-radius:50%;
-    padding:3px;
-    background:conic-gradient(from 180deg, var(--gold-hi), var(--gold) 40%, var(--gold-low) 60%, var(--gold-hi) 100%);
-  }
-  .place-2 .avatar-frame{ background:conic-gradient(from 180deg, #fff, var(--silver) 40%, #6d7679 60%, #fff 100%); width:56px;height:56px; }
-  .place-3 .avatar-frame{ background:conic-gradient(from 180deg, #e3b98a, var(--bronze) 40%, #5c3c22 60%, #e3b98a 100%); width:56px;height:56px; }
-  .avatar-img{
-    width:100%;height:100%;
-    border-radius:50%;
-    object-fit:cover;
-    display:block;
-    background:#2a2013;
-    border:2px solid var(--panel);
-  }
-  .avatar-mono{
-    width:100%;height:100%;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#2a2013;
-    color:var(--gold-hi);
-    font-family:'Cinzel', serif;
-    font-weight:700;
-    font-size:20px;
-    border:2px solid var(--panel);
-  }
-  .crown{
-    width:26px; height:26px;
-    margin-bottom:-8px;
-    color:var(--gold);
-    filter:drop-shadow(0 2px 3px rgba(0,0,0,0.35));
-  }
-  .step{
-    margin-top:12px;
-    width:100%;
-    border-radius:6px 6px 0 0;
-    text-align:center;
-    font-family:'Cinzel', serif;
-    font-weight:700;
-    color:#f1e4c4;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow:inset 0 2px 0 rgba(255,255,255,0.25), 0 6px 14px rgba(0,0,0,0.25);
-  }
-  .place-1 .step{ height:78px; font-size:24px; background:linear-gradient(180deg, var(--gold-hi), var(--gold) 70%, var(--gold-low)); color:#2a2013; }
-  .place-2 .step{ height:54px; font-size:20px; background:linear-gradient(180deg, #d7dee0, var(--silver) 70%, #6d7679); color:#2a2013; }
-  .place-3 .step{ height:40px; font-size:18px; background:linear-gradient(180deg, #dba46c, var(--bronze) 70%, #5c3c22); }
-
-  .rest-list{ margin-top:4px; }
-
-  .accordion-item{
-    border-bottom:1px dashed rgba(212,168,74,0.18);
-  }
-  .accordion-item:last-child{ border-bottom:none; }
-  .accordion-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:12px 4px;
-    cursor:pointer;
-    font-size:14px;
-  }
-  .accordion-head .name{ font-weight:600; }
-  .accordion-head .meta{ color:var(--ink-soft); font-size:12px; }
-  .accordion-body{
-    display:none;
-    padding:0 4px 14px 36px;
-  }
-  .accordion-item.open .accordion-body{ display:block; }
-  .accordion-item.open .chevron{ transform:rotate(90deg); }
-  .chevron{ transition:transform .15s; display:inline-block; margin-right:8px; color:var(--ink-soft); }
-
-  .sub-row{
-    display:flex;
-    justify-content:space-between;
-    font-size:13px;
-    padding:4px 0;
-    color:var(--ink-soft);
-  }
-  .sub-row span:last-child{ color:var(--ink); }
-
-  .empty{
-    text-align:center;
-    color:var(--ink-soft);
-    padding:50px 10px;
-    font-size:14px;
-    line-height:1.6;
-  }
-  .empty strong{ display:block; font-family:'Cinzel', serif; color:var(--ink); font-size:16px; margin-bottom:6px; }
-
-  .footer-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-top:16px;
-    font-size:11px;
-    color:#9c8b66;
-  }
-
-  .totals{
-    display:flex;
-    gap:22px;
-    font-size:12px;
-    color:var(--ink-soft);
-  }
-  .totals b{ color:var(--ink); }
-
-  @media (max-width:560px){
-    .page{ padding:24px 16px 20px; }
-    th, td{ padding:8px 5px; font-size:13px; }
-    .tab{ padding:10px 4px 9px; font-size:10.5px; gap:4px; }
-    .tab .tab-icon{ width:18px; height:18px; }
-    header::before, header::after{ display:none; }
-  }
-</style>
-</head>
-<body>
-<div class="wrap">
-
-  <header>
-    <div class="corner-stud tl"></div>
-    <div class="corner-stud tr"></div>
-    <div class="corner-stud bl"></div>
-    <div class="corner-stud br"></div>
-    <svg class="emblem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-      <g fill="none" stroke="var(--gold)" stroke-width="1.4">
-        <path d="M20 2 L34 20 L20 38 L6 20 Z"/>
-        <path d="M20 10 L28 20 L20 30 L12 20 Z" stroke="var(--gold-hi)"/>
-      </g>
-      <circle cx="20" cy="20" r="2.2" fill="var(--gold-hi)"/>
-    </svg>
-    <h1>Le Registre du Marché aux Bêtes</h1>
-    <div class="subtitle"><span class="rune"></span>Chasse, négoce et renommée de la forêt<span class="rune"></span></div>
-    <div class="statusbar">
-      <span class="dot" id="statusDot"></span>
-      <span id="statusText">Connexion...</span>
-      <button class="refresh-btn" id="refreshBtn" title="Rafraîchir maintenant" aria-label="Rafraîchir maintenant">⟳</button>
-    </div>
-  </header>
-
-  <nav class="tabs" role="tablist">
-    <button class="tab active" data-tab="classement" role="tab">
-      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7z"/></svg>
-      Classement
-    </button>
-    <button class="tab" data-tab="stock" role="tab">
-      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><ellipse cx="12" cy="6" rx="7" ry="2.6"/><path d="M5 6v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6V6"/><path d="M5 12v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6v-6"/></svg>
-      Stock global
-    </button>
-    <button class="tab" data-tab="inventaires" role="tab">
-      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 8h10l1.2 11.5a1.5 1.5 0 0 1-1.5 1.7H7.3a1.5 1.5 0 0 1-1.5-1.7z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
-      Inventaires
-    </button>
-  </nav>
-
-  <main class="page">
-    <div class="pin"></div>
-    <div class="corner-stud tl"></div>
-    <div class="corner-stud tr"></div>
-    <div class="corner-stud bl"></div>
-    <div class="corner-stud br"></div>
-
-    <section id="tab-classement" class="lines"></section>
-    <section id="tab-stock" class="lines" style="display:none"></section>
-    <section id="tab-inventaires" class="lines" style="display:none"></section>
-
-    <div class="footer-row">
-      <span id="lastUpdate">—</span>
-      <span id="rawHint"></span>
-    </div>
-  </main>
-
-</div>
-
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#14141a;color:#eee}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:#1d1d27}
+h1{margin:0;font-size:20px}nav{display:flex;gap:6px;padding:10px 20px;flex-wrap:wrap}
+@media(max-width:800px){nav{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x;padding:10px 12px}nav button{flex:none;white-space:nowrap}main{overflow-x:auto;-webkit-overflow-scrolling:touch}table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}}
+main{padding:10px 20px 40px;max-width:1100px;margin:auto}
+button,select,input,textarea{font:inherit;padding:7px 10px;border-radius:6px;border:1px solid #444;background:#262633;color:#eee}
+button{cursor:pointer;background:#7c3aed;border-color:#7c3aed}button.sec{background:#262633;border-color:#444}button.on{background:#7c3aed}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.card{border:3px solid #444;border-radius:10px;padding:6px;background:#1d1d27;display:flex;flex-direction:column;gap:4px}
+.card img{width:100%;border-radius:6px}small{color:#aaa}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:26px 22px;padding:10px}
+.cw{display:flex;flex-direction:column;gap:12px}
+.cimg{width:100%;display:block;filter:drop-shadow(0 0 3px var(--g)) drop-shadow(0 0 12px var(--g))}
+.inf{font-size:11px;color:#6b6b78;text-align:center;line-height:1.4;border-top:1px dashed #2c2c38;padding-top:6px}
+.dbar{position:sticky;top:0;z-index:5;background:#1d1d27;padding:10px 14px;border-radius:10px;margin:8px 0 14px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid #2c2c38}
+button:disabled{opacity:.4;cursor:not-allowed}
+.cimg.in{filter:drop-shadow(0 0 3px var(--g)) drop-shadow(0 0 12px var(--g)) drop-shadow(0 0 24px var(--g))}
+.cw button{font-size:13px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+form.f{display:grid;gap:8px;max-width:720px;background:#1d1d27;padding:14px;border-radius:10px;margin-bottom:20px}
+table{border-collapse:collapse;width:100%}td,th{padding:6px;border-bottom:1px solid #333;text-align:left}
+.ok{color:#4ade80}.ko{color:#f87171}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin:8px 0 22px}
+.stat{background:#1d1d27;border:1px solid #2c2c38;border-radius:10px;padding:12px}
+.stat b{display:block;font-size:26px;margin:2px 0}.stat span{color:#aaa;font-size:13px;display:block}
+.stat.card2{display:flex;gap:12px;align-items:center;grid-column:span 2}
+.stat.card2 img{width:80px;border-radius:4px;filter:drop-shadow(0 0 3px var(--g)) drop-shadow(0 0 10px var(--g))}
+.mk{min-width:0}.mk>select{width:100%;max-width:100%;text-overflow:ellipsis}
+.mk .row{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}.mk .row label{flex:1 1 130px;min-width:0}.mk .row input,.mk .row select{width:100%;min-width:0;max-width:100%}
+form.f select{max-width:100%;min-width:0}form.f>*{min-width:0}
+</style></head><body>
+<header><h1>🃏 Jeu de cartes</h1><div id="me"></div></header>
+<nav id="nav"></nav><main id="main"></main>
 <script>
-(function(){
-  "use strict";
+const sb=supabase.createClient('https://bjsvqikjnvaomyoifiml.supabase.co','sb_publishable_-3cPqDCyE-zhb3z5r6dPhg_DJFKGAI6');
+const $=s=>document.querySelector(s),main=$('#main');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const img=p=>p?sb.storage.from('cartes').getPublicUrl(p).data.publicUrl:'';
+async function q(p){const r=await p;if(r.error){alert(r.error.message);throw r.error}return r.data}
+let user,joueur,isAdmin,tab='collection',sub='cartes',B={};
+const opts=(a,l='nom')=>a.map(x=>`<option value="${x.id}">${esc(x[l])}</option>`).join('');
+const TABS={collection:'Ma collection',boutique:'Boutique',deck:'Mon deck',profil:'Profils'};
 
-  // ---------- Source des données ----------
-  // Lit data.json (généré et poussé sur GitHub par Streamer.bot) au lieu
-  // d'ouvrir une connexion WebSocket, qui ne peut fonctionner que depuis
-  // la machine où tourne Streamer.bot.
-  var DATA_URL = "data.json";
-  var POLL_MS = 15000;
-
-  // ---------- Status UI ----------
-  var statusDot = document.getElementById("statusDot");
-  var statusText = document.getElementById("statusText");
-  function setStatus(state, text){
-    statusDot.className = "dot " + (state || "");
-    statusText.textContent = text;
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){
+    $('#nav').innerHTML='';$('#me').innerHTML='<button id="login">Se connecter avec Twitch</button>';
+    main.innerHTML='<p>Connecte-toi avec ton compte Twitch pour voir ta collection.</p>';
+    $('#login').onclick=()=>sb.auth.signInWithOAuth({provider:'twitch',options:{redirectTo:location.origin+location.pathname}});
+    return;
   }
+  user=session.user;
+  joueur=await q(sb.from('joueurs').select('*').eq('id',user.id).single());
+  isAdmin=await q(sb.rpc('is_admin'));
+  header();show(tab);
+}
+function header(){
+  $('#me').innerHTML=`${isAdmin?'<small style="opacity:.5;margin-right:8px">site v8</small>':''}${esc(joueur.pseudo)} · 💰 ${joueur.monnaie} <button class="sec" id="out">Déconnexion</button>`;
+  $('#out').onclick=async()=>{await sb.auth.signOut();location.reload()};
+}
+async function refreshJoueur(){joueur=await q(sb.from('joueurs').select('*').eq('id',user.id).single());header()}
+function show(t){
+  tab=t;const T={...TABS};if(isAdmin)T.admin='⚙️ Admin';
+  $('#nav').innerHTML=Object.entries(T).map(([k,v])=>`<button class="${k==t?'on':'sec'}" data-t="${k}">${v}</button>`).join('');
+  $('#nav').querySelectorAll('button').forEach(b=>b.onclick=()=>show(b.dataset.t));
+  ({collection:vCollection,boutique:vBoutique,deck:vDeck,profil:vProfil,admin:vAdmin})[t]();
+}
 
-  var refreshBtn = document.getElementById("refreshBtn");
-  refreshBtn.addEventListener("click", function(){
-    refreshBtn.classList.add("spin");
-    fetchAndRender().finally(function(){
-      setTimeout(function(){ refreshBtn.classList.remove("spin"); }, 400);
-    });
-  });
+/* ---------- Collection ---------- */
+let deck=null,typeOf={},flt='tout',fcol='tout',collData=[];
+const cn=x=>x.variantes_carte.cartes.collections?.nom||'Communes';
+const TYPES={combattant:'Combattants',magie:'Magies',piege:'Pièges'};
+async function loadColl(){
+  collData=await q(sb.from('collection_joueur').select('quantite,variantes_carte(nom,image_path,cartes(id,nom,type,collections(nom),raretes(nom,couleur)))').eq('joueur_id',user.id));
+  typeOf={};collData.forEach(x=>{const c=x.variantes_carte.cartes;typeOf[c.id]=c.type});
+  if(!deck){const dk=await q(sb.from('deck').select('carte_id').eq('joueur_id',user.id));deck=new Set(dk.map(x=>x.carte_id))}
+}
+function updBar(){
+  const n=t=>[...deck].filter(i=>typeOf[i]==t).length,ok=deck.size>=9&&deck.size<=10&&n('combattant')>=3&&n('magie')>=3&&n('piege')>=3;
+  $('#dbar').innerHTML=`<span><b>${deck.size}/10</b> — combattants ${n('combattant')}/3 · magies ${n('magie')}/3 · pièges ${n('piege')}/3</span><button id="sv" ${ok?'':'disabled'} title="9 ou 10 cartes, au moins 3 de chaque type">Enregistrer le deck</button>`;
+  $('#sv').onclick=async()=>{
+    const {error}=await sb.rpc('enregistrer_deck',{p_cartes:[...deck]});
+    alert(error?({DECK_TAILLE_INVALIDE:'Il faut 9 ou 10 cartes.',DECK_COMPOSITION_INVALIDE:'Il faut au moins 3 cartes de chaque type.'}[error.message]||error.message):'Deck enregistré !');};
+}
+function cardHTML(x){
+  const v=x.variantes_carte,c=v.cartes,on=deck.has(c.id);
+  return `<div class="cw">${v.image_path?`<img class="cimg${on?' in':''}" style="--g:${esc(c.raretes.couleur)}" src="${img(v.image_path)}">`:''}<div class="inf">${esc(c.nom)} · ${esc(c.type)} · ${esc(c.raretes.nom)}<br>${esc(v.nom)} ×${x.quantite}</div><button class="${on?'sec':''}" data-c="${c.id}">${on?'✓ Retirer du deck':'Ajouter au deck'}</button></div>`;
+}
+function bindToggle(redraw){
+  main.querySelectorAll('button[data-c]').forEach(b=>b.onclick=()=>{const id=+b.dataset.c;
+    if(deck.has(id))deck.delete(id);
+    else if(deck.size>=10){alert('Deck complet : 10 cartes maximum.');return}
+    else deck.add(id);
+    redraw();});
+}
+async function vCollection(){
+  await loadColl();
+  if(!collData.length){main.innerHTML='<p>Tu n\'as encore aucune carte. Achète un booster dans la boutique, puis ouvre-le en live avec !booster.</p>';return}
+  main.innerHTML='<div id="dbar" class="dbar"></div><div class="row" id="flt"></div><div class="row" id="fcol"></div><div class="cgrid" id="gr"></div>';
+  drawColl();
+}
+function drawColl(){
+  $('#flt').innerHTML=[['tout','Tout'],...Object.entries(TYPES)].map(([k,v])=>`<button class="${k==flt?'on':'sec'}" data-f="${k}">${v}</button>`).join('');
+  $('#flt').querySelectorAll('button').forEach(b=>b.onclick=()=>{flt=b.dataset.f;drawColl()});
+  const names=[...new Set(collData.map(cn))].sort();
+  $('#fcol').innerHTML=[['tout','Toutes les collections'],...names.map(n=>[n,n])].map(([k,v])=>`<button class="${k==fcol?'on':'sec'}" data-k="${esc(k)}">${esc(v)}</button>`).join('');
+  $('#fcol').querySelectorAll('button').forEach(b=>b.onclick=()=>{fcol=b.dataset.k;drawColl()});
+  $('#gr').innerHTML=collData.filter(x=>(flt=='tout'||x.variantes_carte.cartes.type==flt)&&(fcol=='tout'||cn(x)==fcol)).map(cardHTML).join('');
+  bindToggle(drawColl);updBar();
+}
 
-  // ---------- Tabs ----------
-  var tabs = document.querySelectorAll(".tab");
-  var panels = {
-    classement: document.getElementById("tab-classement"),
-    stock: document.getElementById("tab-stock"),
-    inventaires: document.getElementById("tab-inventaires")
-  };
-  tabs.forEach(function(t){
-    t.addEventListener("click", function(){
-      tabs.forEach(function(x){ x.classList.remove("active"); });
-      t.classList.add("active");
-      Object.keys(panels).forEach(function(k){ panels[k].style.display = "none"; });
-      panels[t.dataset.tab].style.display = "block";
-    });
-  });
+/* ---------- Boutique ---------- */
+async function vBoutique(){
+  const [t,s]=await Promise.all([q(sb.from('types_boosters').select('*').eq('actif',true)),
+    q(sb.from('stock_boosters').select('quantite,types_boosters(nom)').eq('joueur_id',user.id).gt('quantite',0))]);
+  main.innerHTML=`<h3>Tes boosters non ouverts</h3><p>${s.length?s.map(x=>`${esc(x.types_boosters.nom)} ×${x.quantite}`).join(' · ')+'<br><small>Ouvre-les pendant le live avec !booster</small>':'Aucun'}</p>
+  <h3>Acheter</h3><div class="grid">${t.map(b=>`<div class="card">${b.image_path?`<img src="${img(b.image_path)}">`:''}<b>${esc(b.nom)}</b><small>${b.nb_cartes} cartes</small><button data-id="${b.id}">Acheter · 💰 ${b.prix}</button></div>`).join('')}</div>`;
+  main.querySelectorAll('button[data-id]').forEach(b=>b.onclick=async()=>{
+    const {error}=await sb.rpc('acheter_booster',{p_type_id:+b.dataset.id});
+    if(error)alert(error.message.includes('MONNAIE')?'Pas assez de monnaie.':error.message);
+    await refreshJoueur();vBoutique();});
+}
 
-  var pollTimer = null;
-  function schedulePoll(){
-    pollTimer = setTimeout(function(){
-      fetchAndRender().finally(schedulePoll);
-    }, POLL_MS);
+/* ---------- Deck ---------- */
+async function vDeck(){
+  await loadColl();
+  main.innerHTML='<div id="dbar" class="dbar"></div><div class="cgrid" id="gr"></div>';
+  drawDeck();
+}
+function drawDeck(){
+  const seen=new Set(),ord={combattant:0,magie:1,piege:2};
+  const L=collData.filter(x=>{const i=x.variantes_carte.cartes.id;if(!deck.has(i)||seen.has(i))return false;seen.add(i);return true})
+    .sort((a,b)=>ord[a.variantes_carte.cartes.type]-ord[b.variantes_carte.cartes.type]);
+  $('#gr').innerHTML=L.length?L.map(cardHTML).join(''):'<p>Ton deck est vide. Ajoute des cartes depuis « Ma collection ».</p>';
+  bindToggle(drawDeck);updBar();
+}
+
+/* ---------- Profils (visibles par tous les joueurs connectés) ---------- */
+async function vProfil(id=user.id){
+  const mine=id==user.id;
+  const [rl,rp]=await Promise.all([sb.rpc('liste_profils'),sb.rpc('profil_public',{p_joueur:id})]);
+  if(rl.error||rp.error){main.innerHTML='<p class="ko">Profils indisponibles pour le moment (l\'admin doit d\'abord lancer 05-profil.sql puis 06-profils-publics.sql dans Supabase).</p>';return}
+  if(!rp.data){main.innerHTML='<p>Profil introuvable.</p>';return}
+  const D=rp.data,S=D.stats||{},n=k=>S[k]??0,tot=n('victoires')+n('defaites')+n('nuls');
+  const pct=tot?Math.round(100*n('victoires')/tot)+' %':'—';
+  const st=(l,v,s)=>`<div class="stat"><span>${l}</span><b>${v}</b>${s?`<span>${s}</span>`:''}</div>`;
+  const cardTile=(l,x,u)=>{
+    if(!x)return st(l,'—');
+    return `<div class="stat card2" style="--g:${esc(x.couleur||'#888')}">${x.image_path?`<img src="${img(x.image_path)}">`:''}<div><span>${l}</span><b style="font-size:18px">${esc(x.nom)}</b><span>${x.valeur} ${u}</span></div></div>`};
+  let coll='';
+  if(mine){
+    await loadColl();
+    const rt=await sb.from('cartes').select('id',{count:'exact',head:true}).eq('actif',true);
+    const mc=new Map();collData.forEach(x=>{const c=x.variantes_carte.cartes;mc.set(c.id,c)});
+    const copies=collData.reduce((a,x)=>a+x.quantite,0),byR={};
+    mc.forEach(c=>{const r=c.raretes.nom;byR[r]=(byR[r]||0)+1});
+    coll=`<h3>Collection</h3><div class="stats">
+   ${st('Cartes différentes',mc.size+(rt.count!=null?' / '+rt.count:''))}${st('Cartes au total',copies,'doublons compris')}
+   ${st('Boosters ouverts',n('boosters_ouverts'))}
+   ${Object.entries(byR).map(([k,v])=>st(esc(k),v,'cartes différentes')).join('')}</div>`;
   }
+  const rank=rl.data.slice(0,50).map((x,i)=>`<tr><td>${i+1}</td><td><button class="${x.joueur_id==id?'on':'sec'}" data-p="${x.joueur_id}">${esc(x.pseudo)}${x.joueur_id==user.id?' (moi)':''}</button></td><td>${x.victoires}</td><td>${x.defaites}</td><td>${x.nuls}</td></tr>`).join('');
+  main.innerHTML=`<div class="row"><h3 style="margin:0">${mine?'Mon profil':'Profil de '+esc(D.pseudo)}</h3>${mine?'':`<button class="sec" data-p="${user.id}">← Mon profil</button>`}</div>
+  <h3>Combats</h3><div class="stats">
+   ${st('Victoires',n('victoires'))}${st('Défaites',n('defaites'))}${st('Nuls',n('nuls'))}
+   ${st('% de victoires',pct,tot+' combat'+(tot>1?'s':''))}
+   ${st('Meilleure série de victoires',n('meilleure_serie'))}${st('Série en cours',n('serie_actuelle'))}</div>
+  <h3>Records</h3><div class="stats">
+   ${st('Plus gros coup infligé',n('plus_gros_coup'),'dégâts en une attaque')}
+   ${st('Victoire la plus rapide',S.victoire_rapide_tours?S.victoire_rapide_tours+' tours':'—')}
+   ${st('Combat le plus long',S.combat_long_tours?S.combat_long_tours+' tours':'—')}
+   ${st('Dégâts totaux infligés',n('degats_totaux'))}</div>
+  <h3>Cartes</h3><div class="stats">${cardTile('Carte la plus jouée',D.plus_jouee,'combats')}${cardTile('Carte la plus victorieuse',D.plus_gagnante,'victoires')}</div>
+  ${coll}
+  ${tot?'':`<p><small>${mine?'Aucun combat joué pour l\'instant : tes statistiques de combat apparaîtront après ton premier combat.':'Ce joueur n\'a pas encore combattu.'}</small></p>`}
+  <h3>Classement</h3><p><small>Clique sur un pseudo pour voir son profil.</small></p>
+  <table><tr><th>#</th><th>Joueur</th><th>V</th><th>D</th><th>N</th></tr>${rank}</table>`;
+  main.querySelectorAll('button[data-p]').forEach(b=>b.onclick=()=>{vProfil(b.dataset.p);window.scrollTo(0,0)});
+}
 
-  // ---------- Récupération des données ----------
-  async function fetchAndRender(){
-    try{
-      setStatus("connecting", "Actualisation...");
-      var res = await fetch(DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
-      if(!res.ok) throw new Error("HTTP " + res.status);
-      var data = await res.json();
+/* ---------- Admin ---------- */
+async function vAdmin(){
+  const S={cartes:'Cartes',collections:'Collections',boosters:'Boosters',effets:'Effets',raretes:'Raretés',cadeaux:'Cadeaux',joueurs:'Joueurs'};
+  main.innerHTML=`<div class="row">${Object.entries(S).map(([k,v])=>`<button class="${k==sub?'on':'sec'}" data-s="${k}">${v}</button>`).join('')}</div><div id="sub"></div>`;
+  main.querySelectorAll('button[data-s]').forEach(b=>b.onclick=()=>{sub=b.dataset.s;vAdmin()});
+  ({cartes:aCartes,collections:aCollections,boosters:aBoosters,effets:aEffets,raretes:aRaretes,cadeaux:aCadeaux,joueurs:aJoueurs})[sub]();
+}
+async function upload(file){
+  const path=crypto.randomUUID()+'.'+(file.name.split('.').pop()||'png');
+  await q(sb.storage.from('cartes').upload(path,file,{contentType:file.type}));return path;
+}
 
-      var balances = data.balances || {};
-      var stock = Array.isArray(data.stock) ? data.stock : [];
-      var config = data.config || null;
+/* ---------- Catalogue d'effets (pour ajouter un effet : une ligne ici) ---------- */
+// Paramètres réutilisables : [libellé, 'n' (nombre) ou liste de choix]
+const P={val:['Valeur','n'],u:['Unité',['pts','pct']],tours:['Nb de tours','n'],chance:['Chance (%)','n'],frappes:['Nb de frappes','n'],
+ coups:['Nb de coups','n'],cible:['Cible',['soi','adversaire']],carte:['Carte',['magie','piege']],seuil:['Seuil (ignoré si aucune condition)','n'],seuilpv:['Seuil (% PV)','n'],
+ cond:['Condition pour éviter la mort',['aucune','pv_max','degats_infliges']],pct:['% PV rendus en plus','n'],val2:['2e valeur','n'],pctatq:["% de l'ATQ infligée volé en PV",'n'],pctpv:['% des PV max de la cible perdus par tour','n'],degtour:['Points de dégâts par tour','n'],ciblem:['Cible (adversaire par défaut)',['adversaire','soi']],max:['Plafond de frappes en plus','n'],reducsoin:['% de soins en moins','n'],annul:["Chance d'annuler l'attaque (%)",'n'],stunch:["Chance d'être étourdi avant l'attaque (%)",'n'],fchance:['Chance de se blesser en attaquant (%)','n'],degfrac:['Dégâts subis en attaquant','n']};
+// Chaque effet : [libellé, ...paramètres]
+const PAS={evite_mort:['Évite la mort une fois'],soin_tour:['Se soigne de X chaque tour','val','u'],renvoi:['Renvoie X dégâts reçus','val','u'],
+ atq_tours:["Augmente l'ATQ tous les X tours",'tours','val','u'],pv_tours:['Augmente les PV tous les X tours','tours','val','u'],
+ multi_frappe:['À X % de chances, frappe X fois par tour','chance','frappes'],reduc_degats:['À X % de chances, réduit les dégâts reçus de X','chance','val','u'],
+ bonus_frappe:["Si frappé X fois par tour, bonus à la prochaine attaque",'coups','val','u'],
+ etourdir:["À X % de chances, étourdit la cible (n'attaque pas au prochain tour)",'chance'],
+ vol_pct_atq:["À X % de chances, vole X % de l'ATQ infligée (soin)",'chance','pctatq'],
+ brulure:["À X % de chances, applique une brûlure (% de PV par tour)",'chance','pctpv','tours'],
+ poison:["À X % de chances, applique un poison (points par tour)",'chance','degtour','tours'],
+ malediction:["À X % de chances, maudit la cible (son ATQ baisse de X points par tour)",'chance','val','tours'],
+ enchainement:["À X % de chances, frappe une fois de plus, puis retente (s'arrête au 1er échec)",'chance','max'],
+ saignement:["À X % de chances, fait saigner (% des PV max par tour + soins réduits)",'chance','pctpv','reducsoin','tours'],
+ gel:["À X % de chances, gèle la cible (chance d'annuler son attaque ou de l'étourdir)",'chance','annul','stunch','tours'],
+ fracture:["À X % de chances, fracture la cible (chance de se blesser en attaquant)",'chance','fchance','degfrac','tours']};
+const ULT={degats:["Dégâts directs à l'adversaire",'val'],voler:['Vole une magie/un piège','carte'],detruire:['Détruit une magie/un piège','carte'],
+ equiper:['Équipe une autre magie/piège du deck','carte'],soin:['Se soigne','val','u'],vol_vie:['Vole de la vie','val'],echange_atq:["Échange l'attaque avec l'adversaire"],
+ annule_attaque:['Annule la prochaine attaque'],double_degats:['Double ses dégâts pendant X tours','tours'],echange_atq_def:["Échange l'ATQ et la défense de l'adversaire"],
+ malediction:["Malédiction : l'ATQ baisse de X points par tour pendant X tours",'ciblem','val','tours'],
+ saignement:["Saignement : X % des PV max par tour + soins réduits, pendant X tours",'ciblem','pctpv','reducsoin','tours'],
+ gel:["Gel : chance d'annuler l'attaque / d'être étourdi, pendant X tours",'ciblem','annul','stunch','tours'],
+ fracture:["Fracture : chance de se blesser en attaquant, pendant X tours",'ciblem','fchance','degfrac','tours'],
+ vol_ultime:["Vole l'ultime de l'adversaire"],
+ soin_tours:["Régénération : soigne de X PV par tour pendant X tours",'val','u','tours'],
+ purification:["Purification : retire les statuts négatifs (poison, brûlure, gel, saignement, fracture, malédiction, étourdissement…) et rend l'ATQ perdu",'cible'],
+ atk_enchainement:["Enchaînement : X % de chances de frapper une fois de plus, puis retente (s'arrête au 1er échec)",'chance','max']};
+const MAG={atq_mod:["Modifie l'ATQ (négatif = baisse)",'cible','val','u'],pv_mod:['Modifie les PV max (négatif = baisse)','cible','val','u'],
+ soin:['Soigne son combattant','val','u'],degats:["Dégâts directs à l'adversaire",'val'],annule_attaque:["Annule la prochaine attaque de l'adversaire"],
+ renvoi:['Renvoie une part des dégâts pendant X tours','val','tours'],insensible_piege:['Insensible aux pièges pendant X tours','tours'],
+ annule_magies:['Annule les autres magies pendant X tours','tours'],mort_evitee:['Évite la mort si condition (reste à 1 PV, une fois)','cond','seuil','pct'],
+ degats_tours:['Inflige X dégâts après X tours','val','tours'],
+ malediction:["Malédiction : l'ATQ baisse de X points par tour pendant X tours",'ciblem','val','tours'],
+ poison_effet:["Poison : X points par tour pendant X tours (soi ou adversaire)",'ciblem','degtour','tours'],
+ brulure_effet:["Brûlure : X % des PV max par tour pendant X tours (soi ou adversaire)",'ciblem','pctpv','tours'],
+ etourdir_effet:["Étourdit pendant X tours (soi ou adversaire)",'ciblem','tours'],
+ atk_brulure:["Attaque de base : X % de chances de brûler (X % des PV max par tour, X tours)",'chance','pctpv','tours'],
+ atk_poison:["Attaque de base : X % de chances d'empoisonner (X points par tour, X tours)",'chance','degtour','tours'],
+ atk_etourdir:["Attaque de base : +X % de chances d'étourdir (s'ajoute au passif)",'chance'],
+ esquive_mod:["Modifie le % d'esquive (négatif = baisse)",'cible','val'],
+ soin_tours:["Régénération : soigne de X PV par tour pendant X tours",'val','u','tours'],
+ purification:["Purification : retire les statuts négatifs (poison, brûlure, gel, saignement, fracture, malédiction, étourdissement…) et rend l'ATQ perdu",'cible'],
+ atk_enchainement:["Attaque de base : X % de chances de frapper une fois de plus, puis retente (s'arrête au 1er échec)",'chance','max'],
+ atk_saignement:["Attaque de base : X % de chances de faire saigner (X % des PV max par tour, soins réduits, X tours)",'chance','pctpv','reducsoin','tours'],
+ atk_malediction:["Attaque de base : X % de chances de maudire (ATQ −X par tour, X tours)",'chance','val','tours'],
+ atk_fracture:["Attaque de base : X % de chances de fracturer (X % de se blesser, X dégâts, X tours)",'chance','fchance','degfrac','tours'],
+ atk_gel:["Attaque de base : X % de chances de geler (X % d'attaque annulée, X % d'étourdi, X tours)",'chance','annul','stunch','tours'],
+ reset_ultime:["Réinitialise l'ultime (utilisable à nouveau)",'cible'],
+ saignement:["Saignement : X % des PV max par tour + soins réduits, pendant X tours",'ciblem','pctpv','reducsoin','tours'],
+ gel:["Gel : chance d'annuler l'attaque / d'être étourdi, pendant X tours",'ciblem','annul','stunch','tours'],
+ fracture:["Fracture : chance de se blesser en attaquant, pendant X tours",'ciblem','fchance','degfrac','tours'],
+ vol_ultime:["Vole l'ultime de l'adversaire"]};
+const CON={adv_attaque:["L'adversaire a attaqué X fois",'coups'],adv_ultime:["L'adversaire utilise son ultime"],proprio_pv_sous:['Le propriétaire passe sous X % de PV','seuilpv'],
+ adv_pv_bas:["L'adversaire passe sous X % de PV",'seuilpv'],adv_soigne:["L'adversaire se soigne"],proprio_soigne:['Le propriétaire se soigne'],proprio_meurt:['Le propriétaire meurt']};
+let editId=null;
+const OL={aucune:'Aucune condition : évite la mort une fois',pv_max:'Ses PV max sont au moins égaux au seuil',degats_infliges:'Il a déjà infligé au moins le seuil en dégâts (total)'};
+function mk(el,cat){
+  el.classList.add('mk');el.innerHTML=`<select><option value="">— Aucun —</option>${Object.entries(cat).map(([k,v])=>`<option value="${k}">${v[0]}</option>`).join('')}</select><div class="row"></div>`;
+  const s=el.querySelector('select'),d=el.querySelector('.row');
+  s.onchange=()=>{d.innerHTML=s.value?cat[s.value].slice(1).map(k=>{const [l,t]=P[k];
+    return `<label><small>${l}</small><br>${t=='n'?`<input data-k="${k}" type="number" step="any">`:`<select data-k="${k}">${t.map(o=>`<option value="${o}">${OL[o]||o}</option>`).join('')}</select>`}</label>`}).join(''):''};
+  return {get(){if(!s.value)return null;const o={type:s.value};
+    d.querySelectorAll('[data-k]').forEach(i=>o[i.dataset.k]=i.tagName=='INPUT'?(i.value===''?null:+i.value):i.value);return o},
+  set(o){if(!o||!o.type)return;s.value=o.type;if(s.value!==o.type){s.value='';return}s.onchange();
+    d.querySelectorAll('[data-k]').forEach(i=>{if(o[i.dataset.k]!=null)i.value=o[i.dataset.k]})}};
+}
 
-      renderClassement(balances);
-      renderStock(stock, config);
-      renderInventaires(stock);
+// Multi-effet : plusieurs effets pour une même magie / un même piège (stockés sous forme { briques:[...] })
+function mkMulti(el,cat,lab,rem){
+  el.innerHTML='<div class="mm"></div><button type="button" class="sec mplus">'+(lab||'+ Ajouter un effet')+'</button>';
+  const zone=el.querySelector('.mm'),L=[];
+  const add=()=>{const w=document.createElement('div');w.style.cssText='border-left:3px solid #7c3aed;padding-left:8px;margin:6px 0';
+    const inner=document.createElement('div'),x=document.createElement('button');x.type='button';x.className='sec';x.textContent=rem||'✕ Retirer cet effet';
+    w.append(inner,x);zone.appendChild(w);const m=mk(inner,cat),it={m,w};L.push(it);
+    x.onclick=()=>{if(L.length<2)return;w.remove();L.splice(L.indexOf(it),1)};return m};
+  el.querySelector('.mplus').onclick=add;add();
+  return {get(){const a=L.map(i=>i.m.get()).filter(Boolean);return !a.length?null:a.length==1?a[0]:{briques:a}},
+   set(o){if(!o)return;const arr=o.briques||[o];while(L.length>1){L.pop().w.remove()}arr.forEach((b,i)=>{(i==0?L[0].m:add()).set(b)})}};
+}
 
-      setStatus("ok", "Connecté");
+async function aCartes(){
+  editId=null;
+  const [col,rar,cartes]=await Promise.all([q(sb.from('collections').select('*')),q(sb.from('raretes').select('*').order('ordre')),
+    q(sb.from('cartes').select('id,nom,type,actif,raretes(nom),collections(nom),variantes_carte(id)').order('id',{ascending:false}))]);
+  const ep=await sb.from('effets_perso').select('*'),cu=ep.data||[];
+  const mc=(b,k)=>({...b,...Object.fromEntries(cu.filter(x=>x.categorie==k).map(x=>[x.cle,[x.libelle,...x.params]]))});
+  const CAT={pas:mc(PAS,'passif'),ult:mc(ULT,'ultime'),mag:mc(MAG,'magie'),con:mc(CON,'condition')};
+  $('#sub').innerHTML=`<h3 id="ftitle">Nouvelle carte</h3>
+  <form class="f" id="fc"><input name="nom" placeholder="Nom" required>
+   <select name="type"><option value="combattant">Combattant</option><option value="magie">Magie</option><option value="piege">Piège</option></select>
+   <select name="col"><option value="">Commune (aucune collection)</option>${opts(col)}</select>
+   <select name="rar">${opts(rar)}</select>
+   <div class="row" id="r-stats"><input name="atq" type="number" placeholder="ATQ" style="width:90px"><input name="pv" type="number" placeholder="PV" style="width:90px"></div>
+   <input name="desc" placeholder="Description (optionnel)">
+   <label>Image complète de la carte<br><input name="file" type="file" accept="image/*" required></label>
+   <label>Image pour le combat — sans les chiffres ATQ/PV (facultatif, combattants)<br><input name="filec" type="file" accept="image/*"></label>
+   <div id="s-comb"><b>Ultime</b><div id="b-ult"></div>
+    <div class="row"><label><small>Après N tours</small><br><input name="utours" type="number" min="0" style="width:90px"></label>
+    <label><input type="checkbox" name="ucarte"> ou quand une magie/piège s'active</label></div>
+    <div class="row"><label><small>Utilisations max (0 = illimité)</small><br><input name="uuses" type="number" min="0" value="1" style="width:90px"></label>
+    <label><small>Délai entre 2 utilisations (tours)</small><br><input name="ucd" type="number" min="0" value="0" style="width:90px"></label></div>
+    <b>Passifs</b> <small>(tu peux en cumuler plusieurs)</small><div id="b-pas"></div></div>
+   <div id="s-mag" style="display:none"><b>Effet de la magie</b><div id="b-mag"></div></div>
+   <div id="s-pie" style="display:none"><b>Condition du piège</b><div id="b-con"></div><b>Effet du piège</b><div id="b-pef"></div>
+    <label><small>Déclenchements max</small><br><input name="decl" type="number" min="1" value="1" style="width:90px"></label></div>
+   <label><input type="checkbox" name="actif"> Publier (visible des joueurs et dans les boosters)</label>
+   <div class="row"><button id="fbtn">Créer la carte</button><button type="button" class="sec" id="fcancel" style="display:none">Annuler la modification</button></div></form>
+  <h3>Ajouter une version alternative</h3>
+  <form class="f" id="fv"><select name="carte">${opts(cartes)}</select><input name="nom" placeholder="Nom (ex : Alt 1)" required>
+   <input name="poids" type="number" step="any" min="0" value="10" title="Taux d'apparition (Standard = 100)"><input name="file" type="file" accept="image/*" required><label><small>Image combat sans chiffres (facultatif)</small><br><input name="filec" type="file" accept="image/*"></label><button>Ajouter la version</button></form>
+  <h3>Cartes (${cartes.length})</h3><div class="row"><select id="fcolad"><option value="">Toutes les collections</option>${col.map(c=>`<option>${esc(c.nom)}</option>`).join('')}<option>Commune</option></select></div><table><tr><th>Nom</th><th>Type</th><th>Rareté</th><th>Collection</th><th>Versions</th><th>Publiée</th><th></th></tr>
+  ${cartes.map(c=>`<tr data-col="${esc(c.collections?.nom||'Commune')}"><td>${esc(c.nom)}</td><td>${c.type}</td><td>${esc(c.raretes.nom)}</td><td>${esc(c.collections?.nom||'Commune')}</td><td>${c.variantes_carte.length}</td>
+  <td><button class="sec" data-a="${c.id}" data-v="${c.actif}">${c.actif?'<span class="ok">Oui</span>':'<span class="ko">Non</span>'}</button></td>
+  <td><button class="sec" data-edit="${c.id}" title="Modifier cette carte">✏️</button> <button class="sec" data-del="${c.id}" data-nom="${esc(c.nom)}" title="Supprimer cette carte">🗑️</button></td></tr>`).join('')}</table>`;
+  const fc=$('#fc');
+  B={ult:mk($('#b-ult'),CAT.ult),pas:mkMulti($('#b-pas'),CAT.pas,'+ Ajouter un passif','✕ Retirer ce passif'),mag:mkMulti($('#b-mag'),CAT.mag),con:mk($('#b-con'),CAT.con),pef:mkMulti($('#b-pef'),{...CAT.ult,...CAT.mag})};
+  const toggle=()=>{const t=fc.type.value;
+    $('#r-stats').style.display=$('#s-comb').style.display=t=='combattant'?'':'none';
+    $('#s-mag').style.display=t=='magie'?'':'none';$('#s-pie').style.display=t=='piege'?'':'none'};
+  fc.type.onchange=toggle;toggle();
+  $('#fcolad').onchange=e=>{const v=e.target.value;$('#sub').querySelectorAll('tr[data-col]').forEach(tr=>tr.style.display=!v||tr.dataset.col==v?'':'none')};
+  fc.onsubmit=async e=>{e.preventDefault();const f=e.target,v=n=>f[n].value,t=v('type');
+    try{let ult=null,pas=null,eff=null;
+     if(t=='combattant'){ult=B.ult.get();if(ult){if(+f.utours.value)ult.apres_tours=+f.utours.value;if(f.ucarte.checked)ult.sur_carte=true;ult.utilisations=+f.uuses.value||0;ult.delai_tours=+f.ucd.value||0}pas=B.pas.get()}
+     else if(t=='magie')eff=B.mag.get();
+     else{const c=B.con.get(),x=B.pef.get();if(c||x)eff={condition:c,effet:x,declenchements:+f.decl.value||1}}
+     const cb=t=='combattant';
+     const row={nom:v('nom'),type:t,collection_id:v('col')||null,rarete_id:+v('rar'),atq:cb&&v('atq')!==''?+v('atq'):null,pv:cb&&v('pv')!==''?+v('pv'):null,
+      description:v('desc')||null,actif:f.actif.checked,ultime:ult,passif:pas,effet:eff};
+     if(editId){delete row.type;await q(sb.from('cartes').update(row).eq('id',editId));
+      if(f.file.files[0]||f.filec.files[0]){const path=f.file.files[0]?await upload(f.file.files[0]):null,pc=f.filec.files[0]?await upload(f.filec.files[0]):null,ch={};if(path)ch.image_path=path;if(pc)ch.image_combat=pc;
+       const vs=await q(sb.from('variantes_carte').select('id').eq('carte_id',editId).eq('nom','Standard').limit(1));
+       if(vs.length)await q(sb.from('variantes_carte').update(ch).eq('id',vs[0].id));
+       else await q(sb.from('variantes_carte').insert({carte_id:editId,nom:'Standard',poids:100,...ch}));}
+      editId=null;aCartes();return}
+     const c=await q(sb.from('cartes').insert(row).select('id').single());
+     const path=await upload(f.file.files[0]),pc=f.filec.files[0]?await upload(f.filec.files[0]):null;
+     await q(sb.from('variantes_carte').insert({carte_id:c.id,nom:'Standard',image_path:path,poids:100,...(pc?{image_combat:pc}:{})}));
+     aCartes();}catch(x){}};
+  $('#fv').onsubmit=async e=>{e.preventDefault();const f=e.target;
+    try{const path=await upload(f.file.files[0]),pc=f.filec.files[0]?await upload(f.filec.files[0]):null;
+     await q(sb.from('variantes_carte').insert({carte_id:+f.carte.value,nom:f.nom.value,image_path:path,poids:+f.poids.value,...(pc?{image_combat:pc}:{})}));aCartes();}catch(x){}};
+  $('#sub').querySelectorAll('button[data-edit]').forEach(b=>b.onclick=async()=>{
+    const c=await q(sb.from('cartes').select('*').eq('id',b.dataset.edit).single()),f=fc;
+    editId=c.id;f.nom.value=c.nom;f.type.value=c.type;f.type.disabled=true;toggle();
+    f.col.value=c.collection_id||'';f.rar.value=c.rarete_id;f.atq.value=c.atq??'';f.pv.value=c.pv??'';f.desc.value=c.description||'';f.actif.checked=c.actif;
+    f.file.required=false;
+    const u=c.ultime||{};B.ult.set(c.ultime);f.utours.value=u.apres_tours||'';f.ucarte.checked=!!u.sur_carte;f.uuses.value=u.utilisations??1;f.ucd.value=u.delai_tours??0;
+    B.pas.set(c.passif);if(c.type=='magie')B.mag.set(c.effet);
+    if(c.type=='piege'&&c.effet){B.con.set(c.effet.condition);B.pef.set(c.effet.effet);f.decl.value=c.effet.declenchements||1}
+    $('#ftitle').textContent='Modifier : '+c.nom;$('#fbtn').textContent='Enregistrer les modifications';$('#fcancel').style.display='';
+    fc.scrollIntoView({behavior:'smooth'});});
+  $('#fcancel').onclick=()=>aCartes();
+  $('#sub').querySelectorAll('button[data-a]').forEach(b=>b.onclick=async()=>{
+    await q(sb.from('cartes').update({actif:b.dataset.v!=='true'}).eq('id',b.dataset.a));aCartes();});
+  $('#sub').querySelectorAll('button[data-del]').forEach(b=>b.onclick=async()=>{
+    if(!confirm('Supprimer définitivement « '+b.dataset.nom+' » ?\nElle disparaîtra aussi des collections et des decks des joueurs.'))return;
+    const chemins=await q(sb.rpc('supprimer_carte',{p_carte_id:+b.dataset.del}));
+    if(chemins&&chemins.length){try{await sb.storage.from('cartes').remove(chemins)}catch(x){}}
+    aCartes();});
+}
 
-      var maj = data.majLe ? new Date(data.majLe) : new Date();
-      document.getElementById("lastUpdate").textContent =
-        "Dernière mise à jour du registre : " + maj.toLocaleString("fr-FR");
-    }catch(e){
-      setStatus("", "Registre injoignable");
-    }
+async function aCollections(){
+  const [c,cc]=await Promise.all([q(sb.from('collections').select('*').order('id')),q(sb.from('cartes').select('collection_id'))]);
+  const nb=id=>cc.filter(y=>y.collection_id==id).length;
+  $('#sub').innerHTML=`<table><tr><th>Nom</th><th>Cartes</th><th></th></tr>
+  ${c.map(x=>`<tr data-id="${x.id}"><td><input value="${esc(x.nom)}"></td><td>${nb(x.id)}</td><td><button>Enregistrer</button> <button class="sec">🗑️</button></td></tr>`).join('')}
+  <tr data-id="new"><td><input placeholder="Nouvelle collection"></td><td></td><td><button>Ajouter</button></td></tr></table>`;
+  $('#sub').querySelectorAll('tr[data-id]').forEach(tr=>{const b=tr.querySelectorAll('button');
+    b[0].onclick=async()=>{const nom=tr.querySelector('input').value.trim();if(!nom)return;
+      await q(tr.dataset.id=='new'?sb.from('collections').insert({nom}):sb.from('collections').update({nom}).eq('id',tr.dataset.id));aCollections();};
+    if(b[1])b[1].onclick=async()=>{if(!confirm('Supprimer cette collection ?'))return;
+      await q(sb.from('collections').delete().eq('id',tr.dataset.id));aCollections();};});
+}
+
+async function aBoosters(){
+  const [b,col,rar,bc,bm]=await Promise.all([q(sb.from('types_boosters').select('*').order('id')),q(sb.from('collections').select('*').order('nom')),
+    q(sb.from('raretes').select('*').order('ordre')),q(sb.from('boosters_collections').select('*')),q(sb.from('boosters_modifs').select('*'))]);
+  const form=x=>{
+    const cs=new Set(bc.filter(y=>x&&y.type_id==x.id).map(y=>y.collection_id)),ms={};
+    bm.filter(y=>x&&y.type_id==x.id).forEach(y=>ms[y.rarete_id]=y.modif);
+    return `<form class="f" data-id="${x?x.id:'new'}"><b>${x?esc(x.nom):'Nouveau booster'}</b>
+    <input name="nom" value="${esc(x?x.nom:'')}" placeholder="Nom du booster" required>
+    <div class="row"><label><small>Prix</small><br><input name="prix" type="number" min="0" value="${x?x.prix:100}" style="width:90px"></label>
+     <label><small>Nb de cartes</small><br><input name="nb" type="number" min="1" value="${x?x.nb_cartes:5}" style="width:90px"></label>
+     <label><input type="checkbox" name="actif" ${!x||x.actif?'checked':''}> En vente</label></div>
+    ${x&&x.image_path?`<img src="${img(x.image_path)}" style="max-width:140px;border-radius:6px">`:''}<label><small>Image du booster (optionnel)</small><br><input name="file" type="file" accept="image/*"></label>
+    <small>Collections présentes (les cartes communes sont toujours incluses)</small>
+    <div class="row">${col.map(c=>`<label><input type="checkbox" name="c${c.id}" ${cs.has(c.id)?'checked':''}> ${esc(c.nom)}</label>`).join('')||'<small>Aucune collection</small>'}</div>
+    <small>Modificateur de drop : s'ajoute au poids de la rareté pour ce booster (négatif possible)</small>
+    <div class="row">${rar.map(r=>`<label><small>${esc(r.nom)} (poids ${r.poids})</small><br><input name="m${r.id}" type="number" step="any" value="${ms[r.id]||0}" style="width:90px"></label>`).join('')}</div>
+    <div class="row"><button>${x?'Enregistrer':'Créer le booster'}</button>${x?`<button type="button" class="sec" data-del="${x.id}" data-nom="${esc(x.nom)}">🗑️ Supprimer</button>`:''}</div></form>`};
+  $('#sub').innerHTML=form(null)+'<h3>Boosters existants ('+b.length+')</h3>'+b.map(form).join('');
+  $('#sub').querySelectorAll('form').forEach(f=>f.onsubmit=async e=>{e.preventDefault();
+    try{const row={nom:f.nom.value,prix:+f.prix.value,nb_cartes:+f.nb.value,actif:f.actif.checked};if(f.file.files[0])row.image_path=await upload(f.file.files[0]);let id=f.dataset.id;
+     if(id=='new')id=(await q(sb.from('types_boosters').insert(row).select('id').single())).id;
+     else await q(sb.from('types_boosters').update(row).eq('id',id));
+     id=+id;
+     await q(sb.from('boosters_collections').delete().eq('type_id',id));
+     const cs=col.filter(c=>f['c'+c.id].checked).map(c=>({type_id:id,collection_id:c.id}));
+     if(cs.length)await q(sb.from('boosters_collections').insert(cs));
+     await q(sb.from('boosters_modifs').upsert(rar.map(r=>({type_id:id,rarete_id:r.id,modif:+f['m'+r.id].value||0}))));
+     aBoosters();}catch(x){}});
+  $('#sub').querySelectorAll('button[data-del]').forEach(x=>x.onclick=async()=>{
+    if(!confirm('Supprimer « '+x.dataset.nom+' » ?\nLes boosters non ouverts de ce type chez les joueurs seront perdus.\n(Pour seulement le retirer de la boutique, décoche « En vente ».)'))return;
+    await q(sb.from('types_boosters').delete().eq('id',x.dataset.del));aBoosters();});
+}
+
+async function aEffets(){
+  const r=await sb.from('effets_perso').select('*').order('id');
+  if(r.error){$('#sub').innerHTML='<p class="ko">Table introuvable : lance d\'abord 04-effets.sql dans Supabase.</p>';return}
+  const L=r.data,CATS={passif:'Passif',ultime:'Ultime',magie:'Magie',condition:'Condition de piège'};
+  $('#sub').innerHTML=`<form class="f" id="fe"><b>Nouvel effet</b><select name="cat">${Object.entries(CATS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select>
+   <input name="lib" placeholder="Texte affiché (ex : Gagne X PV quand il attaque)" required>
+   <small>Valeurs à saisir pour cet effet</small>
+   <div class="row">${Object.entries(P).map(([k,v])=>`<label><input type="checkbox" name="p_${k}"> ${v[0]}</label>`).join('')}</div>
+   <button>Ajouter l'effet</button></form>
+   <h3>Effets ajoutés (${L.length})</h3><table><tr><th>Type</th><th>Texte</th><th>Valeurs</th><th></th></tr>
+   ${L.map(x=>`<tr><td>${CATS[x.categorie]}</td><td>${esc(x.libelle)}</td><td>${x.params.map(k=>esc(P[k]?P[k][0]:k)).join(', ')||'—'}</td><td><button class="sec" data-id="${x.id}">🗑️</button></td></tr>`).join('')}</table>`;
+  $('#fe').onsubmit=async e=>{e.preventDefault();const f=e.target;
+    const params=Object.keys(P).filter(k=>f['p_'+k].checked);
+    const cle='perso_'+f.lib.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
+    try{await q(sb.from('effets_perso').insert({categorie:f.cat.value,cle,libelle:f.lib.value.trim(),params}));aEffets();}catch(x){}};
+  $('#sub').querySelectorAll('button[data-id]').forEach(b=>b.onclick=async()=>{
+    if(!confirm('Retirer cet effet de la liste ? (Les cartes déjà créées avec cet effet le gardent.)'))return;
+    await q(sb.from('effets_perso').delete().eq('id',b.dataset.id));aEffets();});
+}
+
+async function aRaretes(){
+  const r=await q(sb.from('raretes').select('*').order('ordre'));
+  $('#sub').innerHTML=`<p><small>Poids : plus il est grand, plus la rareté sort souvent (ex : 70 / 25 / 5).</small></p>
+  <table><tr><th>Nom</th><th>Couleur</th><th>Poids</th><th>Ordre</th><th></th></tr>
+  ${r.map(x=>`<tr data-id="${x.id}"><td><input value="${esc(x.nom)}"></td><td><input type="color" value="${esc(x.couleur)}"></td><td><input type="number" step="any" min="0" value="${x.poids}" style="width:80px"></td><td><input type="number" value="${x.ordre}" style="width:70px"></td><td><button>Enregistrer</button></td></tr>`).join('')}
+  <tr data-id="new"><td><input placeholder="Nouvelle rareté"></td><td><input type="color" value="#a855f7"></td><td><input type="number" value="10" style="width:80px"></td><td><input type="number" value="${r.length+1}" style="width:70px"></td><td><button>Ajouter</button></td></tr></table>`;
+  $('#sub').querySelectorAll('tr[data-id]').forEach(tr=>tr.querySelector('button').onclick=async()=>{
+    const i=tr.querySelectorAll('input'),row={nom:i[0].value,couleur:i[1].value,poids:+i[2].value,ordre:+i[3].value};
+    if(!row.nom)return;
+    await q(tr.dataset.id=='new'?sb.from('raretes').insert(row):sb.from('raretes').update(row).eq('id',tr.dataset.id));aRaretes();});
+}
+
+async function aCadeaux(){
+  const [t,j]=await Promise.all([q(sb.from('types_boosters').select('id,nom')),q(sb.from('joueurs').select('id,pseudo').order('pseudo'))]);
+  $('#sub').innerHTML=`<form class="f" id="fg"><select name="j"><option value="">🎁 Tous les joueurs</option>${opts(j,'pseudo')}</select>
+   <select name="t">${opts(t)}</select><input name="n" type="number" min="1" value="1"><button>Offrir</button></form>`;
+  $('#fg').onsubmit=async e=>{e.preventDefault();const f=e.target;
+    const {error}=await sb.rpc('offrir_boosters',{p_joueur:f.j.value||null,p_type_id:+f.t.value,p_quantite:+f.n.value});
+    alert(error?error.message:'Boosters offerts !');};
+}
+
+/* ---------- Admin : gérer les cartes et boosters des membres ---------- */
+async function aJoueurs(){
+  const j=await q(sb.from('joueurs').select('id,pseudo,monnaie').order('pseudo'));
+  $('#sub').innerHTML=`<p><small>Gère les cartes et les boosters des membres, par exemple pour nettoyer après les tests. Les suppressions sont définitives. (Il faut avoir lancé 05-admin-joueurs.sql dans Supabase.)</small></p>
+   <div class="f"><select id="jsel"><option value="">— Choisir un joueur —</option>${opts(j,'pseudo')}</select></div>
+   <div id="jbox"></div>
+   <h3>Remise à zéro</h3>
+   <div class="f"><label><input type="checkbox" id="rzb" checked> vider aussi les boosters non ouverts</label>
+    <label>monnaie remise à <input id="rzm" type="number" min="0" style="width:90px" placeholder="inchangée"></label></div>
+   <div class="f"><button class="sec" id="rzj">Vider le joueur choisi</button><button id="rza" style="background:#b91c1c">Vider TOUS les joueurs</button></div>`;
+  const opt=()=>({p_boosters:$('#rzb').checked,p_monnaie:$('#rzm').value===''?null:+$('#rzm').value});
+  const fini=async m=>{collData=[];deck=null;await refreshJoueur();alert(m);aJoueurs()};
+  async function load(){
+    const id=$('#jsel').value;if(!id){$('#jbox').innerHTML='';return}
+    const d=await q(sb.rpc('admin_collection',{p_joueur:id})),p=j.find(x=>x.id==id),tot=d.reduce((s,x)=>s+x.quantite,0);
+    $('#jbox').innerHTML=`<p><b>${esc(p.pseudo)}</b> · 💰 ${p.monnaie} · ${tot} carte(s)</p>`+(d.length?`<table><tr><th>Carte</th><th>Type</th><th>Version</th><th>Qté</th><th></th></tr>${d.map(x=>`<tr><td>${esc(x.carte)}</td><td>${esc(x.type)}</td><td>${esc(x.variante)}</td><td>${x.quantite}</td><td><button class="sec" data-r="${x.variante_id}" data-n="1">−1</button> <button class="sec" data-r="${x.variante_id}">Tout retirer</button></td></tr>`).join('')}</table>`:'<p><small>Aucune carte dans la collection.</small></p>');
+    $('#jbox').querySelectorAll('button[data-r]').forEach(b=>b.onclick=async()=>{
+      if(!b.dataset.n&&!confirm('Retirer toutes les copies de cette carte à ce joueur ?'))return;
+      await q(sb.rpc('admin_retirer_carte',{p_joueur:id,p_variante:b.dataset.r,p_quantite:b.dataset.n?+b.dataset.n:null}));
+      collData=[];deck=null;load()});
   }
+  $('#jsel').onchange=load;
+  $('#rzj').onclick=async()=>{const id=$('#jsel').value;if(!id)return alert('Choisis d\'abord un joueur.');
+    const p=j.find(x=>x.id==id);if(!confirm('Vider la collection et le deck de '+p.pseudo+($('#rzb').checked?' ainsi que ses boosters non ouverts':'')+' ?\nC\'est définitif.'))return;
+    await q(sb.rpc('admin_vider_joueur',{p_joueur:id,...opt()}));fini('Joueur remis à zéro.')};
+  $('#rza').onclick=async()=>{if(prompt('Cela vide les cartes de TOUS les joueurs, toi compris. Tape VIDER pour confirmer :')!=='VIDER')return;
+    await q(sb.rpc('admin_vider_joueur',{p_joueur:null,...opt()}));fini('Tous les joueurs ont été remis à zéro.')};
+}
 
-  // ---------- Rendering ----------
-  function starsMarkup(etoile){
-    var n = Math.max(1, Number(etoile) || 1);
-    return '<span class="stars">' + "★".repeat(n) + '</span>';
-  }
-
-  function priceFor(config, monstre, etoile){
-    if(!config || !config.prix) return null;
-    for(var i=0;i<config.prix.length;i++){
-      var p = config.prix[i];
-      if(p.m === monstre && Number(p.e) === Number(etoile)) return Number(p.p);
-    }
-    return null;
-  }
-
-  // decapi.me/twitch/avatar/<user> renvoie l'URL de l'avatar en TEXTE brut
-  // (pas une image ni une redirection) : un <img src="..."> pointé dessus
-  // ne peut donc jamais s'afficher. On récupère ce texte via fetch, on le
-  // met en cache, puis on l'injecte comme src une fois résolu.
-  var avatarCache = {}; // username(lowercase) -> url string | null (échec)
-
-  function avatarSlug(username){
-    return String(username || "?").replace(/[^a-zA-Z0-9_-]/g, "");
-  }
-
-  async function resolveAvatarUrl(username){
-    var key = String(username || "").toLowerCase();
-    if(Object.prototype.hasOwnProperty.call(avatarCache, key)) return avatarCache[key];
-    try{
-      var resp = await fetch("https://decapi.me/twitch/avatar/" + encodeURIComponent(username));
-      var text = (await resp.text()).trim();
-      avatarCache[key] = /^https?:\/\//i.test(text) ? text : null;
-    }catch(e){
-      avatarCache[key] = null;
-    }
-    return avatarCache[key];
-  }
-
-  function avatarMarkup(username, avatarId){
-    var initial = escapeHtml((username || "?").charAt(0).toUpperCase());
-    return '<div class="avatar-mono" id="' + avatarId + '">' + initial + '</div>';
-  }
-
-  async function hydrateAvatar(username, avatarId){
-    var url = await resolveAvatarUrl(username);
-    if(!url) return;
-    var target = document.getElementById(avatarId);
-    if(!target) return; // le panneau a déjà été re-rendu entre-temps
-    var img = document.createElement("img");
-    img.className = "avatar-img";
-    img.alt = "";
-    img.referrerPolicy = "no-referrer";
-    img.onerror = function(){ /* l'URL renvoyée n'a pas chargé, on garde l'initiale */ };
-    img.src = url;
-    target.replaceWith(img);
-  }
-
-  function renderClassement(balances){
-    var el = panels.classement;
-    var entries = Object.keys(balances || {}).map(function(user){
-      return { user:user, jetons: Number(balances[user]) || 0 };
-    });
-    entries.sort(function(a,b){ return b.jetons - a.jetons; });
-
-    if(entries.length === 0){
-      el.innerHTML = '<div class="empty"><strong>Le registre est vierge.</strong>Aucun chasseur n\'a encore vendu de bête. Le premier lingot inscrira le premier nom ici.</div>';
-      return;
-    }
-
-    var top3 = entries.slice(0, 3);
-    var rest = entries.slice(3);
-
-    var podiumOrder = [top3[1], top3[0], top3[2]]; // 2e, 1er, 3e
-    var avatarIdsToHydrate = [];
-    var podiumHtml = '<div class="podium">' + podiumOrder.map(function(e){
-      if(!e) return '<div class="place"></div>';
-      var idx = top3.indexOf(e);
-      var placeClass = "place-" + (idx + 1);
-      var crown = idx === 0 ? '<svg class="crown" viewBox="0 0 24 24" fill="currentColor"><path d="M3 8l4 3 5-6 5 6 4-3-2 10H5z"/></svg>' : '';
-      var avatarId = "avatar-" + idx + "-" + avatarSlug(e.user);
-      avatarIdsToHydrate.push({ user: e.user, id: avatarId });
-      return '<div class="place ' + placeClass + '">' +
-        crown +
-        '<div class="avatar-frame">' + avatarMarkup(e.user, avatarId) + '</div>' +
-        '<div class="place-name">' + escapeHtml(e.user) + '</div>' +
-        '<div class="place-score">' + e.jetons.toLocaleString("fr-FR") + ' J</div>' +
-        '<div class="step">' + (idx + 1) + '</div>' +
-      '</div>';
-    }).join('') + '</div>';
-
-    var restHtml = '';
-    if(rest.length > 0){
-      var rows = rest.map(function(e, i){
-        return '<tr><td><span class="rank">' + (i + 4) + '</span>' + escapeHtml(e.user) + '</td>' +
-               '<td class="num">' + e.jetons.toLocaleString("fr-FR") + ' <span style="color:var(--ink-soft)">J</span></td></tr>';
-      }).join("");
-      restHtml = '<div class="rest-list"><table><thead><tr><th>Chasseur</th><th class="num">Jetons de la Forêt</th></tr></thead>' +
-        '<tbody>' + rows + '</tbody></table></div>';
-    }
-
-    el.innerHTML = podiumHtml + restHtml;
-
-    avatarIdsToHydrate.forEach(function(a){
-      hydrateAvatar(a.user, a.id);
-    });
-  }
-
-  function renderStock(stock, config){
-    var el = panels.stock;
-    stock = Array.isArray(stock) ? stock : [];
-
-    var groups = {};
-    stock.forEach(function(item){
-      var monstre = item.monstre || "Inconnu";
-      var etoile = Number(item.etoile) || 1;
-      var key = monstre + "__" + etoile;
-      if(!groups[key]) groups[key] = { monstre:monstre, etoile:etoile, qte:0 };
-      groups[key].qte += 1;
-    });
-
-    var list = Object.values(groups).sort(function(a,b){
-      if(a.monstre === b.monstre) return a.etoile - b.etoile;
-      return a.monstre.localeCompare(b.monstre);
-    });
-
-    if(list.length === 0){
-      el.innerHTML = '<div class="empty"><strong>Les étals sont vides.</strong>Personne n\'a de bête en réserve pour le moment.</div>';
-      return;
-    }
-
-    var totalQte = 0, totalVal = 0, hasVal = false;
-    var rows = list.map(function(g){
-      var prix = priceFor(config, g.monstre, g.etoile);
-      var val = prix !== null ? prix * g.qte : null;
-      totalQte += g.qte;
-      if(val !== null){ hasVal = true; totalVal += val; }
-      return '<tr><td>' + escapeHtml(g.monstre) + '</td>' +
-             '<td>' + starsMarkup(g.etoile) + '</td>' +
-             '<td class="num">' + g.qte + '</td>' +
-             '<td class="num">' + (val !== null ? Math.round(val).toLocaleString("fr-FR") + " J" : "—") + '</td></tr>';
-    }).join("");
-
-    el.innerHTML =
-      '<table><thead><tr><th>Monstre</th><th>Rareté</th><th class="num">En stock</th><th class="num">Valeur est.</th></tr></thead>' +
-      '<tbody>' + rows + '</tbody></table>' +
-      '<div class="totals" style="margin-top:16px">' +
-        '<span>Bêtes en stock : <b>' + totalQte + '</b></span>' +
-        (hasVal ? '<span>Valeur totale estimée : <b>' + Math.round(totalVal).toLocaleString("fr-FR") + ' J</b></span>' : '') +
-      '</div>';
-  }
-
-  function renderInventaires(stock){
-    var el = panels.inventaires;
-    stock = Array.isArray(stock) ? stock : [];
-
-    var byUser = {};
-    stock.forEach(function(item){
-      var user = item.user || "inconnu";
-      var key = user.toLowerCase();
-      if(!byUser[key]) byUser[key] = { display:user, items:{}, total:0 };
-      var monstre = item.monstre || "Inconnu";
-      var etoile = Number(item.etoile) || 1;
-      var ik = monstre + "__" + etoile;
-      if(!byUser[key].items[ik]) byUser[key].items[ik] = { monstre:monstre, etoile:etoile, qte:0 };
-      byUser[key].items[ik].qte += 1;
-      byUser[key].total += 1;
-    });
-
-    var users = Object.values(byUser).sort(function(a,b){ return b.total - a.total; });
-
-    if(users.length === 0){
-      el.innerHTML = '<div class="empty"><strong>Aucun sac de chasse rempli.</strong>Dès qu\'un chasseur ramènera une bête, son inventaire apparaîtra ici.</div>';
-      return;
-    }
-
-    var html = users.map(function(u, idx){
-      var items = Object.values(u.items).sort(function(a,b){
-        if(a.monstre === b.monstre) return a.etoile - b.etoile;
-        return a.monstre.localeCompare(b.monstre);
-      });
-      var body = items.map(function(it){
-        return '<div class="sub-row"><span>' + escapeHtml(it.monstre) + ' ' + starsMarkup(it.etoile) + '</span><span>x' + it.qte + '</span></div>';
-      }).join("");
-
-      return '<div class="accordion-item" data-idx="' + idx + '">' +
-        '<div class="accordion-head">' +
-          '<span><span class="chevron">▸</span><span class="name">' + escapeHtml(u.display) + '</span></span>' +
-          '<span class="meta">' + u.total + ' bête' + (u.total>1?'s':'') + '</span>' +
-        '</div>' +
-        '<div class="accordion-body">' + body + '</div>' +
-      '</div>';
-    }).join("");
-
-    el.innerHTML = html;
-
-    el.querySelectorAll(".accordion-head").forEach(function(head){
-      head.addEventListener("click", function(){
-        head.parentElement.classList.toggle("open");
-      });
-    });
-  }
-
-  function escapeHtml(str){
-    return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-  }
-
-  document.addEventListener("visibilitychange", function(){
-    if(document.hidden){
-      clearTimeout(pollTimer);
-    }else{
-      fetchAndRender();
-      schedulePoll();
-    }
-  });
-
-  fetchAndRender();
-  schedulePoll();
-})();
-</script>
-</body>
-</html>
+sb.auth.onAuthStateChange((ev)=>{if(ev==='SIGNED_IN'&&!user)init()});
+init();
+</script></body></html>
