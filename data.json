@@ -230,6 +230,34 @@
     "monstre": "Arkveld",
     "etoile": 10,
     "horodatage": "2026-10-07T20:15:42.7899339Z"
+  },
+  {
+    "id": "a5d1b25a",
+    "user": "SG_Mugiwara13",
+    "monstre": "Rey Dau",
+    "etoile": 10,
+    "horodatage": "2026-10-10T16:14:43.7877206Z"
+  },
+  {
+    "id": "3a421ca5",
+    "user": "SG_Mugiwara13",
+    "monstre": "Uth Duna",
+    "etoile": 10,
+    "horodatage": "2026-10-10T16:14:49.445657Z"
+  },
+  {
+    "id": "12891e4c",
+    "user": "SG_Mugiwara13",
+    "monstre": "Nu Udra",
+    "etoile": 10,
+    "horodatage": "2026-10-10T16:14:53.7254508Z"
+  },
+  {
+    "id": "99a77803",
+    "user": "SG_Mugiwara13",
+    "monstre": "Arkveld",
+    "etoile": 10,
+    "horodatage": "2026-10-10T16:14:59.3378372Z"
   }
 ],"config":{
   "prix": [
@@ -318,4 +346,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-10T16:10:39.1256183Z"}
+},"majLe":"2026-10-10T16:15:39.2750997Z"}
