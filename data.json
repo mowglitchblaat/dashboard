@@ -258,6 +258,13 @@
     "monstre": "Arkveld",
     "etoile": 10,
     "horodatage": "2026-10-10T16:14:59.3378372Z"
+  },
+  {
+    "id": "9571ccac",
+    "user": "SG_Mugiwara13",
+    "monstre": "Arkveld",
+    "etoile": 10,
+    "horodatage": "2026-10-10T16:52:19.1928347Z"
   }
 ],"config":{
   "prix": [
@@ -346,4 +353,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-10T16:50:40.4239979Z"}
+},"majLe":"2026-10-10T16:55:40.8137129Z"}
