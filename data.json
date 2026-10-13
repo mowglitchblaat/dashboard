@@ -4,8 +4,9 @@
   "lockazhion": 6014,
   "GreedMW": 200,
   "DawCoeur_": 12821,
-  "Zarakaih": 662,
-  "SG_Mugiwara13": 12039
+  "Zarakaih": 0,
+  "SG_Mugiwara13": 12039,
+  "Sweeqy": 719
 },"stock":[
   {
     "id": "9e2ba878",
@@ -225,25 +226,11 @@
     "horodatage": "2026-10-10T16:52:19.1928347Z"
   },
   {
-    "id": "1eaad2cb",
-    "user": "Sweeqy",
-    "monstre": "Arkveld",
-    "etoile": 10,
-    "horodatage": "2026-10-13T20:15:08.7667621Z"
-  },
-  {
     "id": "b4b3b9c9",
     "user": "Petonns",
     "monstre": "Arkveld",
     "etoile": 10,
     "horodatage": "2026-10-13T20:15:20.490092Z"
-  },
-  {
-    "id": "acdf956e",
-    "user": "Sweeqy",
-    "monstre": "Arkveld",
-    "etoile": 10,
-    "horodatage": "2026-10-13T20:32:49.3790485Z"
   },
   {
     "id": "f7ab12df",
@@ -253,18 +240,18 @@
     "horodatage": "2026-10-13T20:32:45.6317922Z"
   },
   {
-    "id": "0621e765",
-    "user": "Sweeqy",
-    "monstre": "Nu Udra",
-    "etoile": 9,
-    "horodatage": "2026-10-13T20:40:16.8628701Z"
-  },
-  {
     "id": "d5806a2b",
     "user": "Vlad_Vermillion",
     "monstre": "Nu Udra",
     "etoile": 9,
     "horodatage": "2026-10-13T20:40:16.4914649Z"
+  },
+  {
+    "id": "d07d6602",
+    "user": "DawCoeur_",
+    "monstre": "Arkveld",
+    "etoile": 10,
+    "horodatage": "2026-10-13T20:33:01.8454332Z"
   }
 ],"config":{
   "prix": [
@@ -353,4 +340,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-13T20:48:14.4194194Z"}
+},"majLe":"2026-10-13T20:53:15.0893980Z"}
