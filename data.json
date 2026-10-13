@@ -244,6 +244,27 @@
     "monstre": "Arkveld",
     "etoile": 10,
     "horodatage": "2026-10-13T20:32:49.3790485Z"
+  },
+  {
+    "id": "f7ab12df",
+    "user": "Petonns",
+    "monstre": "Arkveld",
+    "etoile": 10,
+    "horodatage": "2026-10-13T20:32:45.6317922Z"
+  },
+  {
+    "id": "0621e765",
+    "user": "Sweeqy",
+    "monstre": "Nu Udra",
+    "etoile": 9,
+    "horodatage": "2026-10-13T20:40:16.8628701Z"
+  },
+  {
+    "id": "d5806a2b",
+    "user": "Vlad_Vermillion",
+    "monstre": "Nu Udra",
+    "etoile": 9,
+    "horodatage": "2026-10-13T20:40:16.4914649Z"
   }
 ],"config":{
   "prix": [
@@ -332,4 +353,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-13T20:43:13.9481560Z"}
+},"majLe":"2026-10-13T20:48:14.4194194Z"}
