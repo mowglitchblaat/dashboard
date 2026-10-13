@@ -182,6 +182,13 @@
     "monstre": "Arkveld",
     "etoile": 10,
     "horodatage": "2026-10-13T21:02:33.2699315Z"
+  },
+  {
+    "id": "c9762f60",
+    "user": "Petonns",
+    "monstre": "Arkveld",
+    "etoile": 9,
+    "horodatage": "2026-10-13T21:16:34.2259277Z"
   }
 ],"config":{
   "prix": [
@@ -270,4 +277,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-13T21:13:17.7657170Z"}
+},"majLe":"2026-10-13T21:18:18.3027303Z"}
