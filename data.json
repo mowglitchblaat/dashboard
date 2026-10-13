@@ -252,6 +252,20 @@
     "monstre": "Arkveld",
     "etoile": 10,
     "horodatage": "2026-10-13T20:33:01.8454332Z"
+  },
+  {
+    "id": "dedb671f",
+    "user": "Sweeqy",
+    "monstre": "Rey Dau",
+    "etoile": 9,
+    "horodatage": "2026-10-13T20:47:08.5874872Z"
+  },
+  {
+    "id": "1db635b8",
+    "user": "Vlad_Vermillion",
+    "monstre": "Rey Dau",
+    "etoile": 9,
+    "horodatage": "2026-10-13T20:47:08.4883743Z"
   }
 ],"config":{
   "prix": [
@@ -340,4 +354,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-13T20:53:15.0893980Z"}
+},"majLe":"2026-10-13T20:58:15.8603166Z"}
