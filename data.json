@@ -3,7 +3,7 @@
   "Raidraw45500": 0,
   "lockazhion": 6014,
   "GreedMW": 200,
-  "DawCoeur_": 11690,
+  "DawCoeur_": 12821,
   "Zarakaih": 662,
   "SG_Mugiwara13": 12039
 },"stock":[
@@ -78,34 +78,6 @@
     "horodatage": "2026-09-14T20:29:21.2230018Z"
   },
   {
-    "id": "339509b2",
-    "user": "DawCoeur_",
-    "monstre": "Arkveld",
-    "etoile": 9,
-    "horodatage": "2026-09-14T19:46:37.5733176Z"
-  },
-  {
-    "id": "6374dc4f",
-    "user": "DawCoeur_",
-    "monstre": "Rey Dau",
-    "etoile": 9,
-    "horodatage": "2026-09-14T19:46:44.8169246Z"
-  },
-  {
-    "id": "1ed4a875",
-    "user": "DawCoeur_",
-    "monstre": "Arkveld",
-    "etoile": 8,
-    "horodatage": "2026-09-14T19:47:22.4217201Z"
-  },
-  {
-    "id": "f64e11cf",
-    "user": "DawCoeur_",
-    "monstre": "Rey Dau",
-    "etoile": 8,
-    "horodatage": "2026-09-14T19:47:29.387066Z"
-  },
-  {
     "id": "3f1c33e4",
     "user": "ChrisReturn",
     "monstre": "Arkveld",
@@ -118,20 +90,6 @@
     "monstre": "Seregios",
     "etoile": 8,
     "horodatage": "2026-09-18T14:45:45.412535Z"
-  },
-  {
-    "id": "222ddf5b",
-    "user": "DawCoeur_",
-    "monstre": "Arkveld",
-    "etoile": 10,
-    "horodatage": "2026-09-22T19:30:47.799019Z"
-  },
-  {
-    "id": "1eebdec5",
-    "user": "DawCoeur_",
-    "monstre": "Gogmazios",
-    "etoile": 9,
-    "horodatage": "2026-09-28T21:06:54.9447908Z"
   },
   {
     "id": "adb28b83",
@@ -353,4 +311,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-13T19:58:08.0672078Z"}
+},"majLe":"2026-10-13T20:03:08.9527348Z"}
