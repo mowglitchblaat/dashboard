@@ -196,6 +196,20 @@
     "monstre": "Nu Udra",
     "etoile": 7,
     "horodatage": "2026-10-13T21:20:53.1756181Z"
+  },
+  {
+    "id": "17fc5f9a",
+    "user": "SG_Mugiwara13",
+    "monstre": "Seregios",
+    "etoile": 8,
+    "horodatage": "2026-10-13T21:39:21.6912113Z"
+  },
+  {
+    "id": "2dc9c131",
+    "user": "SG_Mugiwara13",
+    "monstre": "Nu Udra",
+    "etoile": 8,
+    "horodatage": "2026-10-13T21:39:29.9465942Z"
   }
 ],"config":{
   "prix": [
@@ -284,4 +298,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-13T21:38:20.5398834Z"}
+},"majLe":"2026-10-13T21:43:21.0141036Z"}
