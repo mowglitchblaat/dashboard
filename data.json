@@ -266,6 +266,13 @@
     "monstre": "Rey Dau",
     "etoile": 9,
     "horodatage": "2026-10-13T20:47:08.4883743Z"
+  },
+  {
+    "id": "45108ccc",
+    "user": "Vlad_Vermillion",
+    "monstre": "Seregios",
+    "etoile": 9,
+    "horodatage": "2026-10-13T20:57:42.6575622Z"
   }
 ],"config":{
   "prix": [
@@ -354,4 +361,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-13T20:58:15.8603166Z"}
+},"majLe":"2026-10-13T21:03:16.2624208Z"}
