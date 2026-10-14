@@ -210,6 +210,13 @@
     "monstre": "Nu Udra",
     "etoile": 8,
     "horodatage": "2026-10-13T21:39:29.9465942Z"
+  },
+  {
+    "id": "f76d05f0",
+    "user": "Vlad_Vermillion",
+    "monstre": "Doshaguma",
+    "etoile": 9,
+    "horodatage": "2026-10-14T21:37:09.0520534Z"
   }
 ],"config":{
   "prix": [
@@ -298,4 +305,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-14T21:36:29.4292480Z"}
+},"majLe":"2026-10-14T21:41:29.5524188Z"}
