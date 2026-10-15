@@ -204,6 +204,20 @@
     "monstre": "Lagiacrus",
     "etoile": 9,
     "horodatage": "2026-10-15T20:15:28.4906344Z"
+  },
+  {
+    "id": "8ff11e14",
+    "user": "Vlad_Vermillion",
+    "monstre": "Rathalos",
+    "etoile": 9,
+    "horodatage": "2026-10-15T20:27:53.9818996Z"
+  },
+  {
+    "id": "3a0e126b",
+    "user": "SG_Mugiwara13",
+    "monstre": "Rathalos",
+    "etoile": 9,
+    "horodatage": "2026-10-15T20:28:09.7835586Z"
   }
 ],"config":{
   "prix": [
@@ -292,4 +306,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-15T20:23:43.5283507Z"}
+},"majLe":"2026-10-15T20:28:43.6538725Z"}
