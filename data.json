@@ -183,6 +183,27 @@
     "monstre": "Arkveld",
     "etoile": 10,
     "horodatage": "2026-10-15T15:30:06.8318457Z"
+  },
+  {
+    "id": "631fb9e1",
+    "user": "Vlad_Vermillion",
+    "monstre": "Lagiacrus",
+    "etoile": 9,
+    "horodatage": "2026-10-15T20:14:53.0192893Z"
+  },
+  {
+    "id": "20b56698",
+    "user": "SG_Mugiwara13",
+    "monstre": "Rey Dau",
+    "etoile": 9,
+    "horodatage": "2026-10-15T20:15:06.4984249Z"
+  },
+  {
+    "id": "75d1e978",
+    "user": "SG_Mugiwara13",
+    "monstre": "Lagiacrus",
+    "etoile": 9,
+    "horodatage": "2026-10-15T20:15:28.4906344Z"
   }
 ],"config":{
   "prix": [
@@ -271,4 +292,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-15T20:13:42.3731576Z"}
+},"majLe":"2026-10-15T20:18:43.2720313Z"}
