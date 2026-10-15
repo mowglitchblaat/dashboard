@@ -176,6 +176,13 @@
     "monstre": "Nu Udra",
     "etoile": 8,
     "horodatage": "2026-10-13T21:39:29.9465942Z"
+  },
+  {
+    "id": "a60a5984",
+    "user": "Vlad_Vermillion",
+    "monstre": "Arkveld",
+    "etoile": 10,
+    "horodatage": "2026-10-15T15:30:06.8318457Z"
   }
 ],"config":{
   "prix": [
@@ -264,4 +271,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-15T15:28:21.7340997Z"}
+},"majLe":"2026-10-15T15:33:22.2246344Z"}
