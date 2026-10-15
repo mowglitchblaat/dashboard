@@ -7,7 +7,7 @@
   "Zarakaih": 588,
   "SG_Mugiwara13": 25395,
   "Sweeqy": 0,
-  "Vlad_Vermillion": 2246
+  "Vlad_Vermillion": 3432
 },"stock":[
   {
     "id": "9e2ba878",
@@ -178,20 +178,6 @@
     "horodatage": "2026-10-13T21:39:29.9465942Z"
   },
   {
-    "id": "a60a5984",
-    "user": "Vlad_Vermillion",
-    "monstre": "Arkveld",
-    "etoile": 10,
-    "horodatage": "2026-10-15T15:30:06.8318457Z"
-  },
-  {
-    "id": "631fb9e1",
-    "user": "Vlad_Vermillion",
-    "monstre": "Lagiacrus",
-    "etoile": 9,
-    "horodatage": "2026-10-15T20:14:53.0192893Z"
-  },
-  {
     "id": "20b56698",
     "user": "SG_Mugiwara13",
     "monstre": "Rey Dau",
@@ -204,13 +190,6 @@
     "monstre": "Lagiacrus",
     "etoile": 9,
     "horodatage": "2026-10-15T20:15:28.4906344Z"
-  },
-  {
-    "id": "8ff11e14",
-    "user": "Vlad_Vermillion",
-    "monstre": "Rathalos",
-    "etoile": 9,
-    "horodatage": "2026-10-15T20:27:53.9818996Z"
   },
   {
     "id": "3a0e126b",
@@ -253,6 +232,13 @@
     "monstre": "Arkveld",
     "etoile": 10,
     "horodatage": "2026-10-15T21:06:03.8722902Z"
+  },
+  {
+    "id": "06aa9a62",
+    "user": "SG_Mugiwara13",
+    "monstre": "Arkveld",
+    "etoile": 10,
+    "horodatage": "2026-10-15T22:23:29.6381857Z"
   }
 ],"config":{
   "prix": [
@@ -341,4 +327,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-15T22:18:52.2495440Z"}
+},"majLe":"2026-10-15T22:23:52.5497778Z"}
