@@ -3,8 +3,8 @@
   "Raidraw45500": 2239,
   "lockazhion": 6014,
   "GreedMW": 200,
-  "DawCoeur_": 0,
-  "Zarakaih": 264,
+  "DawCoeur_": 660,
+  "Zarakaih": 588,
   "SG_Mugiwara13": 25395,
   "Sweeqy": 0,
   "Vlad_Vermillion": 2246
@@ -106,13 +106,6 @@
     "monstre": "Arkveld",
     "etoile": 10,
     "horodatage": "2026-10-13T20:32:45.6317922Z"
-  },
-  {
-    "id": "d07d6602",
-    "user": "DawCoeur_",
-    "monstre": "Arkveld",
-    "etoile": 10,
-    "horodatage": "2026-10-13T20:33:01.8454332Z"
   },
   {
     "id": "dedb671f",
@@ -271,4 +264,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-15T14:08:13.5001965Z"}
+},"majLe":"2026-10-15T14:13:13.8280945Z"}
