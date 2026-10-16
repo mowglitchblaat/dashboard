@@ -253,6 +253,13 @@
     "monstre": "Lagiacrus",
     "etoile": 9,
     "horodatage": "2026-10-16T14:00:53.6886571Z"
+  },
+  {
+    "id": "e046ea98",
+    "user": "Sweeqy",
+    "monstre": "Nu Udra",
+    "etoile": 8,
+    "horodatage": "2026-10-16T14:09:07.3921904Z"
   }
 ],"config":{
   "prix": [
@@ -341,4 +348,4 @@
     {"m":"Rompopolo","e":10,"p":580}
 
   ]
-},"majLe":"2026-10-16T14:05:10.4837192Z"}
+},"majLe":"2026-10-16T14:10:11.2049130Z"}
